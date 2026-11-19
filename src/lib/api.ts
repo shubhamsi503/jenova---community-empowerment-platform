@@ -1,3 +1,5 @@
+import { handleLocalApiRequest } from './localApiFallback';
+
 const TOKEN_STORAGE_KEY = 'jenova_session_v2';
 const VISITOR_KEY = 'jenova_visitor_v2';
 
@@ -34,6 +36,11 @@ export function getVisitorSessionId(): string {
   }
 }
 
+function isJsonResponse(res: Response): boolean {
+  const ct = res.headers.get('content-type') || '';
+  return ct.toLowerCase().includes('application/json');
+}
+
 export async function apiFetch<T>(
   url: string,
   options: RequestInit = {},
@@ -48,12 +55,39 @@ export async function apiFetch<T>(
     headers.Authorization = `Bearer ${activeToken}`;
   }
 
-  const res = await fetch(url, { ...options, headers });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    throw new Error(data?.error || `Request failed (${res.status})`);
+  // If the current session was created in local-fallback mode, stay consistent with local store
+  if (activeToken && activeToken.startsWith('jenova-local.') && url.startsWith('/api/')) {
+    return handleLocalApiRequest<T>(url, options, activeToken);
   }
-  return data as T;
+
+  try {
+    const res = await fetch(url, { ...options, headers });
+
+    // Static deployments often return 200 OK text/html (index.html) or 404/405/502/503 for /api/*
+    const hasJson = isJsonResponse(res);
+    if (!hasJson || res.status === 502 || res.status === 503 || res.status === 504) {
+      if (url.startsWith('/api/')) {
+        return handleLocalApiRequest<T>(url, options, activeToken);
+      }
+      throw new Error(`Unexpected response (${res.status})`);
+    }
+
+    const data = await res.json();
+    if (!res.ok) {
+      // Static hosts may also return JSON 404 for unknown API paths — fallback only on generic gateway/route miss
+      if (res.status === 404 && !data?.error && url.startsWith('/api/')) {
+        return handleLocalApiRequest<T>(url, options, activeToken);
+      }
+      throw new Error(data?.error || `Request failed (${res.status})`);
+    }
+    return data as T;
+  } catch (err) {
+    // Network offline / CORS / connection refused -> seamlessly use built-in persistent local database
+    if (err instanceof TypeError && url.startsWith('/api/')) {
+      return handleLocalApiRequest<T>(url, options, activeToken);
+    }
+    throw err;
+  }
 }
 
 export function trackAnalyticsEvent(
@@ -71,9 +105,8 @@ export function trackAnalyticsEvent(
     | 'voice_assistant_use',
   entityId?: string
 ) {
-  fetch('/api/analytics/event', {
+  apiFetch('/api/analytics/event', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ eventType, entityId }),
   }).catch(() => {});
 }
@@ -90,7 +123,12 @@ export function readOfflineCache<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(`jenova_cache_v2_${key}`);
     if (!raw) return fallback;
-    return JSON.parse(raw) as T;
+    const parsed = JSON.parse(raw) as T;
+    // Never hydrate an empty array from stale cache over a non-empty fallback
+    if (Array.isArray(parsed) && parsed.length === 0 && Array.isArray(fallback) && fallback.length > 0) {
+      return fallback;
+    }
+    return parsed;
   } catch {
     return fallback;
   }
@@ -98,9 +136,9 @@ export function readOfflineCache<T>(key: string, fallback: T): T {
 
 export function writeOfflineCache<T>(key: string, value: T): void {
   try {
+    if (Array.isArray(value) && value.length === 0) return;
     localStorage.setItem(`jenova_cache_v2_${key}`, JSON.stringify(value));
   } catch {
     // Ignore quota or private-mode errors
   }
 }
-

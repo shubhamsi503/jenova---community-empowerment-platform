@@ -134,9 +134,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Record real visit once per browser session
   useEffect(() => {
     const sessionId = getVisitorSessionId();
-    fetch('/api/analytics/visit', {
+    apiFetch('/api/analytics/visit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId }),
     }).catch(() => {});
   }, []);

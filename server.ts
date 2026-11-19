@@ -67,12 +67,32 @@ async function startServer() {
 
   app.use(express.json({ limit: '512kb' }));
 
-  // Basic security headers (iframe-safe)
-  app.use((_req, res, next) => {
+  // Basic security headers (iframe-safe) & never cache API JSON responses
+  app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Permissions-Policy', 'camera=(), geolocation=()');
+    if (req.path.startsWith('/api/')) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    }
     next();
+  });
+
+  app.get('/api/health', (_req, res) => {
+    const s = store.getState();
+    res.json({
+      ok: true,
+      service: 'jenova-platform',
+      counts: {
+        jobs: s.jobs.filter((j) => isPubliclyVerifiedStatus(j.verificationStatus)).length,
+        courses: s.courses.filter((c) => isPubliclyVerifiedStatus(c.verificationStatus)).length,
+        schemes: s.schemes.filter((sc) => isPubliclyVerifiedStatus(sc.verificationStatus)).length,
+        businesses: s.businesses.filter((b) => isPubliclyVerifiedStatus(b.verificationStatus)).length,
+        assistanceCentres: s.assistanceCentres.filter((a) => isPubliclyVerifiedStatus(a.verificationStatus)).length,
+        announcements: s.announcements.filter((a) => a.isActive).length,
+        fraudAlerts: s.fraudAlerts.filter((f) => f.isActive).length,
+      },
+    });
   });
 
   // ── AUTHENTICATION ROUTES ──────────────────────────────────────────────────
@@ -1316,8 +1336,20 @@ async function startServer() {
     res.json(safeBackup);
   });
 
+  // Explicit JSON 404 for unknown API routes so they never fall through to SPA HTML
+  app.use('/api', (_req, res) => {
+    res.status(404).json({ error: 'API endpoint not found.' });
+  });
+
   // ── VITE / STATIC FRONTEND SERVING ─────────────────────────────────────────
-  const isProd = process.env.NODE_ENV === 'production';
+  const distPath = path.resolve(__dirname, 'dist');
+  const hasDistBuild = fs.existsSync(path.join(distPath, 'index.html'));
+  const isDevLifecycle =
+    process.env.npm_lifecycle_event === 'dev' ||
+    process.env.DISABLE_HMR === 'true' ||
+    process.env.VITE_DEV === 'true';
+  const isProd = process.env.NODE_ENV === 'production' || (hasDistBuild && !isDevLifecycle);
+
   if (!isProd) {
     const vite = await createViteServer({
       server: { middlewareMode: true, hmr: false, ws: false },
@@ -1378,7 +1410,6 @@ export class ErrorOverlay extends HTMLElement {}
 
     app.use(vite.middlewares);
   } else {
-    const distPath = path.resolve(__dirname, 'dist');
     app.use(express.static(distPath));
     app.get('*', (_req, res) => {
       const indexFile = path.join(distPath, 'index.html');

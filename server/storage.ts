@@ -1,4 +1,5 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import type {
   Announcement,
@@ -68,7 +69,28 @@ export interface DatabaseState {
   };
 }
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+function resolveWritableDataDir(): string {
+  const candidates = [
+    path.resolve(process.cwd(), 'data'),
+    path.join(os.tmpdir(), 'jenova-platform-data'),
+  ];
+  for (const dir of candidates) {
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      const probe = path.join(dir, '.write-probe');
+      fs.writeFileSync(probe, 'ok', 'utf-8');
+      fs.unlinkSync(probe);
+      return dir;
+    } catch {
+      // Try next writable directory (e.g. read-only cloud container filesystem)
+    }
+  }
+  return candidates[1];
+}
+
+const DATA_DIR = resolveWritableDataDir();
 const DATA_FILE = path.join(DATA_DIR, 'platform-store.json');
 
 function todayKey(): string {
@@ -206,17 +228,36 @@ class PlatformStore {
             return upgraded;
           }
 
-          // Non-destructive backward-compatible hydration for newly added collections
+          // Non-destructive backward-compatible hydration + self-healing if any collection is empty
           const hydrated: DatabaseState = {
             ...base,
             ...parsed,
             seedVersion: CURRENT_SEED_VERSION,
-            assistanceCentres: Array.isArray(parsed.assistanceCentres) && parsed.assistanceCentres.length > 0
-              ? parsed.assistanceCentres
-              : SEED_ASSISTANCE_CENTRES,
-            fraudAlerts: Array.isArray(parsed.fraudAlerts) && parsed.fraudAlerts.length > 0
-              ? parsed.fraudAlerts
-              : SEED_FRAUD_ALERTS,
+            jobs: Array.isArray(parsed.jobs) && parsed.jobs.length > 0 ? parsed.jobs : SEED_JOBS,
+            courses: Array.isArray(parsed.courses) && parsed.courses.length > 0 ? parsed.courses : SEED_COURSES,
+            trainingCentres:
+              Array.isArray(parsed.trainingCentres) && parsed.trainingCentres.length > 0
+                ? parsed.trainingCentres
+                : SEED_TRAINING_CENTRES,
+            schemes: Array.isArray(parsed.schemes) && parsed.schemes.length > 0 ? parsed.schemes : SEED_SCHEMES,
+            businessIdeas:
+              Array.isArray(parsed.businessIdeas) && parsed.businessIdeas.length > 0
+                ? parsed.businessIdeas
+                : SEED_BUSINESS_IDEAS,
+            businesses:
+              Array.isArray(parsed.businesses) && parsed.businesses.length > 0 ? parsed.businesses : SEED_BUSINESSES,
+            announcements:
+              Array.isArray(parsed.announcements) && parsed.announcements.length > 0
+                ? parsed.announcements
+                : SEED_ANNOUNCEMENTS,
+            assistanceCentres:
+              Array.isArray(parsed.assistanceCentres) && parsed.assistanceCentres.length > 0
+                ? parsed.assistanceCentres
+                : SEED_ASSISTANCE_CENTRES,
+            fraudAlerts:
+              Array.isArray(parsed.fraudAlerts) && parsed.fraudAlerts.length > 0
+                ? parsed.fraudAlerts
+                : SEED_FRAUD_ALERTS,
             updateSubscriptions: Array.isArray(parsed.updateSubscriptions)
               ? parsed.updateSubscriptions
               : [],
