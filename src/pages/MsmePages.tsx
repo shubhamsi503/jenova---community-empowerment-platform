@@ -87,8 +87,10 @@ export function MsmeSupportHubPage() {
         }
         subtitle={
           language === 'bn'
-            ? 'ক্ষুদ্র ব্যবসার পরিকল্পনা, সম্পূর্ণ ফ্রি সরকারি উদ্যম (Udyam) নিবন্ধন নির্দেশিকা, ব্যবসা ব্যয় ও লাভ ক্যালকুলেটর এবং মেচেদার স্থানীয় ব্যবসা ডিরেক্টরি।'
-            : 'Practical entrepreneurship guidance, 100% free Udyam registration steps, business expense & profit calculators, and our verified local business directory.'
+            ? 'ক্ষুদ্র ব্যবসার পরিকল্পনা, সম্পূর্ণ ফ্রি সরকারি উদ্যম (Udyam) নিবন্ধন নির্দেশিকা, ব্যবসা ব্যয় ও লাভ ক্যালকুলেটর এবং যাচাইকৃত কমিউনিটি ব্যবসা ডিরেক্টরি।'
+            : language === 'hi'
+              ? 'लघु व्यवसाय योजना, पूर्णतः निःशुल्क उद्यम (Udyam) पंजीकरण गाइड, व्यवसाय लाभ कैलकुलेटर और सत्यापित सामुदायिक व्यवसाय निर्देशिका।'
+              : 'Practical entrepreneurship guidance, 100% free Udyam registration steps, business expense & profit calculators, and our verified community enterprise directory.'
         }
       />
 
@@ -114,7 +116,7 @@ export function MsmeSupportHubPage() {
                 {language === 'bn' ? 'ছোট ও গৃহভিত্তিক ব্যবসার আইডিয়া লাইব্রেরি' : 'Small & Home-Based Business Ideas'}
               </h2>
               <p className="text-sm text-[#5C5C58] mt-1.5">
-                Practical, low-capital micro-enterprise ideas tailored to Mecheda, Kolaghat, and Purba Medinipur.
+                Practical, low-capital micro-enterprise ideas designed for Indian towns, rural communities, and home-based founders.
               </p>
             </div>
             <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-[#176B4D]">
@@ -280,7 +282,7 @@ export function MsmeSupportHubPage() {
           <ol className="list-decimal list-inside space-y-2 text-sm text-[#5C5C58] leading-relaxed">
             <li>Visit ONLY the official Government of India portal: <strong>udyamregistration.gov.in</strong>.</li>
             <li>Keep your Aadhaar number, linked mobile phone, PAN (if applicable), and business bank details ready.</li>
-            <li>Enter business name, address (e.g., Mecheda, Purba Medinipur), and primary activity code.</li>
+            <li>Enter business name, district/city address, and primary activity code.</li>
             <li>Download your free permanent Udyam Registration Certificate upon OTP confirmation.</li>
           </ol>
           <a
@@ -300,11 +302,11 @@ export function MsmeSupportHubPage() {
             5-Step Micro-Business Planning Checklist
           </h2>
           <ul className="space-y-2.5 text-sm text-[#5C5C58] leading-relaxed">
-            <li><strong>01. Validate Local Demand:</strong> Talk to 15–20 neighbours or shopkeepers in Mecheda before buying bulk stock.</li>
+            <li><strong>01. Validate Local Demand:</strong> Talk to 15–20 neighbours or shopkeepers in your area before buying bulk stock.</li>
             <li><strong>02. Start Small Without Heavy Debt:</strong> Test small batches first; never rely on high-interest informal loans.</li>
             <li><strong>03. Separate Business & Home Cash:</strong> Maintain a simple notebook or separate bank account for shop money.</li>
-            <li><strong>04. Learn Free Skills First:</strong> Use Purba Medinipur RSETI or Utkarsh Bangla entrepreneurship courses.</li>
-            <li><strong>05. Verify Official Programmes:</strong> Check official portals for Udyam, PM SVANidhi, or bank schemes — this platform never promises guaranteed funding or loans.</li>
+            <li><strong>04. Learn Free Skills First:</strong> Use National RSETI, PMKVY, or Utkarsh Bangla entrepreneurship courses.</li>
+            <li><strong>05. Verify Official Programmes:</strong> Check official portals for Udyam, PMEGP, PM SVANidhi, or bank schemes — this platform never promises guaranteed funding or loans.</li>
           </ul>
         </div>
       </div>
@@ -333,7 +335,7 @@ export function BusinessIdeasPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <PageHeader
         title={language === 'bn' ? 'ক্ষুদ্র ও গৃহভিত্তিক ব্যবসার আইডিয়া লাইব্রেরি' : 'Small & Home-Based Business Ideas'}
-        subtitle="Practical micro-business models suited to Mecheda, Kolaghat, and rural Purba Medinipur with realistic startup ranges and step-by-step guides."
+        subtitle="Practical micro-business models tailored for aspiring entrepreneurs across India with realistic startup budgets and clear launch steps."
       />
 
       <MsmeTabs active="ideas" />
@@ -403,7 +405,7 @@ export function LocalBusinessDirectoryPage() {
   // Submission state
   const [businessName, setBusinessName] = useState('');
   const [category, setCategory] = useState('Tailoring & Garments');
-  const [location, setLocation] = useState('Mecheda, Purba Medinipur');
+  const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [services, setServices] = useState('');
   const [contactInfo, setContactInfo] = useState('');
@@ -467,7 +469,7 @@ export function LocalBusinessDirectoryPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <PageHeader
         title={language === 'bn' ? 'স্থানীয় ব্যবসা ডিরেক্টরি' : 'Local Business Directory'}
-        subtitle="Verified small businesses, artisans, and local service providers in Mecheda & Purba Medinipur. Business owners may submit profiles free of cost (published after Admin approval)."
+        subtitle="Verified small businesses, women-led SHGs, artisans, and community service providers across India. Submit your enterprise free of cost for Admin review."
         action={
           <button
             type="button"
@@ -589,6 +591,7 @@ export function LocalBusinessDirectoryPage() {
                     required
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g. City, District, State"
                     className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
                   />
                 </div>

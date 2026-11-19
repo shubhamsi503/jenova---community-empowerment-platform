@@ -6,7 +6,7 @@ import type { StoredUser } from './seed.ts';
 
 const TOKEN_SECRET =
   process.env.SESSION_SECRET ||
-  crypto.createHash('sha256').update('mecheda-disha-local-secret-v1').digest('hex');
+  crypto.createHash('sha256').update('jenova-platform-secret-v2').digest('hex');
 
 interface TokenPayload {
   uid: string;

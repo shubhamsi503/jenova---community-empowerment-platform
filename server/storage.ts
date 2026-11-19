@@ -33,6 +33,7 @@ import {
 } from './seed.ts';
 
 export interface DatabaseState {
+  seedVersion?: number;
   users: StoredUser[];
   jobs: JobListing[];
   courses: CourseListing[];
@@ -82,9 +83,12 @@ export function isPubliclyVerifiedStatus(status: string): boolean {
   );
 }
 
+const CURRENT_SEED_VERSION = 2;
+
 function createInitialState(): DatabaseState {
   const today = todayKey();
   return {
+    seedVersion: CURRENT_SEED_VERSION,
     users: createSeedUsers(),
     jobs: SEED_JOBS,
     courses: SEED_COURSES,
@@ -171,10 +175,42 @@ class PlatformStore {
         const raw = fs.readFileSync(DATA_FILE, 'utf-8');
         const parsed = JSON.parse(raw) as Partial<DatabaseState>;
         if (parsed && Array.isArray(parsed.schemes) && Array.isArray(parsed.users)) {
+          const needsSeedUpgrade = (parsed.seedVersion ?? 1) < CURRENT_SEED_VERSION;
+          const base = createInitialState();
+
+          if (needsSeedUpgrade) {
+            const customUsers = parsed.users.filter(
+              (u) => !u.email.toLowerCase().endsWith('@mechedadisha.org') && !u.email.toLowerCase().endsWith('@jenova.in')
+            );
+            const upgraded: DatabaseState = {
+              ...base,
+              seedVersion: CURRENT_SEED_VERSION,
+              users: [...createSeedUsers(), ...customUsers],
+              updateSubscriptions: Array.isArray(parsed.updateSubscriptions) ? parsed.updateSubscriptions : [],
+              bookmarks: Array.isArray(parsed.bookmarks) ? parsed.bookmarks : [],
+              savingsGoals: Array.isArray(parsed.savingsGoals) && parsed.savingsGoals.length > 0
+                ? parsed.savingsGoals
+                : base.savingsGoals,
+              reports: Array.isArray(parsed.reports) ? parsed.reports : [],
+              feedback: Array.isArray(parsed.feedback) ? parsed.feedback : [],
+              analytics: {
+                ...base.analytics,
+                ...(parsed.analytics || {}),
+                checklistsCompleted: parsed.analytics?.checklistsCompleted ?? 0,
+                fraudChecksCompleted: parsed.analytics?.fraudChecksCompleted ?? 0,
+                localHelpClicks: parsed.analytics?.localHelpClicks ?? 0,
+                voiceAssistantUses: parsed.analytics?.voiceAssistantUses ?? 0,
+              },
+            };
+            this.persist(upgraded);
+            return upgraded;
+          }
+
           // Non-destructive backward-compatible hydration for newly added collections
           const hydrated: DatabaseState = {
-            ...(createInitialState()),
+            ...base,
             ...parsed,
+            seedVersion: CURRENT_SEED_VERSION,
             assistanceCentres: Array.isArray(parsed.assistanceCentres) && parsed.assistanceCentres.length > 0
               ? parsed.assistanceCentres
               : SEED_ASSISTANCE_CENTRES,
@@ -185,7 +221,7 @@ class PlatformStore {
               ? parsed.updateSubscriptions
               : [],
             analytics: {
-              ...createInitialState().analytics,
+              ...base.analytics,
               ...(parsed.analytics || {}),
               checklistsCompleted: parsed.analytics?.checklistsCompleted ?? 0,
               fraudChecksCompleted: parsed.analytics?.fraudChecksCompleted ?? 0,

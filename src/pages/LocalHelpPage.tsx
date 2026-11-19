@@ -22,6 +22,7 @@ import { pickText } from '../i18n/translations';
 import type { AssistanceCentreCategory, LocalAssistanceCentre } from '../types/platform';
 import { PageHeader, SafetyNotice, VerificationLabel } from '../components/SharedUI';
 import { ReadAloudButton } from '../components/VoiceAccessibility';
+import { JenovaLocalLogo } from '../components/JenovaIcons3D';
 
 const CATEGORIES: { id: 'all' | AssistanceCentreCategory; bn: string; en: string; hi: string }[] = [
   { id: 'all', bn: 'সব কেন্দ্র', en: 'All Centres', hi: 'सभी केंद्र' },
@@ -30,10 +31,11 @@ const CATEGORIES: { id: 'all' | AssistanceCentreCategory; bn: string; en: string
   { id: 'Skill & Training Centre', bn: 'দক্ষতা ও RSETI প্রশিক্ষণ', en: 'Skill & RSETI Training', hi: 'कौशल और RSETI प्रशिक्षण' },
   { id: 'Employment Support', bn: 'কর্মসংস্থান সহায়তা', en: 'Employment Support', hi: 'रोजगार सहायता' },
   { id: 'Cyber & Legal Safety', bn: 'সাইবার সুরক্ষা (1930)', en: 'Cyber & Legal Safety', hi: 'साइबर सुरक्षा (1930)' },
+  { id: 'Community Assistance', bn: 'CSC ও নাগরিক সহায়তা', en: 'CSC & Community Help', hi: 'CSC व नागरिक सहायता' },
 ];
 
 export function LocalHelpPage() {
-  const { language, navigate, openReportModal } = useApp();
+  const { language, theme, navigate, openReportModal } = useApp();
   const [centres, setCentres] = useState<LocalAssistanceCentre[]>(() =>
     readOfflineCache<LocalAssistanceCentre[]>('assistance_centres', [])
   );
@@ -75,6 +77,20 @@ export function LocalHelpPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <div className="rounded-2xl bg-gradient-to-r from-[#EAF6FE] via-white to-[#ECFBF2] dark:from-[#082447] dark:via-[#0A2242] dark:to-[#072C2A] border border-[#0E7490]/25 dark:border-[#36E7F2]/30 p-5 sm:p-6 shadow-sm">
+        <JenovaLocalLogo
+          size="lg"
+          theme={theme}
+          subtitle={
+            language === 'bn'
+              ? 'যাচাইকৃত স্থানীয় সহায়তা, BSK ও সরকারি দপ্তর ডিরেক্টরি'
+              : language === 'hi'
+                ? 'सत्यापित स्थानीय सहायता, BSK एवं सरकारी कार्यालय निर्देशिका'
+                : 'Verified Local Support, BSK & Government Helpdesk Directory'
+          }
+        />
+      </div>
+
       <PageHeader
         title={
           language === 'bn'
@@ -85,8 +101,10 @@ export function LocalHelpPage() {
         }
         subtitle={
           language === 'bn'
-            ? 'বাংলা সহায়তা কেন্দ্র (BSK), পূর্ব মেদিনীপুর জেলা ও বিডিও ডিরেক্টরি, দুয়ারে সরকার, উৎকর্ষ বাংলা ও জাতীয় সাইবার হেল্পলাইন (১৯৩০) — শুধুমাত্র যাচাইকৃত সরকারি সূত্র।'
-            : 'Verified official portals for Bangla Sahayata Kendra (BSK), Purba Medinipur District/BDO directory, Duare Sarkar, PBSSD/RSETI, Employment Bank, and Cyber Crime Helpline 1930.'
+            ? 'বাংলা সহায়তা কেন্দ্র (BSK), কমন সার্ভিস সেন্টার (CSC), জেলা ও বিডিও ডিরেক্টরি, দুয়ারে সরকার, স্কিল ইন্ডিয়া/RSETI ও জাতীয় সাইবার হেল্পলাইন (১৯৩০) — শুধুমাত্র যাচাইকৃত সরকারি সূত্র।'
+            : language === 'hi'
+              ? 'बांग्ला सहायता केंद्र (BSK), कॉमन सर्विस सेंटर (CSC), जिला एवं BDO पोर्टल, स्किल इंडिया/RSETI, रोजगार कार्यालय और राष्ट्रीय साइबर क्राइम हेल्पलाइन (1930) के सत्यापित आधिकारिक स्रोत।'
+              : 'Verified official portals for Citizen Service Desks (BSK & CSC), District/BDO portals, myScheme, Skill India/RSETI, National Career Service, and Cyber Crime Helpline 1930.'
         }
         action={
           <button
@@ -94,7 +112,11 @@ export function LocalHelpPage() {
             onClick={() => navigate('/checklist')}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#176B4D] hover:bg-[#11533B] text-white text-sm font-semibold cursor-pointer"
           >
-            {language === 'bn' ? 'JENOVA Checklist খুলুন' : 'Open JENOVA Checklist'}
+            {language === 'bn'
+              ? 'JENOVA Checklist খুলুন'
+              : language === 'hi'
+                ? 'JENOVA Checklist खोलें'
+                : 'Open JENOVA Checklist'}
             <ArrowRight className="w-4 h-4" />
           </button>
         }
@@ -104,7 +126,9 @@ export function LocalHelpPage() {
         message={
           language === 'bn'
             ? 'স্বচ্ছতা নীতি: আমরা কখনোই অনুমান করে কোনো রাস্তার ঠিকানা, ব্যক্তিগত ফোন নম্বর বা ক্যাম্পের তারিখ লিখি না। যেসব অফিসের স্থানীয় কাউন্টারের সময় মাঠে যাচাই বাকি আছে, সেগুলি স্পষ্টভাবে চিহ্নিত করা হয়েছে।'
-            : 'Honesty Guarantee: We never invent local counter addresses, personal phone numbers, or camp dates. Entries requiring local field timing confirmation are clearly marked.'
+            : language === 'hi'
+              ? 'पारदर्शिता नीति: हम कभी भी अनुमान से कोई पता, निजी फोन नंबर या कैंप की तारीख नहीं लिखते। जिन कार्यालयों के समय की स्थानीय पुष्टि बाकी है, उन्हें स्पष्ट रूप से चिह्नित किया गया है।'
+              : 'Honesty Guarantee: We never invent local counter addresses, personal phone numbers, or camp dates. Entries requiring local field timing confirmation are clearly marked.'
         }
       />
 
@@ -119,7 +143,9 @@ export function LocalHelpPage() {
             placeholder={
               language === 'bn'
                 ? 'কেন্দ্রের নাম, BSK, BDO, RSETI বা পরিষেবা খুঁজুন...'
-                : 'Search BSK, BDO, Duare Sarkar, RSETI, Cyber Helpline...'
+                : language === 'hi'
+                  ? 'केंद्र का नाम, BSK, BDO, RSETI या साइबर हेल्पलाइन खोजें...'
+                  : 'Search BSK, BDO, Duare Sarkar, RSETI, Cyber Helpline...'
             }
             className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#D8D5CC] bg-[#FAF9F5] text-sm focus:outline-none focus:ring-2 focus:ring-[#176B4D] focus:bg-white"
           />
@@ -145,13 +171,19 @@ export function LocalHelpPage() {
       {/* Results */}
       {loading ? (
         <div className="py-12 text-center text-sm text-[#5C5C58]">
-          {language === 'bn' ? 'তথ্য লোড হচ্ছে...' : 'Loading verified local assistance centres...'}
+          {language === 'bn'
+            ? 'তথ্য লোড হচ্ছে...'
+            : language === 'hi'
+              ? 'सत्यापित स्थानीय सहायता केंद्र लोड हो रहे हैं...'
+              : 'Loading verified local assistance centres...'}
         </div>
       ) : filtered.length === 0 ? (
         <div className="rounded-2xl bg-white border border-[#E5E3DC] p-10 text-center text-sm text-[#5C5C58]">
           {language === 'bn'
             ? 'এই ফিল্টারে কোনো সহায়তা কেন্দ্র পাওয়া যায়নি।'
-            : 'No assistance centres match your current filter.'}
+            : language === 'hi'
+              ? 'इस फ़िल्टर में कोई सहायता केंद्र नहीं मिला।'
+              : 'No assistance centres match your current filter.'}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -258,7 +290,7 @@ export function LocalHelpPage() {
                     )}
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                        `${centre.name.en} ${centre.locationArea} West Bengal`
+                        `${centre.name.en} ${centre.locationArea} India`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"

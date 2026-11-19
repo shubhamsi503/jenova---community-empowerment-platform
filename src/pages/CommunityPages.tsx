@@ -60,7 +60,7 @@ export function AboutPage() {
           </h2>
           <p className="text-sm text-[#5C5C58] leading-relaxed">
             Built for first-time smartphone users, students, women, daily-wage workers, and
-            neighbourhood shopkeepers across Mecheda, Purba Medinipur, and beyond to discover
+            neighbourhood entrepreneurs across towns, villages, and cities throughout India to discover
             verified opportunities without jargon or middlemen.
           </p>
         </div>
@@ -87,7 +87,7 @@ export function AboutPage() {
         </div>
       </div>
 
-      {/* Proposed 3-Month Pilot Roadmap (from Concept Note) */}
+      {/* JENOVA 3-Pillar Community Growth Vision */}
       <section className="relative overflow-hidden p-6 sm:p-8 rounded-xl bg-white border border-[#E5E3DC] space-y-5">
         <img
           src={VISUAL_ASSETS.bgCreamAbstract.src}
@@ -98,34 +98,34 @@ export function AboutPage() {
         />
         <div className="relative">
           <h2 className="text-xl font-bold text-[#252525]">
-            Proposed 3-Month Pilot Plan (Mecheda, Purba Medinipur)
+            JENOVA 3-Pillar Community Growth Vision
           </h2>
           <p className="text-xs text-[#5C5C58] mt-1">
-            All figures and timelines below are proposed planning estimates from our concept note,
-            not confirmed funding or achieved outcomes.
+            Practical, inclusive technology designed around how families actually discover schemes,
+            verify offers, build career skills, and plan household finances.
           </p>
         </div>
 
         <div className="relative grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             {
-              month: 'Month 1',
-              title: 'Community Survey & Listening',
-              desc: 'Speak with Mecheda residents, youth, women’s SHGs, daily-wage workers, and local shopkeepers to map real information gaps.',
+              pillar: 'Pillar 01',
+              title: 'Accessible Multilingual Discovery',
+              desc: 'Voice-friendly guidance in Bengali, Hindi, and English so first-time smartphone users can explore schemes, jobs, and courses effortlessly.',
             },
             {
-              month: 'Month 2',
-              title: 'Prototype & Source Verification',
-              desc: 'Refine mobile usability on entry-level Android phones and verify local training centres, employers, and official scheme links.',
+              pillar: 'Pillar 02',
+              title: 'Verified Official Sources & Scam Shield',
+              desc: 'Direct links to authentic .gov.in portals paired with JENOVA Protect to catch fake job fees, phishing URLs, and UPI traps before harm occurs.',
             },
             {
-              month: 'Month 3',
-              title: 'User Testing & Awareness Workshop',
-              desc: 'Conduct local digital/financial literacy sessions (planning target: ~100 families reached, ~50 individuals guided) and incorporate real feedback.',
+              pillar: 'Pillar 03',
+              title: 'Digital & Financial Empowerment',
+              desc: 'Interactive household budget planners, savings goal trackers, offline document checklists, and community digital-literacy workshops.',
             },
           ].map((m) => (
-            <div key={m.month} className="p-4 rounded-lg bg-[#FAF9F5] border border-[#E5E3DC]">
-              <p className="font-mono text-xs font-semibold text-[#B56A10]">{m.month}</p>
+            <div key={m.pillar} className="p-4 rounded-lg bg-[#FAF9F5] border border-[#E5E3DC]">
+              <p className="font-mono text-xs font-semibold text-[#B56A10]">{m.pillar}</p>
               <h3 className="text-base font-bold text-[#252525] mt-1">{m.title}</h3>
               <p className="text-xs text-[#5C5C58] mt-2 leading-relaxed">{m.desc}</p>
             </div>
@@ -140,7 +140,7 @@ export function AboutPage() {
             className="inline-flex items-center gap-2 text-sm font-semibold text-[#176B4D] hover:underline"
           >
             <FileText className="w-4 h-4" />
-            <span>View Full Project Concept Note & Pilot Plan (PDF)</span>
+            <span>View Community Financial Empowerment Blueprint (PDF)</span>
           </a>
 
           <button
@@ -152,7 +152,7 @@ export function AboutPage() {
             <span>
               {workshopLogged
                 ? 'Workshop Interest Recorded'
-                : 'Express Interest in Mecheda Awareness Workshop'}
+                : 'Express Interest in Community Literacy Workshop'}
             </span>
           </button>
         </div>
@@ -203,7 +203,7 @@ export function ContactSupportPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <PageHeader
         title={language === 'bn' ? 'যোগাযোগ ও কমিউনিটি সহায়তা' : 'Contact & Community Support'}
-        subtitle="Share feedback on the Mecheda pilot, request guidance navigating official portals, report suspicious or outdated information, or read community announcements."
+        subtitle="Share feedback on JENOVA, request guidance navigating official portals, report suspicious or outdated information, or read verified community announcements."
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -238,7 +238,7 @@ export function ContactSupportPage() {
           {done && (
             <div className="mb-5 p-4 rounded-lg bg-[#EBF4F0] text-[#11533B] text-sm flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
-              <span>Submitted successfully! Our pilot coordinator will review it shortly.</span>
+              <span>Submitted successfully! Our JENOVA community desk will review it shortly.</span>
             </div>
           )}
 
@@ -270,7 +270,7 @@ export function ContactSupportPage() {
               <input
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                placeholder="e.g. Suggestion for Mecheda training centre or scheme help"
+                placeholder="e.g. Suggestion for a skill course, welfare scheme, or local centre"
                 className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2.5 text-sm"
               />
             </div>
@@ -356,7 +356,7 @@ export function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [town, setTown] = useState('Mecheda, Purba Medinipur');
+  const [town, setTown] = useState('');
   const [prefLang, setPrefLang] = useState<Language>(language);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -470,6 +470,7 @@ export function AuthPage() {
                   <input
                     value={town}
                     onChange={(e) => setTown(e.target.value)}
+                    placeholder="e.g. Kolkata, Patna, Jaipur"
                     className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2.5 text-sm"
                   />
                 </div>
@@ -524,16 +525,16 @@ export function AuthPage() {
         </form>
       </div>
 
-      {/* Pilot RBAC Testing Helper */}
+      {/* Quick Role Sign-In Helper */}
       <div className="p-5 rounded-xl bg-[#F2F0E8] border border-[#E5E3DC] space-y-3">
         <p className="text-xs font-bold text-[#252525] inline-flex items-center gap-1.5">
           <Shield className="w-4 h-4 text-[#176B4D]" />
-          <span>Pilot Evaluation Accounts (Click to Autofill)</span>
+          <span>Quick Role Sign-In (Click to Autofill)</span>
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
           <button
             type="button"
-            onClick={() => quickFill('superadmin@mechedadisha.org', 'Admin@Mecheda2026')}
+            onClick={() => quickFill('superadmin@jenova.in', 'Admin@Jenova2026')}
             className="p-2.5 rounded-lg bg-white border border-[#E5E3DC] hover:border-[#176B4D] text-left cursor-pointer"
           >
             <span className="font-semibold block text-[#252525]">Super Administrator</span>
@@ -541,7 +542,7 @@ export function AuthPage() {
           </button>
           <button
             type="button"
-            onClick={() => quickFill('editor@mechedadisha.org', 'Editor@Mecheda2026')}
+            onClick={() => quickFill('editor@jenova.in', 'Editor@Jenova2026')}
             className="p-2.5 rounded-lg bg-white border border-[#E5E3DC] hover:border-[#176B4D] text-left cursor-pointer"
           >
             <span className="font-semibold block text-[#252525]">Content Administrator</span>
@@ -549,7 +550,7 @@ export function AuthPage() {
           </button>
           <button
             type="button"
-            onClick={() => quickFill('reviewer@mechedadisha.org', 'Review@Mecheda2026')}
+            onClick={() => quickFill('reviewer@jenova.in', 'Review@Jenova2026')}
             className="p-2.5 rounded-lg bg-white border border-[#E5E3DC] hover:border-[#176B4D] text-left cursor-pointer"
           >
             <span className="font-semibold block text-[#252525]">Content Reviewer</span>
@@ -557,7 +558,7 @@ export function AuthPage() {
           </button>
           <button
             type="button"
-            onClick={() => quickFill('member@mechedadisha.org', 'Member@2026')}
+            onClick={() => quickFill('member@jenova.in', 'Member@2026')}
             className="p-2.5 rounded-lg bg-white border border-[#E5E3DC] hover:border-[#176B4D] text-left cursor-pointer"
           >
             <span className="font-semibold block text-[#252525]">Community User</span>

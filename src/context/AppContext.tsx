@@ -44,7 +44,7 @@ const AppContext = createContext<AppContextValue | null>(null);
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
     try {
-      const saved = localStorage.getItem('mecheda_lang');
+      const saved = localStorage.getItem('jenova_lang');
       if (saved === 'en' || saved === 'hi' || saved === 'bn') return saved;
     } catch {
       // ignore
@@ -105,7 +105,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setLanguageState(lang);
     document.documentElement.lang = lang;
     try {
-      localStorage.setItem('mecheda_lang', lang);
+      localStorage.setItem('jenova_lang', lang);
     } catch {
       // ignore
     }

@@ -1,6 +1,8 @@
 {
-  "name": "Mecheda Disha — Community Financial Empowerment Platform",
+  "name": "Jenova — Community Financial Empowerment Platform",
   "description": "A multilingual community empowerment platform for Mecheda, Purba Medinipur, West Bengal connecting households, youth, women, students, and small business owners with verified employment, free skills training, financial literacy tools, government schemes, and MSME support.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

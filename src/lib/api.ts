@@ -1,5 +1,5 @@
-const TOKEN_STORAGE_KEY = 'mecheda_disha_session_v1';
-const VISITOR_KEY = 'mecheda_disha_visitor_v1';
+const TOKEN_STORAGE_KEY = 'jenova_session_v2';
+const VISITOR_KEY = 'jenova_visitor_v2';
 
 export function getStoredToken(): string | null {
   try {
@@ -88,7 +88,7 @@ export function buildWhatsAppShareUrl(title: string, details: string, pathSuffix
 // Non-sensitive offline cache (never store Aadhaar, OTPs, PINs, or tokens here)
 export function readOfflineCache<T>(key: string, fallback: T): T {
   try {
-    const raw = localStorage.getItem(`mecheda_cache_${key}`);
+    const raw = localStorage.getItem(`jenova_cache_v2_${key}`);
     if (!raw) return fallback;
     return JSON.parse(raw) as T;
   } catch {
@@ -98,7 +98,7 @@ export function readOfflineCache<T>(key: string, fallback: T): T {
 
 export function writeOfflineCache<T>(key: string, value: T): void {
   try {
-    localStorage.setItem(`mecheda_cache_${key}`, JSON.stringify(value));
+    localStorage.setItem(`jenova_cache_v2_${key}`, JSON.stringify(value));
   } catch {
     // Ignore quota or private-mode errors
   }

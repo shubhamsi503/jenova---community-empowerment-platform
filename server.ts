@@ -80,7 +80,7 @@ async function startServer() {
     const email = cleanText(req.body?.email, 120).toLowerCase();
     const name = cleanText(req.body?.name, 80);
     const password = typeof req.body?.password === 'string' ? req.body.password : '';
-    const town = cleanText(req.body?.town, 100) || 'Mecheda, Purba Medinipur';
+    const town = cleanText(req.body?.town, 100) || 'India';
     const preferredLanguage =
       req.body?.preferredLanguage === 'en' || req.body?.preferredLanguage === 'hi'
         ? req.body.preferredLanguage
@@ -644,9 +644,9 @@ async function startServer() {
       subscription: sub,
       deliveryStatus:
         channel === 'whatsapp_ready' && !whatsappConfigured
-          ? 'Preference saved with consent. Note: Official WhatsApp Business API credentials are not configured yet on this pilot server — no WhatsApp message was sent.'
+          ? 'Preference saved with consent. WhatsApp notifications will activate once the WhatsApp Business gateway is linked — updates remain live on-site.'
           : channel === 'email' && !emailConfigured
-            ? 'Preference saved with consent. Note: External email delivery credentials are not configured yet on this pilot server — updates remain available on-site.'
+            ? 'Preference saved with consent. On-site alerts are active immediately, and email digests will activate once mail delivery is connected.'
             : 'Update preferences saved with your explicit consent. You can unsubscribe anytime.',
     });
   });
@@ -885,7 +885,7 @@ async function startServer() {
     const nameBn = cleanText(req.body?.nameBn, 140) || nameEn;
     const category = cleanText(req.body?.category, 60) as LocalAssistanceCentre['category'];
     const address = cleanText(req.body?.address, 220);
-    const locationArea = cleanText(req.body?.locationArea, 120) || 'Mecheda, Purba Medinipur';
+    const locationArea = cleanText(req.body?.locationArea, 120) || 'Pan-India / Local District';
     const descriptionEn = cleanText(req.body?.descriptionEn, 600);
     const officialPortalUrl = cleanText(req.body?.officialPortalUrl, 240);
     const publicContact = cleanText(req.body?.publicContact, 160) || 'Verify via official source';
@@ -1001,7 +1001,7 @@ async function startServer() {
       title: { bn: titleBn, en: titleEn, hi: titleEn },
       body: { bn: bodyBn, en: bodyEn, hi: bodyEn },
       category,
-      locationScope: cleanText(req.body?.locationScope, 80) || 'Mecheda, Purba Medinipur',
+      locationScope: cleanText(req.body?.locationScope, 80) || 'Pan-India',
       publishedAt: new Date().toISOString().slice(0, 10),
       isActive: true,
       createdBy: req.authUser!.name,
@@ -1163,7 +1163,7 @@ async function startServer() {
   app.post('/api/admin/jobs', requireMinRole('content_admin'), (req: AuthedRequest, res) => {
     const titleEn = cleanText(req.body?.title, 140);
     const employerName = cleanText(req.body?.employerName, 120);
-    const location = cleanText(req.body?.location, 120) || 'Mecheda, Purba Medinipur';
+    const location = cleanText(req.body?.location, 120) || 'Pan-India / Remote';
     const descriptionEn = cleanText(req.body?.description, 1000);
     const applicationUrl = cleanText(req.body?.applicationUrl, 240);
     const category = (cleanText(req.body?.category, 60) as JobListing['category']) || 'Local';

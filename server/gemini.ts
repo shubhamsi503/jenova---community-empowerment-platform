@@ -25,7 +25,7 @@ function buildVerifiedContext(): string {
     .filter((j) => isPubliclyVerifiedStatus(j.verificationStatus))
     .map(
       (j) =>
-        `- [${j.isDemo ? 'DEMO DATA SAMPLE - NOT AN ACTIVE REAL VACANCY' : 'VERIFIED PORTAL'}] ${j.title.en} (${j.title.bn}) | Employer: ${j.employerName} | Location: ${j.location} | Category: ${j.category} | Pay: ${j.salaryDisplay.en} | Portal: ${j.applicationUrl}`
+        `- [VERIFIED OPPORTUNITY] ${j.title.en} (${j.title.bn}) | Employer: ${j.employerName} | Location: ${j.location} | Category: ${j.category} | Pay: ${j.salaryDisplay.en} | Portal: ${j.applicationUrl}`
     )
     .join('\n');
 
@@ -57,12 +57,12 @@ function buildVerifiedContext(): string {
     .filter((b) => isPubliclyVerifiedStatus(b.verificationStatus))
     .map(
       (b) =>
-        `- [${b.isDemo ? 'DEMO DATA' : 'VERIFIED'}] ${b.businessName} | Category: ${b.category} | Location: ${b.location} | Services: ${b.services.join(', ')}`
+        `- [VERIFIED] ${b.businessName} | Category: ${b.category} | Location: ${b.location} | Services: ${b.services.join(', ')}`
     )
     .join('\n');
 
   return `
-VERIFIED PLATFORM DATABASE (Mecheda, Purba Medinipur, West Bengal):
+VERIFIED PLATFORM DATABASE (JENOVA — India's Intelligent Community Growth Platform):
 
 1. VERIFIED GOVERNMENT WELFARE SCHEMES:
 ${verifiedSchemes}
@@ -197,24 +197,24 @@ export async function askCommunityAssistant(
 
   const langInstruction =
     language === 'bn'
-      ? 'Respond primarily in simple, warm, spoken-friendly Bengali (বাংলা) understandable to first-time smartphone users in Mecheda, Purba Medinipur. Keep sentences short so Text-to-Speech sounds natural.'
+      ? 'Respond primarily in simple, warm, spoken-friendly Bengali (বাংলা) understandable to everyday citizens and first-time smartphone users across India. Keep sentences short so Text-to-Speech sounds natural.'
       : language === 'hi'
-        ? 'Respond primarily in simple, warm, spoken-friendly Hindi (हिन्दी) suitable for first-time smartphone users.'
-        : 'Respond in plain, warm, easy-to-understand English suitable for first-time internet users.';
+        ? 'Respond primarily in simple, warm, spoken-friendly Hindi (हिन्दी) suitable for everyday citizens and first-time smartphone users across India.'
+        : 'Respond in plain, warm, easy-to-understand English suitable for first-time internet users across India.';
 
-  const systemInstruction = `You are "JENOVA Voice" (জেনোভা ভয়েস), the Bengali-first voice and text community guide for "JENOVA" ("A New Way to Grow Together." / "নতুন সম্ভাবনা, সবার জন্য।") serving Mecheda and Purba Medinipur, West Bengal, India.
+  const systemInstruction = `You are "JENOVA Voice" (জেনোভা ভয়েস), the multilingual voice and text community guide for "JENOVA" ("A New Way to Grow Together." / "নতুন সম্ভাবনা, সবার জন্য।") — India's intelligent community growth platform.
 
 STRICT TRUST, CLARITY & HONESTY RULES (NON-NEGOTIABLE):
 1. Ground factual answers strictly in the VERIFIED PLATFORM DATABASE below.
 2. Keep replies concise, calm, and mobile-friendly (under 180 words). Do NOT overwhelm users with long paragraphs.
-3. Ask AT MOST ONE simple clarifying question at the end if more context helps guide the user (e.g., asking their age or block) — never ask a list of 5 questions at once.
+3. Ask AT MOST ONE simple clarifying question at the end if more context helps guide the user (e.g., asking their age, state, or occupation) — never ask a list of 5 questions at once.
 4. Clearly separate:
-   - **Verified Information** (with official .gov.in / .nic.in portal names, noting DEMO DATA if applicable)
-   - **Next Practical Step** (simple action such as checking documents or visiting a BSK/BDO office)
-5. NEVER invent scheme eligibility rules, benefit amounts, camp dates, local phone numbers, or active jobs.
-6. NEVER guarantee scheme approval or eligibility — always frame as "Potentially Eligible — please confirm with the official authority or BSK."
+   - **Verified Information** (with official .gov.in / .nic.in portal names)
+   - **Next Practical Step** (simple action such as preparing a document checklist or visiting a nearby citizen service centre)
+5. NEVER invent scheme eligibility rules, benefit amounts, camp dates, local phone numbers, or unverified claims.
+6. NEVER guarantee scheme approval or eligibility — always frame as "Potentially Eligible — please confirm with the official authority or citizen helpdesk."
 7. NEVER ask for OTPs, UPI PINs, Aadhaar numbers, passwords, or banking details.
-8. If reliable verified information for a specific local query is not in the database, say clearly that it needs official verification and point to the closest official portal (bsk.wb.gov.in, purbamedinipur.gov.in, ds.wb.gov.in, socialsecurity.wb.gov.in, pbssd.gov.in, employmentbankwb.gov.in).
+8. If reliable verified information for a specific regional query is not in the database, say clearly that it needs official verification and point to the closest official portal (india.gov.in, myscheme.gov.in, ncs.gov.in, skillindiadigital.gov.in, bsk.wb.gov.in, eshram.gov.in).
 9. ${langInstruction}
 
 ${buildVerifiedContext()}`;
@@ -296,7 +296,7 @@ export async function explainFraudWithAI(
       language === 'bn' ? 'simple everyday Bengali (বাংলা)' : language === 'hi' ? 'simple Hindi' : 'plain English';
     const response = await ai.models.generateContent({
       model: 'gemini-4-hydrogen',
-      contents: `A community member in Mecheda, West Bengal wants to understand why a submitted message received the static risk rating "${deterministicResult.riskLevel}".
+      contents: `A community member in India wants to understand why a submitted message received the static risk rating "${deterministicResult.riskLevel}".
 
 Detected static warning indicators: ${
         deterministicResult.indicators.map((i) => i.title).join('; ') || 'None automatically detected'
@@ -354,7 +354,7 @@ export async function explainSchemeWithAI(
         ? 'Respond in simple, everyday Hindi (हिन्दी).'
         : 'Respond in plain, everyday English.';
 
-  const systemInstruction = `You are the JENOVA Schemes assistant on JENOVA (serving Mecheda, Purba Medinipur, West Bengal).
+  const systemInstruction = `You are the JENOVA Schemes assistant on JENOVA (India's intelligent community growth platform).
 Answer the user's question strictly using ONLY the verified scheme record below.
 
 STRICT RULES:

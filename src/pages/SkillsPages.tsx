@@ -54,6 +54,15 @@ export function SkillDevelopmentPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: courses.length };
+    for (const cat of SKILL_CATEGORIES) counts[cat] = 0;
+    for (const c of courses) {
+      counts[c.category] = (counts[c.category] || 0) + 1;
+    }
+    return counts;
+  }, [courses]);
+
   const filtered = useMemo(() => {
     return courses.filter((c) => {
       if (category !== 'ALL' && c.category !== category) return false;
@@ -117,7 +126,7 @@ export function SkillDevelopmentPage() {
                 : 'Vocational Trades, Tailoring & Entrepreneurship'}
             </p>
             <p className="text-xs text-[#5C5C58] mt-0.5">
-              Hands-on livelihoods through Utkarsh Bangla and Purba Medinipur RSETI centres.
+              Hands-on livelihoods through Utkarsh Bangla, PMKVY, and National RSETI training centres.
             </p>
           </div>
         </div>
@@ -169,7 +178,7 @@ export function SkillDevelopmentPage() {
                 : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
             }`}
           >
-            {t.common.all}
+            {t.common.all} ({categoryCounts.ALL || 0})
           </button>
           {SKILL_CATEGORIES.map((cat) => (
             <button
@@ -182,7 +191,7 @@ export function SkillDevelopmentPage() {
                   : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
               }`}
             >
-              {cat}
+              {cat} ({categoryCounts[cat] || 0})
             </button>
           ))}
         </div>
@@ -192,8 +201,20 @@ export function SkillDevelopmentPage() {
       {loading ? (
         <p className="text-sm text-[#5C5C58] py-12 text-center">{t.common.loading}</p>
       ) : filtered.length === 0 ? (
-        <div className="p-10 rounded-xl bg-white border border-[#E5E3DC] text-center">
+        <div className="p-10 rounded-xl bg-white border border-[#E5E3DC] text-center space-y-3">
           <p className="text-sm text-[#5C5C58]">{t.common.noResults}</p>
+          <button
+            type="button"
+            onClick={() => {
+              setCategory('ALL');
+              setSearch('');
+              setFreeOnly(false);
+              setModeFilter('ALL');
+            }}
+            className="px-4 py-2 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+          >
+            {language === 'bn' ? 'সব ফিল্টার রিসেট করুন' : language === 'hi' ? 'सभी फ़िल्टर रीसेट करें' : 'Reset Filters'}
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-14">
@@ -273,11 +294,17 @@ export function SkillDevelopmentPage() {
       <section className="pt-8 border-t border-[#E5E3DC]">
         <h2 className="text-xl sm:text-2xl font-bold text-[#252525]">
           {language === 'bn'
-            ? 'পূর্ব মেদিনীপুর ও মেচেদা প্রশিক্ষণ কেন্দ্র ডিরেক্টরি'
-            : 'Purba Medinipur & Mecheda Training-Centre Directory'}
+            ? 'যাচাইকৃত সরকারি ও স্বীকৃত প্রশিক্ষণ কেন্দ্র ডিরেক্টরি'
+            : language === 'hi'
+              ? 'सत्यापित सरकारी और मान्यता प्राप्त प्रशिक्षण केंद्र निर्देशिका'
+              : 'Verified National & State Training-Centre Directory'}
         </h2>
         <p className="text-sm text-[#5C5C58] mt-1 mb-6">
-          Verified government training directories and clearly labeled local pilot samples.
+          {language === 'bn'
+            ? 'দেশজুড়ে বিনামূল্যে বৃত্তিমূলক, ডিজিটাল ও উদ্যোক্তা প্রশিক্ষণের অফিসিয়াল কেন্দ্র ডিরেক্টরি।'
+            : language === 'hi'
+              ? 'देशभर में निःशुल्क व्यावसायिक, डिजिटल और उद्यमिता प्रशिक्षण के आधिकारिक केंद्र।'
+              : 'Official government-accredited training networks offering free vocational, computer, and entrepreneurship batches across India.'}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

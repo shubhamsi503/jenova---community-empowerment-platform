@@ -32,35 +32,60 @@ export function JenovaHeroShowcase({ language, onNavigate }: JenovaHeroShowcaseP
     {
       id: 'stay-safe',
       path: '/scam-check',
-      label: language === 'bn' ? 'নিরাপদ থাকুন — JENOVA Protect খুলুন' : 'Stay Safe — Open JENOVA Protect',
+      label:
+        language === 'bn'
+          ? 'নিরাপদ থাকুন — JENOVA Protect খুলুন'
+          : language === 'hi'
+            ? 'सुरक्षित रहें — JENOVA Protect खोलें'
+            : 'Stay Safe — Open JENOVA Protect',
       style: { left: '19.1%', top: '4.2%', width: '10.1%', height: '23.6%' },
       ring: true,
     },
     {
       id: 'find-jobs',
       path: '/jobs',
-      label: language === 'bn' ? 'কাজ খুঁজুন — চাকরি ও সুযোগ' : 'Find Jobs — Explore Local Opportunities',
+      label:
+        language === 'bn'
+          ? 'কাজ খুঁজুন — চাকরি ও সুযোগ'
+          : language === 'hi'
+            ? 'नौकरी खोजें — स्थानीय अवसर देखें'
+            : 'Find Jobs — Explore Local Opportunities',
       style: { left: '79.8%', top: '4.8%', width: '10.9%', height: '25.8%' },
       ring: true,
     },
     {
       id: 'local-help',
       path: '/local-help',
-      label: language === 'bn' ? 'স্থানীয় সহায়তা — BSK ও অফিস' : 'Local Help — Verified Support Centres',
+      label:
+        language === 'bn'
+          ? 'স্থানীয় সহায়তা — BSK ও অফিস'
+          : language === 'hi'
+            ? 'स्थानीय सहायता — BSK और कार्यालय'
+            : 'Local Help — Verified Support Centres',
       style: { left: '85.3%', top: '33.2%', width: '11.4%', height: '26.8%' },
       ring: true,
     },
     {
       id: 'india-map',
       path: '/schemes',
-      label: language === 'bn' ? 'সরকারি প্রকল্প — যোগ্যতা যাচাই করুন' : 'India Schemes — Check Government Eligibility',
+      label:
+        language === 'bn'
+          ? 'সরকারি প্রকল্প — যোগ্যতা যাচাই করুন'
+          : language === 'hi'
+            ? 'सरकारी योजनाएं — पात्रता जांचें'
+            : 'India Schemes — Check Government Eligibility',
       style: { left: '2.5%', top: '18%', width: '26%', height: '74%' },
       ring: false,
     },
     {
       id: 'jenova-globe',
       path: '/assistant',
-      label: language === 'bn' ? 'JENOVA AI সহায়ক — বাংলায় জিজ্ঞাসা করুন' : 'JENOVA Global AI Guide — Ask Anything',
+      label:
+        language === 'bn'
+          ? 'JENOVA AI সহায়ক — বাংলায় জিজ্ঞাসা করুন'
+          : language === 'hi'
+            ? 'JENOVA AI सहायक — हिंदी में पूछें'
+            : 'JENOVA Global AI Guide — Ask Anything',
       style: { left: '34%', top: '5%', width: '44%', height: '86%' },
       ring: false,
     },

@@ -2,13 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   Bell,
+  CheckCircle2,
   ChevronDown,
   ClipboardCheck,
   FileCheck2,
   Leaf,
   Megaphone,
+  MessageSquarePlus,
   Play,
   ShieldCheck,
+  Sparkles,
   TrendingUp,
 } from 'lucide-react';
 import gsap from 'gsap';
@@ -27,6 +30,9 @@ import type {
 import {
   Briefcase3DIcon,
   Checklist3DIcon,
+  JenovaLocalLogo,
+  JenovaProtectLogo,
+  JenovaSchemesLogo,
   JourneyOrbIcon,
   LocalPin3DIcon,
   Schemes3DIcon,
@@ -218,6 +224,7 @@ export function HomePage() {
   const [courses, setCourses] = useState<CourseListing[]>([]);
   const [schemes, setSchemes] = useState<WelfareScheme[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [noticeIdx, setNoticeIdx] = useState(0);
   const [fraudAlerts, setFraudAlerts] = useState<FraudAlert[]>([]);
   const [centres, setCentres] = useState<LocalAssistanceCentre[]>([]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -325,7 +332,7 @@ export function HomePage() {
   const floatingQuickPanels = [
     {
       id: 'stay-safe',
-      label: language === 'bn' ? 'নিরাপদ থাকুন' : 'Stay Safe',
+      label: language === 'bn' ? 'নিরাপদ থাকুন' : language === 'hi' ? 'सुरक्षित रहें' : 'Stay Safe',
       path: '/scam-check',
       icon: <Shield3DIcon size={36} />,
       posClass: 'top-2 left-1 2xl:left-3',
@@ -333,7 +340,7 @@ export function HomePage() {
     },
     {
       id: 'get-schemes',
-      label: language === 'bn' ? 'সরকারি প্রকল্প' : 'Get Schemes',
+      label: language === 'bn' ? 'সরকারি প্রকল্প' : language === 'hi' ? 'सरकारी योजनाएं' : 'Get Schemes',
       path: '/schemes',
       icon: <Schemes3DIcon size={36} />,
       posClass: 'bottom-12 left-1 2xl:left-3',
@@ -341,7 +348,7 @@ export function HomePage() {
     },
     {
       id: 'find-jobs',
-      label: language === 'bn' ? 'কাজ খুঁজুন' : 'Find Jobs',
+      label: language === 'bn' ? 'কাজ খুঁজুন' : language === 'hi' ? 'नौकरी खोजें' : 'Find Jobs',
       path: '/jobs',
       icon: <Briefcase3DIcon size={35} />,
       posClass: 'top-2 right-1 2xl:right-3',
@@ -349,7 +356,7 @@ export function HomePage() {
     },
     {
       id: 'local-help',
-      label: language === 'bn' ? 'স্থানীয় সহায়তা' : 'Local Help',
+      label: language === 'bn' ? 'স্থানীয় সহায়তা' : language === 'hi' ? 'स्थानीय सहायता' : 'Local Help',
       path: '/local-help',
       icon: <LocalPin3DIcon size={36} />,
       posClass: 'bottom-12 right-1 2xl:right-3',
@@ -364,7 +371,9 @@ export function HomePage() {
       desc:
         language === 'bn'
           ? 'সন্দেহজনক চাকরির প্রস্তাব, অনলাইন প্রতারণা ও ভুয়া স্ক্যাম শনাক্ত করুন।'
-          : 'Detect suspicious job offers, online fraud and potential scams.',
+          : language === 'hi'
+            ? 'संदिग्ध नौकरी प्रस्ताव, ऑनलाइन धोखाधड़ी और संभावित स्कैम पहचानें।'
+            : 'Detect suspicious job offers, online fraud and potential scams.',
       icon: <Shield3DIcon size={54} />,
     },
     {
@@ -373,7 +382,9 @@ export function HomePage() {
       desc:
         language === 'bn'
           ? 'সরকারি কল্যাণমূলক প্রকল্প খুঁজুন এবং প্রাথমিক যোগ্যতা যাচাই করুন।'
-          : 'Discover government schemes and check eligibility.',
+          : language === 'hi'
+            ? 'सरकारी कल्याणकारी योजनाएं खोजें और प्रारंभिक पात्रता जांचें।'
+            : 'Discover government schemes and check eligibility.',
       icon: <Schemes3DIcon size={54} />,
     },
     {
@@ -382,7 +393,9 @@ export function HomePage() {
       desc:
         language === 'bn'
           ? 'অফিস বা BSK যাওয়ার আগে প্রয়োজনীয় কাগজপত্র গুছিয়ে প্রস্তুত করুন।'
-          : 'Prepare documents before visiting offices.',
+          : language === 'hi'
+            ? 'सरकारी दफ़्तर या BSK जाने से पहले आवश्यक दस्तावेज़ तैयार करें।'
+            : 'Prepare documents before visiting offices.',
       icon: <Checklist3DIcon size={54} />,
     },
     {
@@ -391,7 +404,9 @@ export function HomePage() {
       desc:
         language === 'bn'
           ? 'সহজ ও স্বাভাবিক বাংলা কণ্ঠে আপনার প্রশ্নের সরাসরি উত্তর শুনুন।'
-          : 'Get answers in natural Bengali voice.',
+          : language === 'hi'
+            ? 'सरल हिंदी और बंगाली आवाज़ में अपने सवालों के तुरंत उत्तर सुनें।'
+            : 'Get answers in natural Bengali voice.',
       icon: <Voice3DIcon size={54} />,
     },
     {
@@ -400,7 +415,9 @@ export function HomePage() {
       desc:
         language === 'bn'
           ? 'যাচাইকৃত স্থানীয় সহায়তা কেন্দ্র (BSK), বিডিও ও সরকারি হেল্পলাইন খুঁজুন।'
-          : 'Find verified local assistance and support.',
+          : language === 'hi'
+            ? 'सत्यापित स्थानीय सहायता केंद्र (BSK), BDO और सरकारी हेल्पलाइन खोजें।'
+            : 'Find verified local assistance and support.',
       icon: <LocalPin3DIcon size={54} />,
     },
   ];
@@ -415,55 +432,94 @@ export function HomePage() {
     {
       num: 1,
       key: 'discover',
-      title: language === 'bn' ? '১. খুঁজুন (Discover)' : '1. Discover',
-      subtitle: language === 'bn' ? 'সঠিক তথ্য খুঁজুন' : 'Find what you need',
+      title:
+        language === 'bn'
+          ? '১. খুঁজুন (Discover)'
+          : language === 'hi'
+            ? '1. खोजें (Discover)'
+            : '1. Discover',
+      subtitle:
+        language === 'bn'
+          ? 'সঠিক তথ্য খুঁজুন'
+          : language === 'hi'
+            ? 'अपनी जरूरत की जानकारी पाएं'
+            : 'Find what you need',
       path: '/schemes',
     },
     {
       num: 2,
       key: 'understand',
-      title: language === 'bn' ? '২. বুঝুন (Understand)' : '2. Understand',
-      subtitle: language === 'bn' ? 'সহজ ভাষায় নির্দেশিকা' : 'Get clear guidance',
+      title:
+        language === 'bn'
+          ? '২. বুঝুন (Understand)'
+          : language === 'hi'
+            ? '2. समझें (Understand)'
+            : '2. Understand',
+      subtitle:
+        language === 'bn'
+          ? 'সহজ ভাষায় নির্দেশিকা'
+          : language === 'hi'
+            ? 'सरल भाषा में मार्गदर्शन'
+            : 'Get clear guidance',
       path: '/assistant',
     },
     {
       num: 3,
       key: 'prepare',
-      title: language === 'bn' ? '৩. প্রস্তুত হন (Prepare)' : '3. Prepare',
-      subtitle: language === 'bn' ? 'চেকলিস্ট দিয়ে প্রস্তুত' : 'Get ready with checklist',
+      title:
+        language === 'bn'
+          ? '৩. প্রস্তুত হন (Prepare)'
+          : language === 'hi'
+            ? '3. तैयारी करें (Prepare)'
+            : '3. Prepare',
+      subtitle:
+        language === 'bn'
+          ? 'চেকলিস্ট দিয়ে প্রস্তুত'
+          : language === 'hi'
+            ? 'चेकलिस्ट से कागज़ तैयार करें'
+            : 'Get ready with checklist',
       path: '/checklist',
     },
     {
       num: 4,
       key: 'act',
-      title: language === 'bn' ? '৪. পদক্ষেপ নিন (Act)' : '4. Act',
-      subtitle: language === 'bn' ? 'অফিসিয়াল পরিষেবা নিন' : 'Access services',
+      title:
+        language === 'bn'
+          ? '৪. পদক্ষেপ নিন (Act)'
+          : language === 'hi'
+            ? '4. कदम बढ़ाएं (Act)'
+            : '4. Act',
+      subtitle:
+        language === 'bn'
+          ? 'অফিসিয়াল পরিষেবা নিন'
+          : language === 'hi'
+            ? 'आधिकारिक सेवाओं का लाभ लें'
+            : 'Access services',
       path: '/local-help',
     },
     {
       num: 5,
       key: 'followup',
-      title: language === 'bn' ? '৫. সাথে থাকুন (Follow Up)' : '5. Follow Up',
-      subtitle: language === 'bn' ? 'অগ্রগতি ট্র্যাক করুন' : 'Track progress',
+      title:
+        language === 'bn'
+          ? '৫. সাথে থাকুন (Follow Up)'
+          : language === 'hi'
+            ? '5. आगे बढ़ें (Follow Up)'
+            : '5. Follow Up',
+      subtitle:
+        language === 'bn'
+          ? 'অগ্রগতি ট্র্যাক করুন'
+          : language === 'hi'
+            ? 'अपनी प्रगति पर नज़र रखें'
+            : 'Track progress',
       path: '/updates',
     },
   ];
 
+  const activeAnnouncement = announcements[noticeIdx] || announcements[0] || null;
+
   return (
     <div ref={pageRef} className="overflow-x-hidden">
-      {/* Live Community Announcement Ticker (Only if real DB announcements exist) */}
-      {announcements.length > 0 && (
-        <div className="bg-[#092B55] text-white border-b border-[#36E7F2]/30">
-          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-2.5 text-xs">
-            <Megaphone className="w-3.5 h-3.5 shrink-0 text-[#FFC45C]" />
-            <p className="truncate font-medium">
-              <span className="font-bold text-[#36E7F2]">{pickText(announcements[0].title, language)}:</span>{' '}
-              {pickText(announcements[0].body, language)}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* =====================================================================
           SECTION 1 & 2: EXACT REFERENCE HERO + FIVE GLOWING GLASS SERVICE CARDS
           ===================================================================== */}
@@ -478,19 +534,45 @@ export function HomePage() {
               {/* Trust Badge */}
               <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-[#0A2548]/88 border border-[#138A45]/55 dark:border-[#36E7F2]/50 shadow-sm text-[11px] sm:text-xs font-bold text-[#072247] dark:text-[#DCEEFF]">
                 <ShieldCheck className="w-4 h-4 text-[#138A45] dark:text-[#36E7F2] shrink-0" />
-                <span>Trusted &bull; Verified &bull; People First</span>
+                <span>
+                  {language === 'bn'
+                    ? 'বিশ্বস্ত • যাচাইকৃত • মানুষই প্রথম'
+                    : language === 'hi'
+                      ? 'विश्वसनीय • सत्यापित • जन-प्रथम'
+                      : 'Trusted • Verified • People First'}
+                </span>
               </div>
 
-              {/* Exact 3-Line Display Heading */}
-              <h1 className="text-[34px] min-[400px]:text-[40px] sm:text-5xl lg:text-[44px] xl:text-[56px] font-black tracking-tight leading-[1.06] text-[#072247] dark:text-white">
+              {/* Exact 3-Line Display Heading (Matra-safe line-height for Hindi & Bengali) */}
+              <h1
+                className={`font-black text-[#072247] dark:text-white ${
+                  language === 'hi'
+                    ? 'text-[32px] min-[400px]:text-[38px] sm:text-[44px] lg:text-[40px] xl:text-[50px] leading-[1.24] tracking-normal'
+                    : language === 'bn'
+                      ? 'text-[34px] min-[400px]:text-[40px] sm:text-[46px] lg:text-[42px] xl:text-[52px] leading-[1.18] tracking-normal'
+                      : 'text-[34px] min-[400px]:text-[40px] sm:text-5xl lg:text-[44px] xl:text-[56px] leading-[1.06] tracking-tight'
+                }`}
+              >
                 <span className="block">
-                  {language === 'bn' ? 'আপনার সমাজ।' : 'Your Community.'}
+                  {language === 'bn'
+                    ? 'আপনার সমাজ।'
+                    : language === 'hi'
+                      ? 'आपका समाज।'
+                      : 'Your Community.'}
                 </span>
                 <span className="block">
-                  {language === 'bn' ? 'আপনার সুযোগ।' : 'Your Opportunities.'}
+                  {language === 'bn'
+                    ? 'আপনার সুযোগ।'
+                    : language === 'hi'
+                      ? 'आपके अवसर।'
+                      : 'Your Opportunities.'}
                 </span>
                 <span className="block mt-0.5 bg-gradient-to-r from-[#FF8A18] via-[#FF7300] to-[#E66000] bg-clip-text text-transparent">
-                  {language === 'bn' ? 'আপনার ভবিষ্যৎ।' : 'Your Future.'}
+                  {language === 'bn'
+                    ? 'আপনার ভবিষ্যৎ।'
+                    : language === 'hi'
+                      ? 'आपका भविष्य।'
+                      : 'Your Future.'}
                 </span>
               </h1>
 
@@ -503,7 +585,7 @@ export function HomePage() {
                     : 'Discover essential information, government assistance, digital safety and new opportunities through one intelligent community platform.'}
               </p>
 
-              {/* Action Buttons: Explore Services + Watch Demo + Bengali Read-Aloud */}
+              {/* Action Buttons: Explore Services + Watch Demo + Multilingual Read-Aloud */}
               <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-0.5">
                 <button
                   type="button"
@@ -512,7 +594,13 @@ export function HomePage() {
                   }
                   className="inline-flex items-center gap-2 px-6 py-2.5 sm:py-3 rounded-full text-sm font-bold text-white bg-gradient-to-r from-[#07443B] via-[#0D6249] to-[#138A45] hover:brightness-110 border border-[#6CF4FC]/75 shadow-[0_10px_26px_-6px_rgba(9,43,85,0.45),0_0_18px_rgba(54,231,242,0.45)] transition-all whitespace-nowrap cursor-pointer min-h-[44px]"
                 >
-                  <span>{language === 'bn' ? 'পরিষেবা দেখুন' : 'Explore Services'}</span>
+                  <span>
+                    {language === 'bn'
+                      ? 'পরিষেবা দেখুন'
+                      : language === 'hi'
+                        ? 'सेवाएं देखें'
+                        : 'Explore Services'}
+                  </span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
@@ -524,7 +612,13 @@ export function HomePage() {
                   <span className="w-5.5 h-5.5 rounded-full bg-[#072247] dark:bg-[#36E7F2] text-white dark:text-[#072247] flex items-center justify-center">
                     <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
                   </span>
-                  <span>{language === 'bn' ? 'ডেমো দেখুন' : 'Watch Demo'}</span>
+                  <span>
+                    {language === 'bn'
+                      ? 'ডেমো দেখুন'
+                      : language === 'hi'
+                        ? 'डेमो देखें'
+                        : 'Watch Demo'}
+                  </span>
                 </button>
 
                 <ReadAloudButton
@@ -533,16 +627,18 @@ export function HomePage() {
                   text={
                     language === 'bn'
                       ? 'আপনার সমাজ, আপনার সুযোগ, আপনার ভবিষ্যৎ। নতুন সম্ভাবনা, সবার জন্য। জেনোভা আপনাকে সরকারি প্রকল্প, ডিজিটাল নিরাপত্তা ও স্থানীয় সহায়তা পেতে সাহায্য করে।'
-                      : 'Your Community. Your Opportunities. Your Future. Discover essential information, government assistance, digital safety and new opportunities through JENOVA.'
+                      : language === 'hi'
+                        ? 'आपका समाज, आपके अवसर, आपका भविष्य। नई संभावनाएं, सभी के लिए। जेनोवा आपको सरकारी योजनाओं, डिजिटल सुरक्षा और स्थानीय सहायता तक सरलता से पहुंचाता है।'
+                        : 'Your Community. Your Opportunities. Your Future. Discover essential information, government assistance, digital safety and new opportunities through JENOVA.'
                   }
                 />
               </div>
 
-              {/* Bengali Signature Tagline below buttons */}
+              {/* Multilingual Signature Tagline below buttons */}
               <div className="flex items-center gap-2.5 pt-1 max-w-md">
                 <Leaf className="w-4 h-4 text-[#16A34A] dark:text-[#36E7F2] shrink-0" />
                 <span className="text-sm sm:text-[15px] font-bold text-[#072247] dark:text-[#E6F4FF] whitespace-nowrap drop-shadow-[0_1px_4px_rgba(255,255,255,0.65)]">
-                  নতুন সম্ভাবনা, সবার জন্য।
+                  {language === 'hi' ? 'नई संभावनाएं, सभी के लिए।' : 'নতুন সম্ভাবনা, সবার জন্য।'}
                 </span>
                 <span className="h-[1.5px] flex-1 bg-gradient-to-r from-[#072247]/50 dark:from-[#36E7F2]/55 to-transparent" />
               </div>
@@ -581,7 +677,13 @@ export function HomePage() {
                   key={card.path}
                   title={card.title}
                   description={card.desc}
-                  ctaLabel={language === 'bn' ? 'আরও জানুন' : 'Learn More'}
+                  ctaLabel={
+                    language === 'bn'
+                      ? 'আরও জানুন'
+                      : language === 'hi'
+                        ? 'अधिक जानें'
+                        : 'Learn More'
+                  }
                   icon={card.icon}
                   onClick={() => navigate(card.path)}
                 />
@@ -596,7 +698,7 @@ export function HomePage() {
           ===================================================================== */}
       <section
         id="how-jenova-works"
-        className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-10 scroll-mt-24"
+        className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-6 scroll-mt-24"
       >
         <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-4 xl:gap-5">
           {/* Frosted Pearlescent-White Ribbon Container */}
@@ -604,11 +706,19 @@ export function HomePage() {
             <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
               {/* Left Heading Block */}
               <div className="lg:w-[195px] shrink-0 space-y-1">
-                <h2 className="text-2xl sm:text-[25px] font-black tracking-tight text-[#072247] dark:text-white leading-tight">
-                  {language === 'bn' ? 'কীভাবে JENOVA কাজ করে?' : 'How JENOVA Works?'}
+                <h2 className="text-2xl sm:text-[25px] font-black text-[#072247] dark:text-white leading-snug">
+                  {language === 'bn'
+                    ? 'কীভাবে JENOVA কাজ করে?'
+                    : language === 'hi'
+                      ? 'JENOVA कैसे काम करता है?'
+                      : 'How JENOVA Works?'}
                 </h2>
                 <p className="text-sm font-semibold text-[#2E4C6B] dark:text-[#B9D8F7]">
-                  {language === 'bn' ? 'সহজ ধাপ। বাস্তব সহায়তা।' : 'Simple steps. Real support.'}
+                  {language === 'bn'
+                    ? 'সহজ ধাপ। বাস্তব সহায়তা।'
+                    : language === 'hi'
+                      ? 'सरल चरण। वास्तविक सहायता।'
+                      : 'Simple steps. Real support.'}
                 </p>
                 <svg
                   width="64"
@@ -677,16 +787,156 @@ export function HomePage() {
               <p className="text-[16px] sm:text-[17px] font-extrabold leading-snug text-white">
                 {language === 'bn'
                   ? 'মানুষের ক্ষমতায়ন। আরও সুন্দর আগামী।'
-                  : 'Empowering People. Building a Better Tomorrow.'}
+                  : language === 'hi'
+                    ? 'सशक्त समाज। उज्ज्वल भविष्य की ओर।'
+                    : 'Empowering People. Building a Better Tomorrow.'}
               </p>
               <span className="mt-1.5 inline-block text-[11px] font-semibold text-[#9AF7FF]">
-                {language === 'bn' ? 'JENOVA Voice শুরু করুন' : 'Start with JENOVA Voice'}
+                {language === 'bn'
+                  ? 'JENOVA Voice শুরু করুন'
+                  : language === 'hi'
+                    ? 'JENOVA Voice शुरू करें'
+                    : 'Start with JENOVA Voice'}
               </span>
             </div>
             <span className="w-11 h-11 rounded-full bg-white/10 group-hover:bg-[#FFC45C] group-hover:text-[#092B55] border border-white/70 flex items-center justify-center shrink-0 transition-colors">
               <ArrowRight className="w-5 h-5" />
             </span>
           </button>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          ATTRACTIVE OFFICIAL COMMUNITY NOTICE SPOTLIGHT (Replaces Old Top Strip)
+          ===================================================================== */}
+      <section className="reveal-section max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6">
+        <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-white via-[#F5FAFF] to-[#EBF9F3] dark:from-[#0A2242] dark:via-[#0C2B52] dark:to-[#072F38] border border-[#36E7F2]/45 dark:border-[#36E7F2]/35 shadow-[0_16px_40px_-14px_rgba(9,43,85,0.22)]">
+          {/* Indian Tricolour Luminous Accent Strip */}
+          <div
+            className="h-1.5 w-full bg-gradient-to-r from-[#FF8A18] via-[#FFC45C] via-45% to-[#138A45]"
+            aria-hidden="true"
+          />
+
+          <div className="p-5 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="flex items-start gap-4 flex-1 min-w-0">
+              {/* Glowing Notice Emblem */}
+              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FF8A18] via-[#F97316] to-[#092B55] text-white flex items-center justify-center shadow-[0_10px_24px_-6px_rgba(255,138,24,0.55)] border border-white/40">
+                <Megaphone className="w-6 h-6 sm:w-7 sm:h-7" />
+              </div>
+
+              <div className="space-y-2 min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55]">
+                    <span className="w-2 h-2 rounded-full bg-[#36E7F2] dark:bg-[#138A45] animate-pulse" />
+                    {language === 'bn'
+                      ? 'গুরুত্বপূর্ণ কমিউনিটি নোটিশ'
+                      : language === 'hi'
+                        ? 'महत्वपूर्ण सामुदायिक सूचना'
+                        : 'Official Community Notice'}
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#138A45] dark:text-[#8FF6FF]">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    {language === 'bn'
+                      ? 'যাচাইকৃত সরকারি লিঙ্ক · কোনো ফি নেই'
+                      : language === 'hi'
+                        ? 'सत्यापित सरकारी लिंक · कोई शुल्क नहीं'
+                        : 'Verified Official Links · 100% Free'}
+                  </span>
+                </div>
+
+                <h2 className="text-lg sm:text-xl font-black text-[#092B55] dark:text-white leading-snug">
+                  {activeAnnouncement
+                    ? pickText(activeAnnouncement.title, language)
+                    : language === 'bn'
+                      ? 'JENOVA কমিউনিটি গ্রোথ হাব — যাচাইকৃত সুযোগ, সবার জন্য'
+                      : language === 'hi'
+                        ? 'JENOVA सामुदायिक विकास हब — हर नागरिक के लिए सत्यापित अवसर'
+                        : 'JENOVA Community Growth Hub — Verified Opportunities for Every Citizen'}
+                </h2>
+
+                <p className="text-xs sm:text-sm text-[#355373] dark:text-[#CBE6FF] leading-relaxed max-w-4xl">
+                  {activeAnnouncement
+                    ? pickText(activeAnnouncement.body, language)
+                    : language === 'bn'
+                      ? 'JENOVA আপনাকে সহজ বাংলা, হিন্দি ও ইংরেজিতে যাচাইকৃত সরকারি প্রকল্প, প্রতারণা যাচাই এবং স্থানীয় BSK ও BDO সহায়তা কেন্দ্রে পৌঁছাতে সাহায্য করে। কখনোই কোনো অজানা লিঙ্কে OTP বা UPI PIN শেয়ার করবেন না।'
+                      : language === 'hi'
+                        ? 'JENOVA आपको सरल हिंदी, बंगाली और अंग्रेजी में सत्यापित सरकारी योजनाओं, धोखाधड़ी से सुरक्षा और स्थानीय BSK व BDO सहायता केंद्रों से जोड़ता है। कभी भी किसी अनजान लिंक पर अपना OTP या UPI PIN साझा न करें।'
+                        : 'JENOVA connects citizens directly to verified government portals, scam protection tools, and local BSK & BDO assistance centres in English, Bengali, and Hindi. Never pay fees to middlemen or share your OTP/UPI PIN.'}
+                </p>
+
+                {announcements.length > 1 && (
+                  <div className="flex items-center gap-2 pt-1">
+                    {announcements.map((ann, i) => (
+                      <button
+                        key={ann.id}
+                        type="button"
+                        onClick={() => setNoticeIdx(i)}
+                        className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors cursor-pointer ${
+                          i === noticeIdx
+                            ? 'bg-[#138A45] text-white'
+                            : 'bg-[#E2EFFB] dark:bg-white/10 text-[#092B55] dark:text-[#B9D8F7] hover:bg-[#D0E6FA]'
+                        }`}
+                      >
+                        {language === 'bn'
+                          ? `নোটিশ ${i + 1}`
+                          : language === 'hi'
+                            ? `सूचना ${i + 1}`
+                            : `Notice ${i + 1}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Action Cluster */}
+            <div className="flex flex-wrap lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => navigate('/scam-check')}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#092B55] via-[#0B4D46] to-[#138A45] hover:brightness-110 text-white text-xs font-bold shadow-md cursor-pointer whitespace-nowrap"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#FFC45C]" />
+                <span>
+                  {language === 'bn'
+                    ? 'JENOVA Protect ব্যবহার করুন'
+                    : language === 'hi'
+                      ? 'JENOVA Protect जांचें'
+                      : 'Check with JENOVA Protect'}
+                </span>
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => navigate('/schemes')}
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#081F3D] border border-[#FF8A18]/50 text-[#C2570A] dark:text-[#FFC45C] hover:bg-[#FFF5EB] dark:hover:bg-white/10 text-xs font-bold cursor-pointer whitespace-nowrap"
+                >
+                  <span>
+                    {language === 'bn'
+                      ? 'সরকারি প্রকল্প'
+                      : language === 'hi'
+                        ? 'सरकारी योजनाएं'
+                        : 'Official Schemes'}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/contact')}
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#081F3D] border border-[#092B55]/25 dark:border-[#36E7F2]/35 text-[#092B55] dark:text-[#DCEEFF] hover:bg-[#EAF5FF] dark:hover:bg-white/10 text-xs font-bold cursor-pointer whitespace-nowrap"
+                >
+                  <MessageSquarePlus className="w-3.5 h-3.5" />
+                  <span>
+                    {language === 'bn'
+                      ? 'মতামত দিন'
+                      : language === 'hi'
+                        ? 'सुझाव दें'
+                        : 'Share Feedback'}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -837,7 +1087,9 @@ export function HomePage() {
               desc:
                 language === 'bn'
                   ? 'আয় ও প্রয়োজনীয় খরচ চার্টে দেখুন এবং মাসিক সঞ্চয় পরিকল্পনা করুন।'
-                  : 'Break down household income vs. essentials with live charts and practical spending guidance.',
+                  : language === 'hi'
+                    ? 'घरेलू आय और आवश्यक खर्चों को चार्ट में देखें और मासिक बचत की योजना बनाएं।'
+                    : 'Break down household income vs. essentials with live charts and practical spending guidance.',
             },
             {
               path: '/finance/savings',
@@ -850,7 +1102,9 @@ export function HomePage() {
               desc:
                 language === 'bn'
                   ? 'প্রতি মাসে ছোট সঞ্চয় কীভাবে বাড়ে তা হিসাব করুন এবং নিজের লক্ষ্য সেভ করুন।'
-                  : 'See how regular monthly savings grow over time and track emergency or education goals.',
+                  : language === 'hi'
+                    ? 'जानें कि हर महीने की छोटी बचत समय के साथ कैसे बढ़ती है और अपने लक्ष्य सहेजें।'
+                    : 'See how regular monthly savings grow over time and track emergency or education goals.',
             },
             {
               path: '/finance/emi',
@@ -863,7 +1117,9 @@ export function HomePage() {
               desc:
                 language === 'bn'
                   ? 'যেকোনো ঋণ নেওয়ার আগে মাসিক কিস্তি এবং মোট সুদ আগে থেকেই যাচাই করুন।'
-                  : 'Calculate exact monthly instalments and total interest payable before taking any formal loan.',
+                  : language === 'hi'
+                    ? 'कोई भी औपचारिक ऋण लेने से पहले मासिक किस्त और कुल ब्याज की सटीक गणना करें।'
+                    : 'Calculate exact monthly instalments and total interest payable before taking any formal loan.',
             },
           ].map((tool) => (
             <div
@@ -891,16 +1147,19 @@ export function HomePage() {
         <SafetyNotice />
       </section>
 
-      {/* SECTION 6: VERIFIED GOVERNMENT SCHEMES */}
+      {/* SECTION 6: VERIFIED GOVERNMENT SCHEMES (With Branded JENOVA Schemes Logo) */}
       <section className="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
-              {t.home.schemesTitle}
-            </h2>
-            <p className="mt-1.5 text-sm sm:text-base text-[#46607E] dark:text-[#B9D8F7]">
-              {t.home.schemesSubtitle}
-            </p>
+          <div className="max-w-2xl space-y-2.5">
+            <JenovaSchemesLogo size="sm" theme={theme} />
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
+                {t.home.schemesTitle}
+              </h2>
+              <p className="mt-1.5 text-sm sm:text-base text-[#46607E] dark:text-[#B9D8F7]">
+                {t.home.schemesSubtitle}
+              </p>
+            </div>
           </div>
           <button
             type="button"
@@ -941,7 +1200,11 @@ export function HomePage() {
                   onClick={() => navigate(`/schemes/${sch.id}`)}
                   className="text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline cursor-pointer"
                 >
-                  {language === 'bn' ? 'বিস্তারিত গাইড দেখুন →' : 'View Scheme Guide →'}
+                  {language === 'bn'
+                    ? 'বিস্তারিত গাইড দেখুন →'
+                    : language === 'hi'
+                      ? 'विस्तृत गाइड देखें →'
+                      : 'View Scheme Guide →'}
                 </button>
                 <a
                   href={sch.officialWebsite}
@@ -959,27 +1222,38 @@ export function HomePage() {
 
       {/* SECTION 7: RECENT FRAUD WARNINGS, DOCUMENT PREP & LOCAL DIRECTORY */}
       <section className="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-        {/* Recent Fraud Warnings */}
+        {/* Recent Fraud Warnings (With Branded JENOVA Protect Logo) */}
         <div>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
-                {language === 'bn'
-                  ? 'সাম্প্রতিক প্রতারণা সতর্কতা (JENOVA Protect)'
-                  : 'Recent Fraud Warnings'}
-              </h2>
-              <p className="mt-1 text-sm text-[#46607E] dark:text-[#B9D8F7]">
-                {language === 'bn'
-                  ? 'মেচেদা ও পূর্ব মেদিনীপুর এলাকায় প্রচলিত প্রতারণার ধরনগুলি জানুন এবং সন্দেহজনক মেসেজ যাচাই করুন।'
-                  : 'Stay alert to active scam patterns affecting residents in Mecheda & Purba Medinipur.'}
-              </p>
+            <div className="space-y-2.5">
+              <JenovaProtectLogo size="sm" theme={theme} />
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
+                  {language === 'bn'
+                    ? 'সাম্প্রতিক প্রতারণা সতর্কতা (JENOVA Protect)'
+                    : language === 'hi'
+                      ? 'हालिया धोखाधड़ी चेतावनियाँ (JENOVA Protect)'
+                      : 'Recent Fraud Warnings'}
+                </h2>
+                <p className="mt-1 text-sm text-[#46607E] dark:text-[#B9D8F7]">
+                  {language === 'bn'
+                    ? 'সারা দেশে প্রচলিত ডিজিটাল ও চাকরির প্রতারণার ধরনগুলি জানুন এবং সন্দেহজনক মেসেজ যাচাই করুন।'
+                    : language === 'hi'
+                      ? 'देश भर में सक्रिय डिजिटल और नौकरी धोखाधड़ी के तरीकों से सतर्क रहें और संदिग्ध संदेशों की जांच करें।'
+                      : 'Stay ahead of active digital, employment, and welfare scam patterns across India.'}
+                </p>
+              </div>
             </div>
             <button
               type="button"
               onClick={() => navigate('/scam-check')}
               className="text-sm font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
             >
-              {language === 'bn' ? 'JENOVA Protect খুলুন →' : 'Open JENOVA Protect →'}
+              {language === 'bn'
+                ? 'JENOVA Protect খুলুন →'
+                : language === 'hi'
+                  ? 'JENOVA Protect खोलें →'
+                  : 'Open JENOVA Protect →'}
             </button>
           </div>
 
@@ -1009,7 +1283,7 @@ export function HomePage() {
           </div>
         </div>
 
-        {/* Checklist Guide + Verified Local Assistance Directory */}
+        {/* Checklist Guide + Verified Local Assistance Directory (With Branded JENOVA Local Logo) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-[#092B55] via-[#0E3F6B] to-[#0E604C] text-white border border-[#36E7F2]/40 flex flex-col justify-between gap-5">
             <div className="space-y-3">
@@ -1017,17 +1291,42 @@ export function HomePage() {
               <h2 className="text-xl sm:text-2xl font-extrabold">
                 {language === 'bn'
                   ? 'JENOVA Checklist — কাগজপত্র প্রস্তুতি গাইড'
-                  : 'JENOVA Checklist — Document Preparation Guide'}
+                  : language === 'hi'
+                    ? 'JENOVA Checklist — दस्तावेज़ तैयारी गाइड'
+                    : 'JENOVA Checklist — Document Preparation Guide'}
               </h2>
               <p className="text-sm text-[#D6EEFF] leading-relaxed">
                 {language === 'bn'
                   ? 'অসম্পূর্ণ কাগজ বা নামের বানানের অমিলের জন্য বারবার BSK বা BDO অফিস থেকে ফিরে আসতে হয়। যাওয়ার আগেই আপনার ফোল্ডার যাচাই করে নিন।'
-                  : 'Avoid wasted trips to BSK or BDO offices caused by missing photocopies, spelling mismatches, or inactive Aadhaar DBT seeding.'}
+                  : language === 'hi'
+                    ? 'अधूरे कागज़ात या नाम की वर्तनी में अंतर के कारण बार-बार BSK या BDO कार्यालय से लौटना न पड़े — जाने से पहले अपना फ़ोल्डर जांच लें।'
+                    : 'Avoid wasted trips to BSK or BDO offices caused by missing photocopies, spelling mismatches, or inactive Aadhaar DBT seeding.'}
               </p>
               <ul className="space-y-2 text-xs sm:text-sm text-[#EBF6FF] pt-1">
-                <li>1. {language === 'bn' ? 'প্রকল্প বেছে নিন ও ৩টি সহজ প্রশ্নে প্রাথমিক ধারণা পান।' : 'Select your scheme and answer 3 non-sensitive questions.'}</li>
-                <li>2. {language === 'bn' ? 'প্রতিটি নথি "প্রস্তুত / নেই / সাহায্য দরকার" চিহ্নিত করুন।' : 'Mark each document Ready, Missing, Not Applicable, or Need Help.'}</li>
-                <li>3. {language === 'bn' ? 'অফলাইনে সেভ করুন, প্রিন্ট নিন বা হোয়াটসঅ্যাপে পাঠান (কোনো আপলোড নেই)।' : 'Save offline on your phone, print PDF, or share via WhatsApp — zero uploads.'}</li>
+                <li>
+                  1.{' '}
+                  {language === 'bn'
+                    ? 'প্রকল্প বেছে নিন ও ৩টি সহজ প্রশ্নে প্রাথমিক ধারণা পান।'
+                    : language === 'hi'
+                      ? 'अपनी योजना चुनें और 3 सरल प्रश्नों के उत्तर दें।'
+                      : 'Select your scheme and answer 3 non-sensitive questions.'}
+                </li>
+                <li>
+                  2.{' '}
+                  {language === 'bn'
+                    ? 'প্রতিটি নথি "প্রস্তুত / নেই / সাহায্য দরকার" চিহ্নিত করুন।'
+                    : language === 'hi'
+                      ? 'प्रत्येक दस्तावेज़ को "तैयार / अधूरा / सहायता चाहिए" के रूप में चिह्नित करें।'
+                      : 'Mark each document Ready, Missing, Not Applicable, or Need Help.'}
+                </li>
+                <li>
+                  3.{' '}
+                  {language === 'bn'
+                    ? 'অফলাইনে সেভ করুন, প্রিন্ট নিন বা হোয়াটসঅ্যাপে পাঠান (কোনো আপলোড নেই)।'
+                    : language === 'hi'
+                      ? 'फ़ोन में ऑफ़लाइन सहेजें, PDF प्रिंट करें या WhatsApp पर साझा करें — कोई अपलोड नहीं।'
+                      : 'Save offline on your phone, print PDF, or share via WhatsApp — zero uploads.'}
+                </li>
               </ul>
             </div>
             <button
@@ -1036,23 +1335,36 @@ export function HomePage() {
               className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#FFC45C] hover:bg-[#FFB338] text-[#092B55] text-sm font-extrabold cursor-pointer min-h-[46px]"
             >
               <ClipboardCheck className="w-4 h-4" />
-              <span>{language === 'bn' ? 'JENOVA Checklist শুরু করুন' : 'Open JENOVA Checklist'}</span>
+              <span>
+                {language === 'bn'
+                  ? 'JENOVA Checklist শুরু করুন'
+                  : language === 'hi'
+                    ? 'JENOVA Checklist खोलें'
+                    : 'Open JENOVA Checklist'}
+              </span>
             </button>
           </div>
 
           <div className="lg:col-span-7 p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h2 className="text-xl font-extrabold text-[#092B55] dark:text-white">
-                  {language === 'bn'
-                    ? 'JENOVA Local — স্থানীয় সহায়তা ডিরেক্টরি'
-                    : 'JENOVA Local — Verified Assistance Directory'}
-                </h2>
-                <p className="text-xs text-[#46607E] dark:text-[#A8CBEB] mt-0.5">
-                  {language === 'bn'
-                    ? 'পূর্ব মেদিনীপুর ও পশ্চিমবঙ্গের যাচাইকৃত অফিসিয়াল সহায়তা সূত্র ও শেষ যাচাইয়ের তারিখ।'
-                    : 'Verified official assistance portals with verification status and last-checked dates.'}
-                </p>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="space-y-2">
+                <JenovaLocalLogo size="sm" theme={theme} />
+                <div>
+                  <h2 className="text-xl font-extrabold text-[#092B55] dark:text-white">
+                    {language === 'bn'
+                      ? 'JENOVA Local — স্থানীয় সহায়তা ডিরেক্টরি'
+                      : language === 'hi'
+                        ? 'JENOVA Local — सत्यापित स्थानीय सहायता निर्देशिका'
+                        : 'JENOVA Local — Verified Assistance Directory'}
+                  </h2>
+                  <p className="text-xs text-[#46607E] dark:text-[#A8CBEB] mt-0.5">
+                    {language === 'bn'
+                      ? 'ভারত ও রাজ্য স্তরের যাচাইকৃত অফিসিয়াল সহায়তা সূত্র ও শেষ যাচাইয়ের তারিখ।'
+                      : language === 'hi'
+                        ? 'सत्यापन स्थिति और अंतिम जांच तिथि के साथ आधिकारिक स्थानीय सहायता स्रोत।'
+                        : 'Verified official assistance portals with verification status and last-checked dates.'}
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
@@ -1074,7 +1386,9 @@ export function HomePage() {
                       <span>·</span>
                       <VerificationLabel status={centre.verificationStatus} />
                       <span>·</span>
-                      <span>Checked {centre.dateVerified}</span>
+                      <span>
+                        {language === 'hi' ? `जांच तिथि ${centre.dateVerified}` : `Checked ${centre.dateVerified}`}
+                      </span>
                     </div>
                     <p className="text-sm font-bold text-[#092B55] dark:text-white mt-0.5">
                       {pickText(centre.name, language)}
@@ -1086,7 +1400,11 @@ export function HomePage() {
                     onClick={() => navigate('/local-help')}
                     className="text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap self-start sm:self-center cursor-pointer"
                   >
-                    {language === 'bn' ? 'বিস্তারিত →' : 'View Details →'}
+                    {language === 'bn'
+                      ? 'বিস্তারিত →'
+                      : language === 'hi'
+                        ? 'विवरण देखें →'
+                        : 'View Details →'}
                   </button>
                 </div>
               ))}
@@ -1100,50 +1418,88 @@ export function HomePage() {
             <div className="flex items-center gap-2 text-[#138A45] dark:text-[#36E7F2]">
               <ShieldCheck className="w-5 h-5" />
               <h2 className="text-lg font-extrabold text-[#092B55] dark:text-white">
-                {language === 'bn' ? 'বিশ্বাস ও যাচাইকরণ নীতি' : 'Trust & Verification Standards'}
+                {language === 'bn'
+                  ? 'বিশ্বাস ও যাচাইকরণ নীতি'
+                  : language === 'hi'
+                    ? 'विश्वास और सत्यापन मानक'
+                    : 'Trust & Verification Standards'}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-[#46607E] dark:text-[#B9D8F7] leading-relaxed">
               {language === 'bn'
                 ? 'JENOVA কোনো সরকারি দপ্তর, ব্যাংক বা দালাল সংস্থা নয়। প্রতিটি তথ্যের পাশে তার প্রকৃত যাচাইয়ের অবস্থা ও সরকারি উৎস উল্লেখ থাকে:'
-                : 'JENOVA is an independent community guidance platform — not a government office, lender, or placement agency. Every listing discloses its verification status:'}
+                : language === 'hi'
+                  ? 'JENOVA एक स्वतंत्र सामुदायिक मार्गदर्शन मंच है — यह कोई सरकारी कार्यालय, बैंक या एजेंट नहीं है। प्रत्येक जानकारी के साथ उसकी सत्यापन स्थिति स्पष्ट रूप से दिखाई जाती है:'
+                  : 'JENOVA is an independent community guidance platform — not a government office, lender, or placement agency. Every listing discloses its verification status:'}
             </p>
             <ul className="space-y-2 text-xs text-[#355373] dark:text-[#CBE6FF]">
-              <li><strong className="text-[#138A45] dark:text-[#36E7F2]">Officially Verified:</strong> Directly sourced from official .gov.in / .nic.in portals.</li>
-              <li><strong className="text-[#138A45] dark:text-[#36E7F2]">Independently Verified:</strong> Checked by our Verification Desk with source link &amp; review date.</li>
-              <li><strong className="text-[#FF8A18]">Community Submitted / Pending:</strong> Submitted locally and awaiting verification — never shown as confirmed.</li>
-              <li><strong className="text-red-600 dark:text-red-400">Expired:</strong> Marked outdated past review deadline so users never waste a trip.</li>
+              <li>
+                <strong className="text-[#138A45] dark:text-[#36E7F2]">Officially Verified:</strong>{' '}
+                {language === 'hi'
+                  ? 'सीधे आधिकारिक .gov.in / .nic.in पोर्टल से संकलित।'
+                  : 'Directly sourced from official .gov.in / .nic.in portals.'}
+              </li>
+              <li>
+                <strong className="text-[#138A45] dark:text-[#36E7F2]">Independently Verified:</strong>{' '}
+                {language === 'hi'
+                  ? 'हमारी सत्यापन टीम द्वारा स्रोत लिंक और जांच तिथि के साथ सत्यापित।'
+                  : 'Checked by our Verification Desk with source link & review date.'}
+              </li>
+              <li>
+                <strong className="text-[#FF8A18]">Community Submitted / Pending:</strong>{' '}
+                {language === 'hi'
+                  ? 'स्थानीय रूप से साझा किया गया और सत्यापन की प्रतीक्षा में।'
+                  : 'Submitted locally and awaiting verification — never shown as confirmed.'}
+              </li>
+              <li>
+                <strong className="text-red-600 dark:text-red-400">Expired:</strong>{' '}
+                {language === 'hi'
+                  ? 'अंतिम तिथि बीत जाने पर स्पष्ट रूप से चिह्नित किया जाता है।'
+                  : 'Marked outdated past review deadline so users never waste a trip.'}
+              </li>
             </ul>
           </div>
 
           <div className="lg:col-span-7 p-6 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 space-y-3">
             <h2 className="text-lg font-extrabold text-[#092B55] dark:text-white">
-              {language === 'bn' ? 'সাধারণ জিজ্ঞাসা (FAQs)' : 'Frequently Asked Questions (FAQs)'}
+              {language === 'bn'
+                ? 'সাধারণ জিজ্ঞাসা (FAQs)'
+                : language === 'hi'
+                  ? 'अक्सर पूछे जाने वाले प्रश्न (FAQs)'
+                  : 'Frequently Asked Questions (FAQs)'}
             </h2>
             <div className="divide-y divide-[#E4EFFA] dark:divide-white/10">
               {[
                 {
                   qBn: 'JENOVA কি কোনো সরকারি ওয়েবসাইট?',
+                  qHi: 'क्या JENOVA कोई सरकारी वेबसाइट है?',
                   qEn: 'Is JENOVA an official government website?',
                   aBn: 'না। JENOVA একটি স্বাধীন কমিউনিটি সহায়তা প্ল্যাটফর্ম। এটি আপনাকে সহজ বাংলায় প্রকল্প বুঝতে, কাগজপত্র প্রস্তুত করতে এবং সরাসরি অফিসিয়াল .gov.in পোর্টাল বা BSK-তে পৌঁছাতে সাহায্য করে।',
+                  aHi: 'नहीं। JENOVA एक स्वतंत्र सामुदायिक मार्गदर्शन मंच है। यह आपको सरल भाषा में योजनाएं समझने, दस्तावेज़ तैयार करने और सीधे आधिकारिक .gov.in पोर्टल या BSK तक पहुंचने में मदद करता है।',
                   aEn: 'No. JENOVA is an independent community information platform. It explains schemes simply and links directly to official .gov.in / .nic.in portals and verified BSK resources.',
                 },
                 {
                   qBn: 'JENOVA Checklist বা JENOVA Protect-এ কি আধার বা OTP দিতে হয়?',
+                  qHi: 'क्या JENOVA Checklist या JENOVA Protect में आधार या OTP देना होता है?',
                   qEn: 'Do I need to upload Aadhaar or share OTP/UPI PIN?',
                   aBn: 'কখনোই নয়। JENOVA কখনোই আপনার আধার নম্বর, ব্যাংক পাসবই আপলোড, OTP বা UPI PIN চায় না। আপনার চেকলিস্ট কেবল আপনার ফোনেই অফলাইনে সেভ থাকে।',
+                  aHi: 'बिल्कुल नहीं। JENOVA कभी भी आपका आधार अपलोड, OTP, UPI PIN या बैंक पासवर्ड नहीं मांगता। आपकी दस्तावेज़ सूची केवल आपके फ़ोन में ऑफ़लाइन सुरक्षित रहती है।',
                   aEn: 'Never. JENOVA never asks for Aadhaar uploads, OTPs, UPI PINs, or banking passwords. Your document checklist stays locally on your own device.',
                 },
                 {
                   qBn: 'JENOVA Protect কি কোনো মেসেজকে ১০০% নিরাপদ বলে গ্যারান্টি দেয়?',
+                  qHi: 'क्या JENOVA Protect किसी संदेश के 100% सुरक्षित होने की गारंटी देता है?',
                   qEn: 'Does JENOVA Protect guarantee a message is 100% safe?',
                   aBn: 'না। কোনো স্বয়ংক্রিয় টুল ১০০% নিশ্চয়তা দিতে পারে না। এটি পরিচিত প্রতারণার লক্ষণ ধরিয়ে দেয়, তবে টাকা বা ব্যক্তিগত তথ্য দেওয়ার আগে সবসময় অফিসিয়াল উৎসে যাচাই করুন এবং প্রতারণা হলে ১৯৩০-তে কল করুন।',
+                  aHi: 'नहीं। कोई भी स्वचालित टूल 100% गारंटी नहीं दे सकता। यह धोखाधड़ी के संभावित संकेत दिखाता है और आधिकारिक हेल्पलाइन (1930 / cybercrime.gov.in) की जानकारी देता है, पर हमेशा स्वतंत्र रूप से भी पुष्टि करें।',
                   aEn: 'No automated tool can guarantee 100% safety. JENOVA Protect highlights known fraud indicators and official reporting channels (1930 / cybercrime.gov.in), but always verify independently.',
                 },
                 {
                   qBn: 'ইন্টারনেট দুর্বল থাকলে বা অফলাইনে কি JENOVA কাজ করবে?',
+                  qHi: 'क्या धीमे इंटरनेट या ऑफ़लाइन में भी JENOVA काम करेगा?',
                   qEn: 'Does JENOVA work on slow mobile networks or offline?',
                   aBn: 'হ্যাঁ। আপনি JENOVA-কে আপনার ফোনের হোম স্ক্রিনে অ্যাপ হিসেবে ইনস্টল করতে পারেন এবং আগে দেখা সরকারি প্রকল্প, স্থানীয় সহায়তা ও আপনার সেভ করা চেকলিস্ট অফলাইনেও দেখতে পারবেন।',
+                  aHi: 'हाँ। आप JENOVA को अपने फ़ोन की होम स्क्रीन पर ऐप (PWA) के रूप में इंस्टॉल कर सकते हैं और पहले देखी गई योजनाएं, स्थानीय सहायता केंद्र और अपनी चेकलिस्ट ऑफ़लाइन भी देख सकते हैं।',
                   aEn: 'Yes. You can install JENOVA on your phone home screen as a PWA to access cached public scheme guides, local help directories, and your saved checklists offline.',
                 },
               ].map((item, idx) => {
@@ -1156,7 +1512,9 @@ export function HomePage() {
                       aria-expanded={isOpen}
                       className="w-full flex items-center justify-between gap-3 text-left text-sm font-bold text-[#092B55] dark:text-white hover:text-[#138A45] dark:hover:text-[#36E7F2] cursor-pointer"
                     >
-                      <span>{language === 'bn' ? item.qBn : item.qEn}</span>
+                      <span>
+                        {language === 'bn' ? item.qBn : language === 'hi' ? item.qHi : item.qEn}
+                      </span>
                       <ChevronDown
                         className={`w-4 h-4 shrink-0 text-[#46607E] dark:text-[#A8CBEB] transition-transform ${
                           isOpen ? 'rotate-180 text-[#138A45] dark:text-[#36E7F2]' : ''
@@ -1165,7 +1523,7 @@ export function HomePage() {
                     </button>
                     {isOpen && (
                       <p className="mt-2 text-xs sm:text-sm text-[#46607E] dark:text-[#CBE6FF] leading-relaxed">
-                        {language === 'bn' ? item.aBn : item.aEn}
+                        {language === 'bn' ? item.aBn : language === 'hi' ? item.aHi : item.aEn}
                       </p>
                     )}
                   </div>
@@ -1193,33 +1551,41 @@ export function HomePage() {
               label:
                 language === 'bn'
                   ? 'যাচাইকৃত সরকারি প্রকল্প ও সহায়তা'
-                  : 'Verified Schemes & Help Centres',
+                  : language === 'hi'
+                    ? 'सत्यापित योजनाएं एवं सहायता केंद्र'
+                    : 'Verified Schemes & Help Centres',
               value: stats
                 ? String(stats.verifiedCounts.schemes + (stats.verifiedCounts.assistanceCentres || 0))
                 : '—',
-              note: 'Live database count',
+              note: language === 'hi' ? 'लाइव डेटाबेस संख्या' : 'Live database count',
             },
             {
               label:
                 language === 'bn'
                   ? 'সম্পন্ন ফোল্ডার চেকলিস্ট'
-                  : 'Document Checklists Completed',
+                  : language === 'hi'
+                    ? 'पूर्ण दस्तावेज़ चेकलिस्ट'
+                    : 'Document Checklists Completed',
               value: stats ? String(stats.checklistsCompleted ?? 0) : '—',
-              note: 'Real completion counter',
+              note: language === 'hi' ? 'वास्तविक उपयोग गणना' : 'Real completion counter',
             },
             {
               label:
                 language === 'bn'
                   ? 'সম্পন্ন প্রতারণা যাচাই'
-                  : 'Fraud Checks Completed',
+                  : language === 'hi'
+                    ? 'पूर्ण धोखाधड़ी जांच'
+                    : 'Fraud Checks Completed',
               value: stats ? String(stats.fraudChecksCompleted ?? 0) : '—',
-              note: 'Real safety check counter',
+              note: language === 'hi' ? 'वास्तविक सुरक्षा जांच गणना' : 'Real safety check counter',
             },
             {
               label:
                 language === 'bn'
                   ? 'অফিসিয়াল পোর্টাল ও BSK রেফারেল'
-                  : 'Official & Local Help Referrals',
+                  : language === 'hi'
+                    ? 'आधिकारिक पोर्टल और BSK रेफ़रल'
+                    : 'Official & Local Help Referrals',
               value: stats
                 ? String(
                     stats.schemeReferrals +
@@ -1228,7 +1594,10 @@ export function HomePage() {
                       (stats.localHelpClicks ?? 0)
                   )
                 : '—',
-              note: `Visits: ${stats ? stats.totalVisits : '—'}`,
+              note:
+                language === 'hi'
+                  ? `विज़िट्स: ${stats ? stats.totalVisits : '—'}`
+                  : `Visits: ${stats ? stats.totalVisits : '—'}`,
             },
           ].map((stat) => (
             <div
@@ -1249,12 +1618,18 @@ export function HomePage() {
             <TrendingUp className="w-5 h-5 text-[#138A45] dark:text-[#36E7F2] shrink-0 mt-0.5" />
             <div className="text-sm text-[#092B55] dark:text-white">
               <p className="font-bold">
-                Proposed 3-Month Pilot Planning Targets (Mecheda, Purba Medinipur)
+                {language === 'bn'
+                  ? 'JENOVA কমিউনিটি ইমপ্যাক্ট ও ডিজিটাল অন্তর্ভুক্তি মিশন'
+                  : language === 'hi'
+                    ? 'JENOVA सामुदायिक प्रभाव और डिजिटल समावेशन मिशन'
+                    : 'JENOVA Community Impact & Digital Inclusion Mission'}
               </p>
               <p className="text-xs text-[#46607E] dark:text-[#B9D8F7] mt-1">
-                Planning estimates only — not achieved outcomes: engage ~100 local families and
-                share verified opportunity &amp; skill information with ~50 individuals during field
-                testing.
+                {language === 'bn'
+                  ? 'প্রতিটি পরিবার যেন যাচাইকৃত সরকারি প্রকল্প, নিরাপদ কর্মসংস্থান, বিনামূল্যে দক্ষতা প্রশিক্ষণ এবং প্রতারণা সুরক্ষা নিজ ভাষায় সহজে পায় — সেই লক্ষ্যেই JENOVA কাজ করে।'
+                  : language === 'hi'
+                    ? 'हमारा उद्देश्य है कि हर परिवार अपनी भाषा में सत्यापित सरकारी योजनाओं, सुरक्षित रोजगार, निःशुल्क कौशल प्रशिक्षण और डिजिटल सुरक्षा उपकरणों तक आसानी से पहुंच सके।'
+                    : 'Empowering households across India with verified welfare portals, scam-free career discovery, free skill pathways, and practical financial planning tools in their own language.'}
               </p>
             </div>
           </div>
@@ -1263,7 +1638,11 @@ export function HomePage() {
             onClick={() => navigate('/about')}
             className="text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
           >
-            Read Pilot Roadmap →
+            {language === 'bn'
+              ? 'আমাদের মিশন পড়ুন →'
+              : language === 'hi'
+                ? 'हमारा मिशन पढ़ें →'
+                : 'Explore Our Mission →'}
           </button>
         </div>
       </section>

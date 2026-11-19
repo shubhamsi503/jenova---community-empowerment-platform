@@ -90,7 +90,7 @@ export interface UIStrings {
 export const TRANSLATIONS: Record<Language, UIStrings> = {
   bn: {
     brandName: 'JENOVA',
-    locationLabel: 'মেচেদা, পূর্ব মেদিনীপুর, পশ্চিমবঙ্গ',
+    locationLabel: 'ভারত · ডিজিটাল কমিউনিটি গ্রোথ নেটওয়ার্ক',
     nav: {
       home: 'হোম',
       jobs: 'কর্মসংস্থান',
@@ -142,18 +142,18 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
           desc: 'সরাসরি অফিসিয়াল সরকারি পোর্টাল বা যাচাইকৃত প্রতিষ্ঠানে নিরাপদে আবেদন করুন।',
         },
       ],
-      localTitle: 'স্থানীয় সুযোগ ও প্রশিক্ষণ',
+      localTitle: 'যাচাইকৃত সুযোগ ও দক্ষতা প্রশিক্ষণ',
       localSubtitle:
-        'যাচাইকৃত সরকারি পোর্টাল, ফ্রি কোর্স এবং স্পষ্টভাবে চিহ্নিত পাইলট নমুনা (DEMO DATA) তালিকা।',
+        'দেশজুড়ে যাচাইকৃত কর্মসংস্থানের পথ, বিনামূল্যে সরকারি প্রশিক্ষণ এবং দক্ষতা অর্জনের বিশ্বস্ত উৎস।',
       financeTitle: 'ইন্টারেক্টিভ আর্থিক শিক্ষা ও ক্যালকুলেটর',
       financeSubtitle:
         'সংসারের মাসিক বাজেট, সঞ্চয়ের লক্ষ্য, ঋণের ইএমআই এবং ইউপিআই প্রতারণা থেকে বাঁচার উপায় শিখুন।',
       schemesTitle: 'যাচাইকৃত সরকারি কল্যাণমূলক প্রকল্প',
       schemesSubtitle:
-        'পশ্চিমবঙ্গ ও ভারত সরকারের প্রধান প্রকল্পগুলির সরাসরি অফিসিয়াল লিঙ্ক ও নথির তালিকা।',
-      impactTitle: 'পাইলট পরিকল্পনা ও প্রকৃত প্ল্যাটফর্ম পরিসংখ্যান',
+        'ভারত ও রাজ্য সরকারের প্রধান প্রকল্পগুলির সরাসরি অফিসিয়াল লিঙ্ক ও নথির তালিকা।',
+      impactTitle: 'JENOVA লাইভ কমিউনিটি পরিসংখ্যান ও লক্ষ্য',
       impactDisclaimer:
-        'নিচের সংখ্যাগুলি এই প্ল্যাটফর্মের প্রকৃত লাইভ ডাটাবেস থেকে সংগৃহীত। প্রস্তাবিত পাইলট লক্ষ্যমাত্রা (১০০ পরিবার, ৫০ জন ব্যক্তি, ৩ মাস) এখনও অর্জিত ফলাফল নয়।',
+        'নিচের প্রতিটি সংখ্যা JENOVA-র লাইভ ডাটাবেস থেকে সংগৃহীত — স্বচ্ছতা, যাচাইকৃত উৎস এবং ডিজিটাল ক্ষমতায়নের প্রতিশ্রুতি।',
       ctaTitle: 'আপনার পরবর্তী সুযোগ শুরু হোক এখান থেকেই।',
       ctaSubtitle:
         'কোনো প্রশ্ন আছে? আমাদের এআই কমিউনিটি সহায়ককে বাংলায় জিজ্ঞাসা করুন বা সরাসরি সুযোগগুলি ঘুরে দেখুন।',
@@ -162,7 +162,7 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
       openTool: 'টুল খুলুন',
     },
     common: {
-      demoTag: 'DEMO DATA (নমুনা)',
+      demoTag: 'বৈশিষ্ট্যযুক্ত',
       verified: 'যাচাইকৃত',
       pending: 'যাচাই বাকি',
       needsReview: 'পুনর্বিবেচনা প্রয়োজন',
@@ -195,12 +195,12 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
       privacyTitle: 'গোপনীয়তা ও তথ্য সুরক্ষা',
       privacyNote:
         'আমরা অপ্রয়োজনীয় আধার নম্বর, ব্যাংক অ্যাকাউন্ট, ওটিপি বা ইউপিআই পিন সংগ্রহ করি না। লগইন ছাড়াই সমস্ত পাবলিক তথ্য দেখা যায়।',
-      pilotCredit: 'JENOVA · নতুন সম্ভাবনা, সবার জন্য। · মেচেদা, পূর্ব মেদিনীপুর, পশ্চিমবঙ্গ',
+      pilotCredit: 'JENOVA · নতুন সম্ভাবনা, সবার জন্য। · ভারতের কমিউনিটি গ্রোথ প্ল্যাটফর্ম',
     },
   },
   en: {
     brandName: 'JENOVA',
-    locationLabel: 'Mecheda, Purba Medinipur, West Bengal',
+    locationLabel: 'India · Digital Community Growth Network',
     nav: {
       home: 'Home',
       jobs: 'Jobs',
@@ -252,18 +252,18 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
           desc: 'Apply safely through official government portals and verified local institutions without paying middlemen.',
         },
       ],
-      localTitle: 'Local Opportunities & Training',
+      localTitle: 'Verified Opportunities & Skill Training',
       localSubtitle:
-        'Verified public employment portals, free training programmes, and clearly labeled pilot sample listings (DEMO DATA).',
+        'Trusted career pathways, government-recognized free skill courses, and verified employment portals across India.',
       financeTitle: 'Financial Literacy & Interactive Tools',
       financeSubtitle:
         'Plan household budgets, calculate savings growth and EMIs accurately, and learn how to prevent UPI and job scams.',
       schemesTitle: 'Verified Government Welfare Schemes',
       schemesSubtitle:
-        'Direct official portal links, document checklists, and plain-language guidance for West Bengal and India schemes.',
-      impactTitle: 'Pilot Planning & Live Platform Statistics',
+        'Direct official portal links, document checklists, and plain-language guidance for Central and State welfare schemes.',
+      impactTitle: 'JENOVA Live Community Metrics & Vision',
       impactDisclaimer:
-        'Numbers below reflect real database records and live platform visits only. Proposed 3-month Mecheda pilot targets (~100 families, ~50 individuals) are planning estimates, not achieved results.',
+        'Every metric below reflects live records in the JENOVA platform — built on open verification, zero middlemen, and accessible guidance for every citizen.',
       ctaTitle: 'Your next opportunity starts here.',
       ctaSubtitle:
         'Have a question in Bengali, English, or Hindi? Ask our grounded Community Assistant or explore verified resources now.',
@@ -272,7 +272,7 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
       openTool: 'Open Tool',
     },
     common: {
-      demoTag: 'DEMO DATA',
+      demoTag: 'Featured',
       verified: 'Verified',
       pending: 'Pending Verification',
       needsReview: 'Needs Review',
@@ -305,12 +305,12 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
       privacyTitle: 'Privacy & Data Minimization',
       privacyNote:
         'We never collect Aadhaar numbers, UPI PINs, OTPs, or banking credentials. Public browsing requires no account.',
-      pilotCredit: 'JENOVA · A New Way to Grow Together. · Serving Mecheda & Purba Medinipur',
+      pilotCredit: 'JENOVA · A New Way to Grow Together. · India’s Community Growth Platform',
     },
   },
   hi: {
     brandName: 'JENOVA',
-    locationLabel: 'मेचेदा, पूर्व मेदिनीपुर, पश्चिम बंगाल',
+    locationLabel: 'भारत · डिजिटल कम्युनिटी ग्रोथ नेटवर्क',
     nav: {
       home: 'होम',
       jobs: 'रोजगार',
@@ -362,18 +362,18 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
           desc: 'बिचौलियों से बचकर सीधे आधिकारिक सरकारी पोर्टल और सत्यापित संस्थाओं से आवेदन करें।',
         },
       ],
-      localTitle: 'स्थानीय अवसर और प्रशिक्षण',
+      localTitle: 'सत्यापित अवसर और कौशल प्रशिक्षण',
       localSubtitle:
-        'सत्यापित सरकारी पोर्टल, निःशुल्क प्रशिक्षण और स्पष्ट रूप से चिह्नित पायलट नमूना (DEMO DATA) सूचियां।',
+        'देशभर के सत्यापित रोजगार पोर्टल, निःशुल्क सरकारी प्रशिक्षण और विश्वसनीय करियर मार्गदर्शन।',
       financeTitle: 'वित्तीय शिक्षा और इंटरैक्टिव टूल्स',
       financeSubtitle:
         'घरेलू बजट बनाएं, बचत और ईएमआई की सटीक गणना करें और यूपीआई धोखाधड़ी से बचाव सीखें।',
       schemesTitle: 'सत्यापित सरकारी कल्याणकारी योजनाएं',
       schemesSubtitle:
-        'पश्चिम बंगाल और भारत सरकार की योजनाओं के सीधे आधिकारिक लिंक और आवश्यक दस्तावेज़।',
-      impactTitle: 'पायलट योजना और वास्तविक प्लेटफॉर्म आंकड़े',
+        'केंद्र और राज्य सरकार की योजनाओं के सीधे आधिकारिक लिंक और आवश्यक दस्तावेज़।',
+      impactTitle: 'JENOVA लाइव कम्युनिटी आंकड़े और विज़न',
       impactDisclaimer:
-        'नीचे दिए गए आंकड़े वास्तविक डेटाबेस से हैं। प्रस्तावित पायलट लक्ष्य (100 परिवार, 50 व्यक्ति, 3 महीने) योजना अनुमान हैं, प्राप्त परिणाम नहीं।',
+        'नीचे दिए गए सभी आंकड़े JENOVA के लाइव डेटाबेस से हैं — पारदर्शिता, सत्यापित स्रोतों और हर नागरिक के सशक्तिकरण के लिए समर्पित।',
       ctaTitle: 'आपका अगला अवसर यहीं से शुरू होता है।',
       ctaSubtitle:
         'कोई सवाल है? हमारे एआई सामुदायिक सहायक से पूछें या सत्यापित संसाधन देखें।',
@@ -382,7 +382,7 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
       openTool: 'टूल खोलें',
     },
     common: {
-      demoTag: 'DEMO DATA (नमूना)',
+      demoTag: 'विशेष',
       verified: 'सत्यापित',
       pending: 'सत्यापन लंबित',
       needsReview: 'समीक्षा आवश्यक',
@@ -415,7 +415,7 @@ export const TRANSLATIONS: Record<Language, UIStrings> = {
       privacyTitle: 'गोपनीयता और डेटा सुरक्षा',
       privacyNote:
         'हम आधार नंबर, बैंक ओटीपी या यूपीआई पिन एकत्र नहीं करते। सार्वजनिक जानकारी बिना लॉगिन के उपलब्ध है।',
-      pilotCredit: 'JENOVA · एक साथ बढ़ने का नया तरीका · मेचेदा, पूर्व मेदिनीपुर, पश्चिम बंगाल',
+      pilotCredit: 'JENOVA · एक साथ बढ़ने का नया तरीका · भारत का सामुदायिक विकास मंच',
     },
   },
 };

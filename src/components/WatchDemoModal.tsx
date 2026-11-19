@@ -91,12 +91,12 @@ const DEMO_STEPS = [
     titleEn: 'Reach Verified Local Assistance Centres & Helplines',
     titleBn: 'যাচাইকৃত বাংলা সহায়তা কেন্দ্র (BSK), BDO ও স্থানীয় সহায়তা',
     summaryEn:
-      'Locate verified Bangla Sahayata Kendra (BSK) services, Purba Medinipur BDO directories, Duare Sarkar official portals, RSETI free training, and emergency helplines without paying middlemen.',
+      'Locate verified Bangla Sahayata Kendra (BSK) desks, District & BDO portals, CSC Digital Seva centres, RSETI free training, and emergency helplines without paying middlemen.',
     summaryBn:
-      'কোনো দালাল ছাড়াই বিনামূল্যে সহায়তার জন্য যাচাইকৃত বাংলা সহায়তা কেন্দ্র, বিডিও ডিরেক্টরি, দুয়ারে সরকার ও জরুরি হেল্পলাইন খুঁজুন।',
+      'কোনো দালাল ছাড়াই বিনামূল্যে সহায়তার জন্য যাচাইকৃত বাংলা সহায়তা কেন্দ্র, জেলা ও বিডিও ডিরেক্টরি, কমন সার্ভিস সেন্টার ও জরুরি হেল্পলাইন খুঁজুন।',
     highlightsEn: [
       'Shows verification tier & last-checked date on every entry',
-      'Covers Mecheda, Purba Medinipur & statewide portals',
+      'Covers National, State & District verified citizen portals',
       'Includes free 1-minute mobile Biodata (CV) builder & calculators',
     ],
     Icon: LocationPin3DIcon,

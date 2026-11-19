@@ -98,7 +98,7 @@ export function AssistantPage() {
           'আমি বিধবা ভাতা সম্পর্কে জানতে চাই।',
           'লক্ষ্মীর ভাণ্ডারের জন্য কী কী কাগজ লাগবে?',
           'চাকরির জন্য ১,৫০০ টাকা চাইছে — এটা কি প্রতারণা?',
-          'মেচেদার কাছাকাছি বিনামূল্যে কম্পিউটার বা সেলাই কোথায় শিখব?',
+          'আমার জেলায় বিনামূল্যে কম্পিউটার বা সেলাই কোথায় শিখব?',
         ]
       : language === 'hi'
         ? [
@@ -111,7 +111,7 @@ export function AssistantPage() {
             'I want to know about widow pension and welfare schemes.',
             'What documents do I need for Lakshmir Bhandar?',
             'Someone is asking ₹1,500 for a job — is it a scam?',
-            'Where can I learn free computer or tailoring skills near Mecheda?',
+            'Where can I learn free computer or tailoring skills in my district?',
           ];
 
   const sendQuestion = async (questionText: string, viaVoice = false) => {

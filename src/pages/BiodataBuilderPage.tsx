@@ -8,7 +8,7 @@ export function BiodataBuilderPage() {
   const { language, navigate, showToast } = useApp();
   const [form, setForm] = useState({
     fullName: '',
-    area: 'Mecheda, Purba Medinipur, West Bengal',
+    area: '',
     phone: '',
     email: '',
     targetRole: '',
@@ -139,6 +139,13 @@ export function BiodataBuilderPage() {
                 type="text"
                 value={form.area}
                 onChange={(e) => setForm({ ...form, area: e.target.value })}
+                placeholder={
+                  language === 'bn'
+                    ? 'যেমন: শহর, জেলা, রাজ্য'
+                    : language === 'hi'
+                      ? 'जैसे: शहर, जिला, राज्य'
+                      : 'e.g. City, District, State'
+                }
                 className="w-full rounded-xl border border-[#D8D5CC] bg-[#FAF9F5] px-3.5 py-2.5 text-sm"
               />
             </div>

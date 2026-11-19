@@ -24,6 +24,13 @@ import type { Language } from '../types/platform';
 import { apiFetch } from '../lib/api';
 import { OfflineIndicator, PWAInstallButton } from './PWAControls';
 import { JenovaLogo } from './JenovaLogo';
+import {
+  Checklist3DIcon,
+  LocalPin3DIcon,
+  Schemes3DIcon,
+  Shield3DIcon,
+  Voice3DIcon,
+} from './JenovaIcons3D';
 
 function ReportModal() {
   const { reportTarget, closeReportModal, showToast, t } = useApp();
@@ -180,17 +187,117 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const isAdmin = user && user.role !== 'user';
   const isHome = route === '/' || route === '';
 
-  const serviceLinks = [
-    { path: '/scam-check', label: 'JENOVA Protect', sub: 'Fraud & scam detection' },
-    { path: '/schemes', label: 'JENOVA Schemes', sub: 'Government welfare directory' },
-    { path: '/checklist', label: 'JENOVA Checklist', sub: 'Offline document folder check' },
-    { path: '/assistant', label: 'JENOVA Voice', sub: 'Bengali-first AI voice guide' },
-    { path: '/local-help', label: 'JENOVA Local', sub: 'Verified BSK & BDO directory' },
-    { path: '/jobs', label: t.nav.jobs, sub: 'Employment & 1-min Biodata' },
-    { path: '/skills', label: t.nav.skills, sub: 'Free vocational courses' },
-    { path: '/finance', label: t.nav.finance, sub: 'Budget, Savings & EMI tools' },
-    { path: '/msme', label: t.nav.msme, sub: 'Udyam & small business hub' },
-    { path: '/updates', label: t.nav.updates, sub: 'Community alerts & reminders' },
+  const serviceLinks: Array<{
+    path: string;
+    label: string;
+    sub: string;
+    icon?: React.ReactNode;
+  }> = [
+    {
+      path: '/scam-check',
+      label: 'JENOVA Protect',
+      sub:
+        language === 'bn'
+          ? 'প্রতারণা ও ভুয়া অফার যাচাই'
+          : language === 'hi'
+            ? 'धोखाधड़ी और संदिग्ध ऑफर जांच'
+            : 'Fraud & scam detection',
+      icon: <Shield3DIcon size={28} />,
+    },
+    {
+      path: '/schemes',
+      label: 'JENOVA Schemes',
+      sub:
+        language === 'bn'
+          ? 'সরকারি কল্যাণমূলক প্রকল্প নির্দেশিকা'
+          : language === 'hi'
+            ? 'सरकारी कल्याणकारी योजना निर्देशिका'
+            : 'Government welfare directory',
+      icon: <Schemes3DIcon size={28} />,
+    },
+    {
+      path: '/checklist',
+      label: 'JENOVA Checklist',
+      sub:
+        language === 'bn'
+          ? 'অফলাইন কাগজপত্র প্রস্তুতি যাচাই'
+          : language === 'hi'
+            ? 'ऑफ़लाइन दस्तावेज़ तैयारी सूची'
+            : 'Offline document folder check',
+      icon: <Checklist3DIcon size={28} />,
+    },
+    {
+      path: '/assistant',
+      label: 'JENOVA Voice',
+      sub:
+        language === 'bn'
+          ? 'বাংলা-বান্ধব AI ভয়েস সহায়ক'
+          : language === 'hi'
+            ? 'सरल भाषा में AI वॉइस सहायक'
+            : 'Bengali-first AI voice guide',
+      icon: <Voice3DIcon size={28} />,
+    },
+    {
+      path: '/local-help',
+      label: 'JENOVA Local',
+      sub:
+        language === 'bn'
+          ? 'যাচাইকৃত BSK ও BDO সহায়তা কেন্দ্র'
+          : language === 'hi'
+            ? 'सत्यापित BSK और BDO सहायता केंद्र'
+            : 'Verified BSK & BDO directory',
+      icon: <LocalPin3DIcon size={28} />,
+    },
+    {
+      path: '/jobs',
+      label: t.nav.jobs,
+      sub:
+        language === 'bn'
+          ? 'চাকরি ও ১-মিনিট বায়োডাটা'
+          : language === 'hi'
+            ? 'रोजगार और 1-मिनट बायोडाटा'
+            : 'Employment & 1-min Biodata',
+    },
+    {
+      path: '/skills',
+      label: t.nav.skills,
+      sub:
+        language === 'bn'
+          ? 'বিনামূল্যে বৃত্তিমূলক প্রশিক্ষণ'
+          : language === 'hi'
+            ? 'निःशुल्क कौशल प्रशिक्षण कोर्स'
+            : 'Free vocational courses',
+    },
+    {
+      path: '/finance',
+      label: t.nav.finance,
+      sub:
+        language === 'bn'
+          ? 'বাজেট, সঞ্চয় ও EMI ক্যালকুলেটর'
+          : language === 'hi'
+            ? 'बजट, बचत और EMI कैलकुलेटर'
+            : 'Budget, Savings & EMI tools',
+    },
+    {
+      path: '/msme',
+      label: t.nav.msme,
+      sub:
+        language === 'bn'
+          ? 'উদ্যম ও ক্ষুদ্র ব্যবসা সহায়তা'
+          : language === 'hi'
+            ? 'उद्यम और लघु व्यवसाय सहायता'
+            : 'Udyam & small business hub',
+    },
+    {
+      path: '/updates',
+      label: t.nav.updates,
+      sub:
+        language === 'bn'
+          ? 'কমিউনিটি সতর্কতা ও রিমাইন্ডার'
+          : language === 'hi'
+            ? 'सामुदायिक अलर्ट और रिमाइंडर'
+            : 'Community alerts & reminders',
+    },
   ];
 
   const handleNav = (path: string) => {
@@ -299,21 +406,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onClick={() => setServicesMenuOpen(false)}
                     aria-hidden="true"
                   />
-                  <div className="absolute left-0 mt-3 w-[320px] sm:w-[350px] rounded-2xl bg-white/97 dark:bg-[#0A2040]/98 border border-[#36E7F2]/45 shadow-2xl p-2.5 z-40 grid grid-cols-1 gap-0.5 max-h-[75vh] overflow-y-auto">
+                  <div className="absolute left-0 mt-3 w-[330px] sm:w-[365px] rounded-2xl bg-white/97 dark:bg-[#0A2040]/98 border border-[#36E7F2]/45 shadow-2xl p-2.5 z-40 grid grid-cols-1 gap-0.5 max-h-[75vh] overflow-y-auto">
                     {serviceLinks.map((svc) => (
                       <button
                         key={svc.path}
                         type="button"
                         onClick={() => handleNav(svc.path)}
-                        className="w-full px-3.5 py-2 rounded-xl text-left hover:bg-[#EAF5FF] dark:hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between gap-2"
+                        className="w-full px-3 py-2 rounded-xl text-left hover:bg-[#EAF5FF] dark:hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between gap-2.5"
                       >
-                        <div>
-                          <p className="text-xs font-bold text-[#092B55] dark:text-white">
-                            {svc.label}
-                          </p>
-                          <p className="text-[11px] text-[#46607E] dark:text-[#A8CBEB]">{svc.sub}</p>
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {svc.icon && (
+                            <span className="shrink-0 w-8 h-8 rounded-lg bg-[#EAF5FF] dark:bg-white/10 flex items-center justify-center">
+                              {svc.icon}
+                            </span>
+                          )}
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold text-[#092B55] dark:text-white truncate">
+                              {svc.label}
+                            </p>
+                            <p className="text-[11px] text-[#46607E] dark:text-[#A8CBEB] truncate">
+                              {svc.sub}
+                            </p>
+                          </div>
                         </div>
-                        <span className="text-xs text-[#138A45] dark:text-[#36E7F2]">→</span>
+                        <span className="text-xs text-[#138A45] dark:text-[#36E7F2] shrink-0">→</span>
                       </button>
                     ))}
                   </div>
@@ -332,7 +448,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               }`}
             >
               <Bot className="w-3.5 h-3.5" />
-              <span>{language === 'bn' ? 'AI সহায়ক' : 'AI Assistant'}</span>
+              <span>
+                {language === 'bn' ? 'AI সহায়ক' : language === 'hi' ? 'AI सहायक' : 'AI Assistant'}
+              </span>
             </button>
 
             {/* Local Support */}
@@ -346,7 +464,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
               }`}
             >
               <MapPin className="w-3.5 h-3.5" />
-              <span>{language === 'bn' ? 'স্থানীয় সহায়তা' : 'Local Support'}</span>
+              <span>
+                {language === 'bn'
+                  ? 'স্থানীয় সহায়তা'
+                  : language === 'hi'
+                    ? 'स्थानीय सहायता'
+                    : 'Local Support'}
+              </span>
             </button>
 
             {/* About */}
@@ -370,7 +494,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#092B55] dark:text-[#DCEEFF] hover:bg-white/60 dark:hover:bg-white/10 transition-all whitespace-nowrap shrink-0 cursor-pointer"
             >
               <HelpCircle className="w-3.5 h-3.5" />
-              <span>FAQs</span>
+              <span>{language === 'bn' ? 'প্রশ্নোত্তর' : language === 'hi' ? 'सामान्य प्रश्न' : 'FAQs'}</span>
             </button>
 
             {/* Contact */}
@@ -653,14 +777,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#FFC45C] hover:underline"
                 >
                   <FileText className="w-3.5 h-3.5" />
-                  <span>Read Project Concept Note &amp; Pilot Plan (PDF)</span>
+                  <span>Read Community Empowerment Blueprint (PDF)</span>
                 </a>
               </div>
             </div>
 
             <div className="lg:col-span-2 space-y-2 text-sm">
               <p className="font-semibold text-white mb-3">
-                {language === 'bn' ? 'প্রধান পরিষেবা' : 'Core Modules'}
+                {language === 'bn' ? 'প্রধান পরিষেবা' : language === 'hi' ? 'मुख्य सेवाएं' : 'Core Modules'}
               </p>
               {[
                 { path: '/jobs', label: t.nav.jobs },
@@ -682,7 +806,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             <div className="lg:col-span-2 space-y-2 text-sm">
               <p className="font-semibold text-white mb-3">
-                {language === 'bn' ? 'JENOVA টুলস' : 'JENOVA Suite'}
+                {language === 'bn' ? 'JENOVA টুলস' : language === 'hi' ? 'JENOVA टूल्स' : 'JENOVA Suite'}
               </p>
               {[
                 { path: '/scam-check', label: 'JENOVA Protect' },
@@ -690,7 +814,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 { path: '/checklist', label: 'JENOVA Checklist' },
                 { path: '/assistant', label: 'JENOVA Voice' },
                 { path: '/local-help', label: 'JENOVA Local' },
-                { path: '/jobs/biodata', label: 'Biodata Builder' },
+                { path: '/jobs/biodata', label: language === 'hi' ? 'बायोडाटा बिल्डर' : 'Biodata Builder' },
               ].map((l) => (
                 <button
                   key={`${l.path}-${l.label}`}
@@ -730,7 +854,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <p className="text-xs text-[#B8D8F5] leading-relaxed">{t.footer.disclaimer}</p>
             <p className="text-xs text-[#7FA6CE]">
               © {new Date().getFullYear()} JENOVA ·{' '}
-              {language === 'bn' ? 'নতুন সম্ভাবনা, সবার জন্য।' : 'A New Way to Grow Together.'}
+              {language === 'bn'
+                ? 'নতুন সম্ভাবনা, সবার জন্য।'
+                : language === 'hi'
+                  ? 'नई संभावनाएं, सभी के लिए।'
+                  : 'A New Way to Grow Together.'}
             </p>
           </div>
         </div>
@@ -744,11 +872,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
       >
         <div className="grid grid-cols-5 gap-1 max-w-md mx-auto">
           {[
-            { path: '/', label: language === 'bn' ? 'হোম' : 'Home', Icon: Home },
-            { path: '/scam-check', label: language === 'bn' ? 'নিরাপদ' : 'Protect', Icon: ShieldCheck },
-            { path: '/schemes', label: language === 'bn' ? 'প্রকল্প' : 'Schemes', Icon: LayoutGrid },
-            { path: '/assistant', label: language === 'bn' ? 'ভয়েস' : 'Voice', Icon: Bot },
-            { path: '/local-help', label: language === 'bn' ? 'সহায়তা' : 'Local', Icon: MapPin },
+            {
+              path: '/',
+              label: language === 'bn' ? 'হোম' : language === 'hi' ? 'होम' : 'Home',
+              Icon: Home,
+            },
+            {
+              path: '/scam-check',
+              label: language === 'bn' ? 'নিরাপদ' : language === 'hi' ? 'सुरक्षा' : 'Protect',
+              Icon: ShieldCheck,
+            },
+            {
+              path: '/schemes',
+              label: language === 'bn' ? 'প্রকল্প' : language === 'hi' ? 'योजनाएं' : 'Schemes',
+              Icon: LayoutGrid,
+            },
+            {
+              path: '/assistant',
+              label: language === 'bn' ? 'ভয়েস' : language === 'hi' ? 'आवाज़' : 'Voice',
+              Icon: Bot,
+            },
+            {
+              path: '/local-help',
+              label: language === 'bn' ? 'সহায়তা' : language === 'hi' ? 'स्थानीय' : 'Local',
+              Icon: MapPin,
+            },
           ].map(({ path, label, Icon }) => {
             const active = path === '/' ? route === '/' : route === path || route.startsWith(`${path}/`);
             return (

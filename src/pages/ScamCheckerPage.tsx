@@ -19,6 +19,7 @@ import { pickText } from '../i18n/translations';
 import type { FraudAlert, FraudAnalysisResult } from '../types/platform';
 import { PageHeader, SafetyNotice } from '../components/SharedUI';
 import { ReadAloudButton, VoiceInputButton } from '../components/VoiceAccessibility';
+import { JenovaProtectLogo } from '../components/JenovaIcons3D';
 
 type CheckCategory = 'message' | 'job' | 'loan' | 'link' | 'payment' | 'contact';
 
@@ -35,6 +36,7 @@ const SAMPLE_TESTS: {
   id: string;
   category: CheckCategory;
   labelBn: string;
+  labelHi: string;
   labelEn: string;
   text: string;
 }[] = [
@@ -42,13 +44,15 @@ const SAMPLE_TESTS: {
     id: 'job-fee',
     category: 'job',
     labelBn: 'নমুনা ১: চাকরির আগে ফি চাওয়া মেসেজ',
+    labelHi: 'नमूना 1: नौकरी से पहले शुल्क मांगने वाला संदेश',
     labelEn: 'Sample 1: Job Asking Registration Fee',
-    text: 'Urgent Airport Packing Job in Haldia/Mecheda! Salary ₹28,500/month. Pay ₹1,500 registration & uniform fee via UPI today to confirm joining letter.',
+    text: 'Urgent Airport & Warehouse Packing Job! Salary ₹28,500/month. Pay ₹1,500 registration & uniform fee via UPI today to confirm joining letter.',
   },
   {
     id: 'upi-qr',
     category: 'payment',
     labelBn: 'নমুনা ২: টাকা পাওয়ার জন্য UPI PIN চাওয়া',
+    labelHi: 'नमूना 2: पैसे पाने के लिए UPI PIN मांगना',
     labelEn: 'Sample 2: UPI QR / PIN to Receive Money',
     text: 'আপনার লটারি ও লক্ষ্মীর ভাণ্ডার বোনাস ₹15,000 মঞ্জুর হয়েছে। টাকা অ্যাকাউন্টে পেতে এই QR কোড স্ক্যান করে আপনার UPI PIN দিন এবং AnyDesk অ্যাপ ডাউনলোড করুন।',
   },
@@ -56,13 +60,14 @@ const SAMPLE_TESTS: {
     id: 'kyc-link',
     category: 'link',
     labelBn: 'নমুনা ৩: ব্যাংক KYC বন্ধের ভয় দেখানো লিঙ্ক',
+    labelHi: 'नमूना 3: बैंक KYC बंद होने का डर दिखाने वाला लिंक',
     labelEn: 'Sample 3: Urgent Bank KYC Link',
     text: 'Dear Customer, your SBI account will be blocked within 2 hours. Update PAN KYC immediately at http://sbi-kyc-update-alert.xyz/verify or share OTP.',
   },
 ];
 
 export function ScamCheckerPage() {
-  const { language, navigate, openReportModal } = useApp();
+  const { language, theme, navigate, openReportModal } = useApp();
   const [category, setCategory] = useState<CheckCategory>('message');
   const [content, setContent] = useState('');
   const [checking, setChecking] = useState(false);
@@ -168,6 +173,20 @@ export function ScamCheckerPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <div className="rounded-2xl bg-gradient-to-r from-[#EBF9F2] via-white to-[#EAF6FE] dark:from-[#07263B] dark:via-[#0A2242] dark:to-[#082E3A] border border-[#138A45]/25 dark:border-[#36E7F2]/30 p-5 sm:p-6 shadow-sm">
+        <JenovaProtectLogo
+          size="lg"
+          theme={theme}
+          subtitle={
+            language === 'bn'
+              ? 'ডিজিটাল সুরক্ষা ও প্রতারণা শনাক্তকরণ কেন্দ্র'
+              : language === 'hi'
+                ? 'डिजिटल सुरक्षा और धोखाधड़ी जांच केंद्र'
+                : 'Digital Safety & Suspicious Offer Shield'
+          }
+        />
+      </div>
+
       <PageHeader
         title={
           language === 'bn'
@@ -189,7 +208,9 @@ export function ScamCheckerPage() {
         message={
           language === 'bn'
             ? 'কখনোই এখানে আপনার আসল OTP, UPI PIN, ব্যাংক পাসওয়ার্ড বা আধার নম্বর লিখবেন না। শুধু সন্দেহজনক মেসেজ বা লিঙ্কটি পেস্ট করুন।'
-            : 'Never paste your real OTP, UPI PIN, bank password, or Aadhaar number here. Paste only the suspicious message, link, or offer text.'
+            : language === 'hi'
+              ? 'कभी भी यहाँ अपना असली OTP, UPI PIN, बैंक पासवर्ड या आधार नंबर न लिखें। केवल संदिग्ध संदेश, लिंक या ऑफर टेक्स्ट पेस्ट करें।'
+              : 'Never paste your real OTP, UPI PIN, bank password, or Aadhaar number here. Paste only the suspicious message, link, or offer text.'
         }
       />
 
@@ -243,8 +264,10 @@ export function ScamCheckerPage() {
             onChange={(e) => setContent(e.target.value)}
             placeholder={
               language === 'bn'
-                ? 'যেমন: "হলদিয়া প্যাকিং জব, বেতন ২৫,০০০ টাকা। আজই ১,৫০০ টাকা রেজিস্ট্রেশন ফি পাঠান..." অথবা সন্দেহজনক ওয়েবসাইট লিঙ্ক...'
-                : 'Example: "Pay ₹1,500 registration fee via UPI for confirmed job..." or paste a suspicious URL or SMS...'
+                ? 'যেমন: "এয়ারপোর্ট প্যাকিং জব, বেতন ২৫,০০০ টাকা। আজই ১,৫০০ টাকা রেজিস্ট্রেশন ফি পাঠান..." অথবা সন্দেহজনক ওয়েবসাইট লিঙ্ক...'
+                : language === 'hi'
+                  ? 'उदाहरण: "पक्की नौकरी के लिए UPI से ₹1,500 रजिस्ट्रेशन शुल्क भेजें..." या कोई संदिग्ध लिंक/SMS पेस्ट करें...'
+                  : 'Example: "Pay ₹1,500 registration fee via UPI for confirmed job..." or paste a suspicious URL or SMS...'
             }
             className="w-full rounded-xl border border-[#D8D5CC] bg-[#FAF9F5] px-4 py-3 text-sm sm:text-base text-[#252525] focus:outline-none focus:ring-2 focus:ring-[#176B4D] focus:bg-white"
           />
@@ -256,7 +279,9 @@ export function ScamCheckerPage() {
           <p className="text-xs font-medium text-[#5C5C58]">
             {language === 'bn'
               ? 'কীভাবে কাজ করে দেখতে নমুনা উদাহরণ চেষ্টা করুন:'
-              : 'Try a sample scam pattern to see how analysis works:'}
+              : language === 'hi'
+                ? 'जांच कैसे काम करती है देखने के लिए नमूना उदाहरण आज़माएं:'
+                : 'Try a sample scam pattern to see how analysis works:'}
           </p>
           <div className="flex flex-wrap gap-2">
             {SAMPLE_TESTS.map((sample) => (
@@ -270,7 +295,11 @@ export function ScamCheckerPage() {
                 }}
                 className="text-xs px-3 py-2 rounded-lg bg-[#FAF9F5] border border-[#E5E3DC] text-[#252525] hover:border-[#176B4D] hover:bg-[#EBF4F0] transition-colors cursor-pointer text-left"
               >
-                {language === 'bn' ? sample.labelBn : sample.labelEn}
+                {language === 'bn'
+                  ? sample.labelBn
+                  : language === 'hi'
+                    ? sample.labelHi
+                    : sample.labelEn}
               </button>
             ))}
           </div>
@@ -522,8 +551,10 @@ export function ScamCheckerPage() {
           </h2>
           <p className="text-sm text-[#5C5C58]">
             {language === 'bn'
-              ? 'মেচেদা ও পূর্ব মেদিনীপুর এলাকায় প্রচলিত পরিচিত প্রতারণার ধরনগুলি জেনে রাখুন।'
-              : 'Common digital, job, and welfare scam patterns flagged for residents in Purba Medinipur.'}
+              ? 'সারা দেশে প্রচলিত ডিজিটাল, চাকরি ও সরকারি প্রকল্প-সংক্রান্ত প্রতারণার ধরনগুলি জেনে সচেতন থাকুন।'
+              : language === 'hi'
+                ? 'देश भर में सक्रिय डिजिटल, नौकरी और कल्याणकारी योजनाओं से जुड़ी धोखाधड़ी के तरीकों से सतर्क रहें।'
+                : 'Stay ahead of common digital, employment, and welfare scam patterns flagged across India.'}
           </p>
         </div>
 

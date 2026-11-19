@@ -6,7 +6,7 @@ export interface VisualAsset {
 export const VISUAL_ASSETS = {
   heroCommunityEmpowerment: {
     src: '/src/assets/images/hero_community_empowerment_1795068308541.jpg',
-    alt: '3D illustration symbolizing community empowerment, financial independence, education, and local opportunity in Mecheda',
+    alt: '3D illustration symbolizing community empowerment, financial independence, education, and opportunity across India',
   },
   employmentProfessionals: {
     src: '/src/assets/images/employment_indian_professionals_1795068308120.jpg',

@@ -24,6 +24,7 @@ import {
   VerificationLabel,
 } from '../components/SharedUI';
 import { ReadAloudButton } from '../components/VoiceAccessibility';
+import { JenovaSchemesLogo } from '../components/JenovaIcons3D';
 import { VISUAL_ASSETS } from '../lib/visualAssets';
 
 const SCHEME_CATEGORIES: SchemeCategory[] = [
@@ -40,7 +41,7 @@ const SCHEME_CATEGORIES: SchemeCategory[] = [
 ];
 
 export function SchemesDirectoryPage() {
-  const { language, t, navigate } = useApp();
+  const { language, theme, t, navigate } = useApp();
   const [schemes, setSchemes] = useState<WelfareScheme[]>(() =>
     readOfflineCache<WelfareScheme[]>('schemes_list', [])
   );
@@ -81,7 +82,9 @@ export function SchemesDirectoryPage() {
         reason:
           language === 'bn'
             ? 'এই প্রকল্পটি সাধারণত পশ্চিমবঙ্গের স্থায়ী বাসিন্দাদের জন্য প্রযোজ্য।'
-            : 'This scheme generally requires West Bengal residency.',
+            : language === 'hi'
+              ? 'यह योजना सामान्यतः पश्चिम बंगाल के स्थायी निवासियों के लिए लागू है।'
+              : 'This scheme generally requires West Bengal residency.',
       };
     }
     if (gender !== 'any' && !p.genders.includes('all') && !p.genders.includes(gender)) {
@@ -90,7 +93,9 @@ export function SchemesDirectoryPage() {
         reason:
           language === 'bn'
             ? 'এই প্রকল্পটি নির্দিষ্ট আবেদনকারী শ্রেণির জন্য নির্ধারিত।'
-            : 'Applicant group does not match the primary target category of this scheme.',
+            : language === 'hi'
+              ? 'आवेदक वर्ग इस योजना की मुख्य पात्रता श्रेणी से मेल नहीं खाता।'
+              : 'Applicant group does not match the primary target category of this scheme.',
       };
     }
     if (hasAge && ((p.minAge && parsedAge < p.minAge) || (p.maxAge && parsedAge > p.maxAge))) {
@@ -99,7 +104,9 @@ export function SchemesDirectoryPage() {
         reason:
           language === 'bn'
             ? `সাধারণ বয়সসীমা (${p.minAge || '—'}–${p.maxAge || '—'} বছর) এর সাথে বর্তমান বয়স মিলছে না।`
-            : `Entered age (${parsedAge}) falls outside the typical scheme age band (${p.minAge || '—'}–${p.maxAge || '—'} yrs).`,
+            : language === 'hi'
+              ? `दर्ज आयु (${parsedAge}) इस योजना की सामान्य आयु सीमा (${p.minAge || '—'}–${p.maxAge || '—'} वर्ष) से बाहर है।`
+              : `Entered age (${parsedAge}) falls outside the typical scheme age band (${p.minAge || '—'}–${p.maxAge || '—'} yrs).`,
       };
     }
     if (!hasAge && (p.minAge || p.maxAge)) {
@@ -108,7 +115,9 @@ export function SchemesDirectoryPage() {
         reason:
           language === 'bn'
             ? 'সঠিক ধারণা পেতে অনুগ্রহ করে বয়স লিখুন।'
-            : 'Enter age above to check the scheme age band.',
+            : language === 'hi'
+              ? 'सही जानकारी के लिए कृपया ऊपर अपनी आयु दर्ज करें।'
+              : 'Enter age above to check the scheme age band.',
       };
     }
     if (
@@ -121,7 +130,9 @@ export function SchemesDirectoryPage() {
         reason:
           language === 'bn'
             ? 'আপনার পেশার সাথে প্রকল্পের ব্যতিক্রম শর্ত অফিসিয়াল পোর্টালে যাচাই করুন।'
-            : 'Occupation-specific rules may apply — confirm directly on the official portal or BSK.',
+            : language === 'hi'
+              ? 'पेशे से जुड़े विशेष नियम लागू हो सकते हैं — आधिकारिक पोर्टल या BSK पर जांचें।'
+              : 'Occupation-specific rules may apply — confirm directly on the official portal or BSK.',
       };
     }
     return {
@@ -129,9 +140,20 @@ export function SchemesDirectoryPage() {
       reason:
         language === 'bn'
           ? 'প্রাথমিক তথ্য অনুযায়ী আপনি যোগ্য হতে পারেন। চূড়ান্ত অনুমোদন কেবল সরকারি কর্তৃপক্ষ দেয়।'
-          : 'Matches basic profile filters. Final eligibility is always decided by the official government authority.',
+          : language === 'hi'
+            ? 'प्रारंभिक जानकारी के अनुसार आप पात्र हो सकते हैं। अंतिम निर्णय केवल सरकारी विभाग द्वारा किया जाता है।'
+            : 'Matches basic profile filters. Final eligibility is always decided by the official government authority.',
     };
   };
+
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: schemes.length };
+    for (const cat of SCHEME_CATEGORIES) counts[cat] = 0;
+    for (const sch of schemes) {
+      counts[sch.category] = (counts[sch.category] || 0) + 1;
+    }
+    return counts;
+  }, [schemes]);
 
   const filtered = useMemo(() => {
     return schemes.filter((sch) => {
@@ -149,6 +171,20 @@ export function SchemesDirectoryPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="rounded-2xl bg-gradient-to-r from-[#FFF5EB] via-white to-[#EEF7FF] dark:from-[#2C1A0B] dark:via-[#0A2242] dark:to-[#082447] border border-[#FF8A18]/30 dark:border-[#FFC45C]/30 p-5 sm:p-6 shadow-sm mb-6">
+        <JenovaSchemesLogo
+          size="lg"
+          theme={theme}
+          subtitle={
+            language === 'bn'
+              ? 'সরকারি প্রকল্প অনুসন্ধান ও অফিসিয়াল পোর্টাল গাইড'
+              : language === 'hi'
+                ? 'सरकारी योजना खोज एवं आधिकारिक पोर्टल गाइड'
+                : 'Verified Government Welfare & Eligibility Guide'
+          }
+        />
+      </div>
+
       <PageHeader
         title={
           language === 'bn'
@@ -160,7 +196,9 @@ export function SchemesDirectoryPage() {
         subtitle={
           language === 'bn'
             ? 'পশ্চিমবঙ্গ ও ভারত সরকারের যাচাইকৃত প্রকল্পসমূহ। প্রতিটি প্রকল্প সরাসরি অফিসিয়াল সরকারি ওয়েবসাইটের সাথে যুক্ত।'
-            : 'Verified West Bengal and Government of India public welfare schemes with official portal links, document checklists, and a scheme discovery helper.'
+            : language === 'hi'
+              ? 'पश्चिम बंगाल और भारत सरकार की सत्यापित जन-कल्याणकारी योजनाएं, सीधे आधिकारिक सरकारी पोर्टल लिंक और दस्तावेज़ सूची के साथ।'
+              : 'Verified West Bengal and Government of India public welfare schemes with official portal links, document checklists, and a scheme discovery helper.'
         }
       />
 
@@ -175,16 +213,23 @@ export function SchemesDirectoryPage() {
           <p className="text-xs font-semibold text-[#176B4D]">
             {language === 'bn'
               ? 'শিক্ষা · স্বাস্থ্য · নারী ক্ষমতায়ন · কৃষক সহায়তা · আবাসন · সামাজিক সুরক্ষা'
-              : 'Education · Healthcare · Women Empowerment · Farmers · Housing · Social Security'}
+              : language === 'hi'
+                ? 'शिक्षा · स्वास्थ्य · महिला सशक्तिकरण · किसान सहायता · आवास · सामाजिक सुरक्षा'
+                : 'Education · Healthcare · Women Empowerment · Farmers · Housing · Social Security'}
           </p>
           <h2 className="text-lg sm:text-xl font-bold text-[#252525]">
             {language === 'bn'
               ? 'সরকারি প্রকল্পের সহজ তথ্য, সরাসরি অফিসিয়াল পোর্টালে'
-              : 'Clear Citizen Summaries Linking Directly to Official Portals'}
+              : language === 'hi'
+                ? 'सरकारी योजनाओं की सरल जानकारी, सीधे आधिकारिक पोर्टल पर'
+                : 'Clear Citizen Summaries Linking Directly to Official Portals'}
           </h2>
           <p className="text-sm text-[#5C5C58] leading-relaxed">
-            Every entry lists commonly required documents and directs you straight to the official
-            West Bengal or Government of India portal — never through unverified middlemen.
+            {language === 'bn'
+              ? 'প্রতিটি প্রকল্পের সাথে প্রয়োজনীয় কাগজপত্রের তালিকা এবং সরাসরি পশ্চিমবঙ্গ বা ভারত সরকারের অফিসিয়াল পোর্টাল লিঙ্ক দেওয়া আছে — কোনো দালাল ছাড়া।'
+              : language === 'hi'
+                ? 'प्रत्येक योजना के साथ आवश्यक दस्तावेज़ों की सूची और सीधे पश्चिम बंगाल या भारत सरकार के आधिकारिक पोर्टल का लिंक दिया गया है — बिना किसी बिचौलिए के।'
+                : 'Every entry lists commonly required documents and directs you straight to the official West Bengal or Government of India portal — never through unverified middlemen.'}
           </p>
         </div>
       </div>
@@ -198,12 +243,16 @@ export function SchemesDirectoryPage() {
               <h2 className="text-sm sm:text-base font-bold text-[#11533B]">
                 {language === 'bn'
                   ? 'প্রকল্প অনুসন্ধান সহায়ক (Scheme Discovery Assistant)'
-                  : 'Scheme Discovery Assistant'}
+                  : language === 'hi'
+                    ? 'योजना खोज सहायक (Scheme Discovery Assistant)'
+                    : 'Scheme Discovery Assistant'}
               </h2>
               <p className="text-xs text-[#176B4D]">
                 {language === 'bn'
                   ? 'সাধারণ তথ্য নির্বাচন করে সম্ভাব্য প্রাসঙ্গিক প্রকল্প দেখুন (এটি সরকারি যোগ্যতার চূড়ান্ত নিশ্চয়তা নয়)।'
-                  : 'Filter potentially relevant schemes based on basic profile options. This tool does NOT determine official government eligibility.'}
+                  : language === 'hi'
+                    ? 'अपनी सामान्य जानकारी चुनकर संभावित उपयुक्त योजनाएं देखें (यह अंतिम सरकारी पात्रता की गारंटी नहीं है)।'
+                    : 'Filter potentially relevant schemes based on basic profile options. This tool does NOT determine official government eligibility.'}
               </p>
             </div>
           </div>
@@ -212,7 +261,13 @@ export function SchemesDirectoryPage() {
             onClick={() => setAssistantOpen((v) => !v)}
             className="text-xs font-semibold text-[#176B4D] hover:underline whitespace-nowrap cursor-pointer"
           >
-            {assistantOpen ? 'Hide' : 'Open'}
+            {assistantOpen
+              ? language === 'hi'
+                ? 'छिपाएं'
+                : 'Hide'
+              : language === 'hi'
+                ? 'खोलें'
+                : 'Open'}
           </button>
         </div>
 
@@ -345,7 +400,7 @@ export function SchemesDirectoryPage() {
                 : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
             }`}
           >
-            {t.common.all}
+            {t.common.all} ({categoryCounts.ALL || 0})
           </button>
           {SCHEME_CATEGORIES.map((cat) => (
             <button
@@ -358,7 +413,7 @@ export function SchemesDirectoryPage() {
                   : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
               }`}
             >
-              {cat}
+              {cat} ({categoryCounts[cat] || 0})
             </button>
           ))}
         </div>
@@ -368,8 +423,19 @@ export function SchemesDirectoryPage() {
       {loading ? (
         <p className="text-sm text-[#5C5C58] py-12 text-center">{t.common.loading}</p>
       ) : filtered.length === 0 ? (
-        <div className="p-10 rounded-xl bg-white border border-[#E5E3DC] text-center">
+        <div className="p-10 rounded-xl bg-white border border-[#E5E3DC] text-center space-y-3">
           <p className="text-sm text-[#5C5C58]">{t.common.noResults}</p>
+          <button
+            type="button"
+            onClick={() => {
+              setCategory('ALL');
+              setScope('ALL');
+              setSearch('');
+            }}
+            className="px-4 py-2 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+          >
+            {language === 'bn' ? 'সব ফিল্টার রিসেট করুন' : language === 'hi' ? 'सभी फ़िल्टर रीसेट करें' : 'Reset Filters'}
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -677,8 +743,10 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
               </h2>
               <p className="text-xs text-[#5C5C58] mt-0.5">
                 {language === 'bn'
-                  ? 'বাংলা সহায়তা কেন্দ্র (BSK), পূর্ব মেদিনীপুর জেলা/বিডিও ডিরেক্টরি বা দুয়ারে সরকার পোর্টালে যান।'
-                  : 'Find verified Bangla Sahayata Kendra (BSK), Purba Medinipur BDO directory, and Duare Sarkar links.'}
+                  ? 'বাংলা সহায়তা কেন্দ্র (BSK), কমন সার্ভিস সেন্টার (CSC), জেলা/বিডিও পোর্টাল বা দুয়ারে সরকার ডিরেক্টরি দেখুন।'
+                  : language === 'hi'
+                    ? 'सत्यापित CSC डिजिटल सेवा, बांग्ला सहायता केंद्र (BSK), जिला/BDO पोर्टल और आधिकारिक हेल्पडेस्क देखें।'
+                    : 'Find verified Bangla Sahayata Kendra (BSK), CSC Digital Seva desks, District/BDO portals, and official helpdesks.'}
               </p>
             </div>
           </div>

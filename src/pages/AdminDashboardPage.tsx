@@ -85,7 +85,7 @@ export function AdminDashboardPage() {
   const [acNameEn, setAcNameEn] = useState('');
   const [acNameBn, setAcNameBn] = useState('');
   const [acCategory, setAcCategory] = useState<AssistanceCentreCategory>('Bangla Sahayata Kendra');
-  const [acArea, setAcArea] = useState('Mecheda, Purba Medinipur');
+  const [acArea, setAcArea] = useState('');
   const [acAddress, setAcAddress] = useState('');
   const [acOfficialUrl, setAcOfficialUrl] = useState('');
   const [acSourceName, setAcSourceName] = useState('');
@@ -118,7 +118,7 @@ export function AdminDashboardPage() {
   // Verified Job creation state
   const [jobTitle, setJobTitle] = useState('');
   const [jobEmployer, setJobEmployer] = useState('');
-  const [jobLocation, setJobLocation] = useState('Mecheda, Purba Medinipur');
+  const [jobLocation, setJobLocation] = useState('');
   const [jobSalary, setJobSalary] = useState('');
   const [jobUrl, setJobUrl] = useState('');
   const [jobDesc, setJobDesc] = useState('');
@@ -1070,7 +1070,7 @@ export function AdminDashboardPage() {
                   required
                   value={acSourceName}
                   onChange={(e) => setAcSourceName(e.target.value)}
-                  placeholder="Verification Source (e.g. Purba Medinipur District Portal) *"
+                  placeholder="Verification Source (e.g. Official District / State Portal) *"
                   className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
                 />
                 <input

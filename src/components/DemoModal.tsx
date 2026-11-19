@@ -83,7 +83,7 @@ const DEMO_SLIDES = [
     title: 'JENOVA Local',
     subtitle: 'Verified Local Assistance & Official Helplines',
     description:
-      'Find verified Bangla Sahayata Kendra (BSK), Purba Medinipur BDO directories, Duare Sarkar portals, and RSETI training centres with transparent verification dates.',
+      'Find verified Bangla Sahayata Kendra (BSK), District & BDO directories, CSC Digital Seva desks, Duare Sarkar portals, and RSETI training centres with transparent verification dates.',
     route: '/local-help',
     cta: 'Find Local Support',
     icon: LocalPin3DIcon,

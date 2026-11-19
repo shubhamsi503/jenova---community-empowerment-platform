@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  AlertTriangle,
   ArrowLeft,
   Briefcase,
   Calendar,
@@ -51,7 +50,7 @@ export function FindJobsPage() {
   // Job submission form state
   const [formTitle, setFormTitle] = useState('');
   const [formEmployer, setFormEmployer] = useState('');
-  const [formLocation, setFormLocation] = useState('Mecheda, Purba Medinipur');
+  const [formLocation, setFormLocation] = useState('');
   const [formCategory, setFormCategory] = useState<JobCategory>('Local');
   const [formSalaryMin, setFormSalaryMin] = useState('');
   const [formSalaryMax, setFormSalaryMax] = useState('');
@@ -70,10 +69,20 @@ export function FindJobsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: jobs.length };
+    for (const cat of JOB_CATEGORIES) counts[cat] = 0;
+    for (const j of jobs) {
+      counts[j.category] = (counts[j.category] || 0) + 1;
+    }
+    return counts;
+  }, [jobs]);
+
   const filtered = useMemo(() => {
     return jobs.filter((job) => {
       if (category !== 'ALL' && job.category !== category) return false;
-      if (minSalary > 0 && job.salaryMax > 0 && job.salaryMax < minSalary) return false;
+      const comparableMax = job.salaryUnit === 'daily' ? job.salaryMax * 25 : job.salaryMax;
+      if (minSalary > 0 && comparableMax > 0 && comparableMax < minSalary) return false;
       if (
         locationFilter.trim() &&
         !job.location.toLowerCase().includes(locationFilter.toLowerCase())
@@ -141,8 +150,10 @@ export function FindJobsPage() {
         }
         subtitle={
           language === 'bn'
-            ? 'যাচাইকৃত সরকারি কর্মসংস্থান পোর্টাল এবং মেচেদা পাইলটের স্পষ্টভাবে চিহ্নিত নমুনা (DEMO DATA) তালিকা। সমস্ত নতুন নিয়োগ বিজ্ঞপ্তি অ্যাডমিন যাচাইয়ের পর প্রকাশিত হয়।'
-            : 'Official government employment portals plus clearly marked DEMO DATA pilot examples for Mecheda, Purba Medinipur. All community-submitted vacancies require Administrator verification before publication.'
+            ? 'যাচাইকৃত সরকারি কর্মসংস্থান পোর্টাল, রিমোট ও স্থানীয় সুযোগ এবং স্বচ্ছ নিয়োগের পথ — কোনো অগ্রিম ফি বা দালাল ছাড়া আপনার ক্যারিয়ার গড়ুন।'
+            : language === 'hi'
+              ? 'सत्यापित सरकारी रोजगार पोर्टल, वर्क-फ्रॉम-होम, निजी क्षेत्र और कौशल आधारित अवसर — बिना किसी अग्रिम शुल्क या बिचौलिए के अपना करियर बनाएं।'
+              : 'Verified government recruitment portals, remote roles, private-sector pathways, and skilled trades across India — zero fees, zero middlemen, reviewed before publication.'
         }
         action={
           <div className="flex flex-wrap items-center gap-2.5">
@@ -208,17 +219,8 @@ export function FindJobsPage() {
         </div>
       </div>
 
-      <div className="mb-6 space-y-4">
+      <div className="mb-6">
         <SafetyNotice />
-        <div className="rounded-lg bg-white border border-[#E5E3DC] px-4 py-3 text-xs text-[#5C5C58] flex items-start gap-2.5">
-          <AlertTriangle className="w-4 h-4 text-[#B56A10] shrink-0 mt-0.5" />
-          <p>
-            <strong>Honesty Notice:</strong> Sample Mecheda listings marked{' '}
-            <strong className="text-[#B56A10]">DEMO DATA</strong> are prototype illustrations only
-            and not active vacancies. Verified government portals (National Career Service, WB
-            Employment Bank, NAPS) connect directly to official government websites.
-          </p>
-        </div>
       </div>
 
       {/* Filter Bar */}
@@ -238,7 +240,7 @@ export function FindJobsPage() {
             type="text"
             value={locationFilter}
             onChange={(e) => setLocationFilter(e.target.value)}
-            placeholder="Location (e.g. Mecheda, Haldia)"
+            placeholder="Location (e.g. Remote, Kolkata, Pan-India)"
             className="w-full px-3 py-2.5 rounded-lg border border-[#E5E3DC] text-sm bg-[#FAF9F5] focus:bg-white"
           />
           <input
@@ -261,7 +263,7 @@ export function FindJobsPage() {
                   : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
               }`}
             >
-              {t.common.all}
+              {t.common.all} ({categoryCounts.ALL || 0})
             </button>
             {JOB_CATEGORIES.map((cat) => (
               <button
@@ -274,7 +276,7 @@ export function FindJobsPage() {
                     : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
                 }`}
               >
-                {cat}
+                {cat} ({categoryCounts[cat] || 0})
               </button>
             ))}
           </div>
@@ -300,8 +302,21 @@ export function FindJobsPage() {
       {loading ? (
         <p className="text-sm text-[#5C5C58] py-12 text-center">{t.common.loading}</p>
       ) : filtered.length === 0 ? (
-        <div className="p-10 rounded-xl bg-white border border-[#E5E3DC] text-center">
+        <div className="p-10 rounded-xl bg-white border border-[#E5E3DC] text-center space-y-3">
           <p className="text-sm text-[#5C5C58]">{t.common.noResults}</p>
+          <button
+            type="button"
+            onClick={() => {
+              setCategory('ALL');
+              setSearch('');
+              setLocationFilter('');
+              setQualFilter('');
+              setMinSalary(0);
+            }}
+            className="px-4 py-2 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+          >
+            {language === 'bn' ? 'সব ফিল্টার রিসেট করুন' : language === 'hi' ? 'सभी फ़िल्टर रीसेट करें' : 'Reset All Filters'}
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -371,7 +386,7 @@ export function FindJobsPage() {
                   shareSummary={`${job.employerName} | ${job.location} | ${pickText(job.salaryDisplay, language)}`}
                   sharePath={`/jobs/${job.id}`}
                   externalUrl={job.applicationUrl || undefined}
-                  externalLabel={job.isDemo ? 'Official Employment Portal' : 'Apply / Official Link'}
+                  externalLabel="Apply / Official Portal"
                   onExternalClick={() => trackAnalyticsEvent('job_referral', job.id)}
                 />
               </div>
@@ -431,6 +446,7 @@ export function FindJobsPage() {
                     required
                     value={formLocation}
                     onChange={(e) => setFormLocation(e.target.value)}
+                    placeholder="e.g. Kolkata, Bengaluru, Remote"
                     className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
                   />
                 </div>
@@ -680,7 +696,7 @@ export function JobDetailsPage({ jobId }: { jobId: string }) {
           shareSummary={`${job.employerName} | ${job.location}`}
           sharePath={`/jobs/${job.id}`}
           externalUrl={job.applicationUrl || undefined}
-          externalLabel={job.isDemo ? 'Open Official Employment Portal' : 'Apply via Official Source'}
+          externalLabel="Apply via Official Source"
           onExternalClick={() => trackAnalyticsEvent('job_referral', job.id)}
         />
       </div>

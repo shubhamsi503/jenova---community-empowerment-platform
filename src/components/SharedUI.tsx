@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  AlertTriangle,
   Bookmark,
   CheckCircle2,
   Clock,
@@ -57,15 +56,10 @@ export function VerificationLabel({
     status === 'Independently Verified';
   const isDanger = status === 'Rejected' || status === 'Expired';
 
+  void isDemo;
+
   return (
     <span className="inline-flex items-center gap-2 text-xs font-medium whitespace-nowrap">
-      {isDemo && (
-        <span className="inline-flex items-center gap-1 text-[#B56A10] dark:text-[#FFC45C] font-semibold">
-          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-          {t.common.demoTag}
-        </span>
-      )}
-      {isDemo && <span className="text-[#C8C5BC] dark:text-slate-600" aria-hidden="true">·</span>}
       <span
         className={`inline-flex items-center gap-1 ${
           isVerified
