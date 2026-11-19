@@ -1,0 +1,61 @@
+<svg width="512" height="512" viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="96" y2="98" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B3B6B" />
+      <stop offset="100%" stop-color="#041933" />
+    </linearGradient>
+    <linearGradient id="starMain" x1="47" y1="13" x2="52" y2="37" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFF8B8" />
+      <stop offset="40%" stop-color="#FFC72C" />
+      <stop offset="80%" stop-color="#FF8800" />
+      <stop offset="100%" stop-color="#D65200" />
+    </linearGradient>
+    <linearGradient id="centerGold" x1="40" y1="32" x2="54" y2="87" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFE169" />
+      <stop offset="35%" stop-color="#FFA812" />
+      <stop offset="75%" stop-color="#F26B00" />
+      <stop offset="100%" stop-color="#BA3F00" />
+    </linearGradient>
+    <radialGradient id="orangeOrb" cx="34%" cy="30%" r="68%">
+      <stop offset="0%" stop-color="#FFF2A8" />
+      <stop offset="38%" stop-color="#FFA71A" />
+      <stop offset="80%" stop-color="#E66200" />
+      <stop offset="100%" stop-color="#993400" />
+    </radialGradient>
+    <linearGradient id="leftOrange" x1="8" y1="59" x2="36" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFC740" />
+      <stop offset="50%" stop-color="#FF8000" />
+      <stop offset="100%" stop-color="#C94700" />
+    </linearGradient>
+    <radialGradient id="greenOrb" cx="34%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#8BFFCB" />
+      <stop offset="28%" stop-color="#1DB574" />
+      <stop offset="68%" stop-color="#08643E" />
+      <stop offset="100%" stop-color="#022C1B" />
+    </radialGradient>
+    <linearGradient id="greenFig" x1="20" y1="49" x2="46" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#26C485" />
+      <stop offset="42%" stop-color="#0B754B" />
+      <stop offset="84%" stop-color="#04472E" />
+      <stop offset="100%" stop-color="#02291A" />
+    </linearGradient>
+    <linearGradient id="swoosh" x1="94" y1="55" x2="46" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#72F7D6" />
+      <stop offset="30%" stop-color="#19AE7D" />
+      <stop offset="70%" stop-color="#076A49" />
+      <stop offset="100%" stop-color="#033926" />
+    </linearGradient>
+  </defs>
+  <rect width="104" height="104" rx="24" fill="url(#bg)" />
+  <g transform="translate(0, 10)">
+    <circle cx="15.5" cy="44" r="6.2" fill="url(#orangeOrb)" />
+    <path d="M4.5 58.2C13.8 48.2 26.8 48.8 36.2 58.8C36.8 64.5 36.4 71.2 33.4 76.2C27.2 66.2 17.5 60.2 4.5 58.2Z" fill="url(#leftOrange)" />
+    <circle cx="29.8" cy="33.5" r="7.4" fill="url(#greenOrb)" />
+    <path d="M15.8 45.8C24.2 45.6 32.8 43.2 38.8 39.2C43.2 47.4 45.5 60.5 42.6 76.6C40.2 77.2 37.8 77.2 35.8 76.4C37.6 61.8 32.5 52.8 15.8 45.8Z" fill="url(#greenFig)" />
+    <circle cx="65.8" cy="33.5" r="7.4" fill="url(#greenOrb)" />
+    <path d="M81.5 45.2C72.2 45.2 63.4 43.2 56.6 39.4C52.4 48.2 50.2 61 52.2 76.4C54.8 76.8 57.6 76.2 60 75.2C59.4 61.2 66.2 51.8 81.5 45.2Z" fill="url(#greenFig)" />
+    <path d="M47.5 21.8L51.4 33.8L58.4 27.6L55.2 41.2C52.2 52.2 51.4 64.2 50.2 76.8C47.8 77.8 45.6 77.8 43.4 76.8C44.4 63.8 43.2 51.8 39.8 40.8L36.6 27.6L43.6 33.8L47.5 21.8Z" fill="url(#centerGold)" />
+    <path d="M47.5 3.5L50.8 11.2L59.1 11.9L52.8 17.4L54.7 25.5L47.5 21.2L40.3 25.5L42.2 17.4L35.9 11.9L44.2 11.2L47.5 3.5Z" fill="url(#starMain)" />
+    <path d="M80.5 45.2C92.5 45.4 98.8 50.8 94.8 58.6C90.2 67.5 72.5 74.5 45.2 77.8C65.2 70.6 80.2 63.6 85.4 55.8C88.5 51.2 86.2 47.2 80.5 45.2Z" fill="url(#swoosh)" />
+  </g>
+</svg>

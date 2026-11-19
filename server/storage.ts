@@ -1,0 +1,378 @@
+import fs from 'fs';
+import path from 'path';
+import type {
+  Announcement,
+  BookmarkItem,
+  BusinessIdea,
+  BusinessProfile,
+  ContentReport,
+  CourseListing,
+  FeedbackSubmission,
+  FraudAlert,
+  JobListing,
+  LocalAssistanceCentre,
+  PlatformAnalytics,
+  SavingsGoal,
+  TrainingCentre,
+  UpdateSubscription,
+  VerificationLog,
+  WelfareScheme,
+} from '../src/types/platform.ts';
+import {
+  createSeedUsers,
+  SEED_ANNOUNCEMENTS,
+  SEED_ASSISTANCE_CENTRES,
+  SEED_BUSINESS_IDEAS,
+  SEED_BUSINESSES,
+  SEED_COURSES,
+  SEED_FRAUD_ALERTS,
+  SEED_JOBS,
+  SEED_SCHEMES,
+  SEED_TRAINING_CENTRES,
+  type StoredUser,
+} from './seed.ts';
+
+export interface DatabaseState {
+  users: StoredUser[];
+  jobs: JobListing[];
+  courses: CourseListing[];
+  trainingCentres: TrainingCentre[];
+  schemes: WelfareScheme[];
+  businessIdeas: BusinessIdea[];
+  businesses: BusinessProfile[];
+  assistanceCentres: LocalAssistanceCentre[];
+  fraudAlerts: FraudAlert[];
+  updateSubscriptions: UpdateSubscription[];
+  bookmarks: BookmarkItem[];
+  savingsGoals: SavingsGoal[];
+  reports: ContentReport[];
+  feedback: FeedbackSubmission[];
+  announcements: Announcement[];
+  verificationLogs: VerificationLog[];
+  analytics: {
+    totalVisits: number;
+    visitorSessionIds: string[];
+    jobsViewed: number;
+    jobReferrals: number;
+    coursesViewed: number;
+    trainingReferrals: number;
+    schemeReferrals: number;
+    businessDirectoryVisits: number;
+    workshopInterestCount: number;
+    checklistsCompleted: number;
+    fraudChecksCompleted: number;
+    localHelpClicks: number;
+    voiceAssistantUses: number;
+    dailyEngagement: Record<string, { visits: number; referrals: number }>;
+  };
+}
+
+const DATA_DIR = path.resolve(process.cwd(), 'data');
+const DATA_FILE = path.join(DATA_DIR, 'platform-store.json');
+
+function todayKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export function isPubliclyVerifiedStatus(status: string): boolean {
+  return (
+    status === 'Verified' ||
+    status === 'Officially Verified' ||
+    status === 'Independently Verified'
+  );
+}
+
+function createInitialState(): DatabaseState {
+  const today = todayKey();
+  return {
+    users: createSeedUsers(),
+    jobs: SEED_JOBS,
+    courses: SEED_COURSES,
+    trainingCentres: SEED_TRAINING_CENTRES,
+    schemes: SEED_SCHEMES,
+    businessIdeas: SEED_BUSINESS_IDEAS,
+    businesses: SEED_BUSINESSES,
+    assistanceCentres: SEED_ASSISTANCE_CENTRES,
+    fraudAlerts: SEED_FRAUD_ALERTS,
+    updateSubscriptions: [],
+    bookmarks: [],
+    savingsGoals: [
+      {
+        id: 'goal-seed-1',
+        userId: 'usr-member-1',
+        title: 'Emergency Household Reserve (3 Months)',
+        targetAmount: 24000,
+        savedAmount: 6500,
+        monthlyContribution: 1500,
+        targetDate: '2027-11-01',
+        updatedAt: new Date().toISOString(),
+      },
+    ],
+    reports: [],
+    feedback: [],
+    announcements: SEED_ANNOUNCEMENTS,
+    verificationLogs: [
+      {
+        id: 'vlog-init-1',
+        entityType: 'scheme',
+        entityId: 'sch-lakshmir-bhandar',
+        entityTitle: 'Lakshmir Bhandar Scheme',
+        previousStatus: 'Pending Verification',
+        newStatus: 'Officially Verified',
+        reviewerName: 'Verification Desk',
+        reviewerRole: 'content_reviewer',
+        note: 'Verified official URL socialsecurity.wb.gov.in and department details.',
+        timestamp: '2026-11-12T09:30:00.000Z',
+      },
+      {
+        id: 'vlog-init-2',
+        entityType: 'assistance',
+        entityId: 'help-bsk-wb',
+        entityTitle: 'Bangla Sahayata Kendra (BSK)',
+        previousStatus: 'Pending Verification',
+        newStatus: 'Officially Verified',
+        reviewerName: 'Verification Desk',
+        reviewerRole: 'content_reviewer',
+        note: 'Verified official West Bengal BSK portal bsk.wb.gov.in.',
+        timestamp: '2026-11-15T10:15:00.000Z',
+      },
+    ],
+    analytics: {
+      totalVisits: 1,
+      visitorSessionIds: [],
+      jobsViewed: 0,
+      jobReferrals: 0,
+      coursesViewed: 0,
+      trainingReferrals: 0,
+      schemeReferrals: 0,
+      businessDirectoryVisits: 0,
+      workshopInterestCount: 0,
+      checklistsCompleted: 0,
+      fraudChecksCompleted: 0,
+      localHelpClicks: 0,
+      voiceAssistantUses: 0,
+      dailyEngagement: {
+        [today]: { visits: 1, referrals: 0 },
+      },
+    },
+  };
+}
+
+class PlatformStore {
+  private state: DatabaseState;
+
+  constructor() {
+    this.state = this.load();
+  }
+
+  private load(): DatabaseState {
+    try {
+      if (fs.existsSync(DATA_FILE)) {
+        const raw = fs.readFileSync(DATA_FILE, 'utf-8');
+        const parsed = JSON.parse(raw) as Partial<DatabaseState>;
+        if (parsed && Array.isArray(parsed.schemes) && Array.isArray(parsed.users)) {
+          // Non-destructive backward-compatible hydration for newly added collections
+          const hydrated: DatabaseState = {
+            ...(createInitialState()),
+            ...parsed,
+            assistanceCentres: Array.isArray(parsed.assistanceCentres) && parsed.assistanceCentres.length > 0
+              ? parsed.assistanceCentres
+              : SEED_ASSISTANCE_CENTRES,
+            fraudAlerts: Array.isArray(parsed.fraudAlerts) && parsed.fraudAlerts.length > 0
+              ? parsed.fraudAlerts
+              : SEED_FRAUD_ALERTS,
+            updateSubscriptions: Array.isArray(parsed.updateSubscriptions)
+              ? parsed.updateSubscriptions
+              : [],
+            analytics: {
+              ...createInitialState().analytics,
+              ...(parsed.analytics || {}),
+              checklistsCompleted: parsed.analytics?.checklistsCompleted ?? 0,
+              fraudChecksCompleted: parsed.analytics?.fraudChecksCompleted ?? 0,
+              localHelpClicks: parsed.analytics?.localHelpClicks ?? 0,
+              voiceAssistantUses: parsed.analytics?.voiceAssistantUses ?? 0,
+            },
+          };
+          this.persist(hydrated);
+          return hydrated;
+        }
+      }
+    } catch (err) {
+      console.error('Failed to read store file, initializing fresh store:', err);
+    }
+    const fresh = createInitialState();
+    this.persist(fresh);
+    return fresh;
+  }
+
+  private persist(nextState: DatabaseState) {
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      const tmp = `${DATA_FILE}.tmp`;
+      fs.writeFileSync(tmp, JSON.stringify(nextState, null, 2), 'utf-8');
+      fs.renameSync(tmp, DATA_FILE);
+    } catch (err) {
+      console.error('Failed to persist database state:', err);
+    }
+  }
+
+  getState(): DatabaseState {
+    return this.state;
+  }
+
+  save() {
+    this.persist(this.state);
+  }
+
+  recordVisit(sessionId?: string) {
+    const today = todayKey();
+    this.state.analytics.totalVisits += 1;
+    if (sessionId && !this.state.analytics.visitorSessionIds.includes(sessionId)) {
+      if (this.state.analytics.visitorSessionIds.length < 5000) {
+        this.state.analytics.visitorSessionIds.push(sessionId);
+      }
+    }
+    if (!this.state.analytics.dailyEngagement[today]) {
+      this.state.analytics.dailyEngagement[today] = { visits: 0, referrals: 0 };
+    }
+    this.state.analytics.dailyEngagement[today].visits += 1;
+    this.save();
+  }
+
+  recordEvent(
+    eventType:
+      | 'job_view'
+      | 'job_referral'
+      | 'course_view'
+      | 'training_referral'
+      | 'scheme_referral'
+      | 'business_visit'
+      | 'workshop_interest'
+      | 'checklist_completed'
+      | 'fraud_check_completed'
+      | 'local_help_click'
+      | 'voice_assistant_use',
+    entityId?: string
+  ) {
+    const today = todayKey();
+    if (!this.state.analytics.dailyEngagement[today]) {
+      this.state.analytics.dailyEngagement[today] = { visits: 0, referrals: 0 };
+    }
+
+    switch (eventType) {
+      case 'job_view': {
+        this.state.analytics.jobsViewed += 1;
+        const j = this.state.jobs.find((x) => x.id === entityId);
+        if (j) j.viewsCount += 1;
+        break;
+      }
+      case 'job_referral': {
+        this.state.analytics.jobReferrals += 1;
+        this.state.analytics.dailyEngagement[today].referrals += 1;
+        const j = this.state.jobs.find((x) => x.id === entityId);
+        if (j) j.referralsCount += 1;
+        break;
+      }
+      case 'course_view': {
+        this.state.analytics.coursesViewed += 1;
+        const c = this.state.courses.find((x) => x.id === entityId);
+        if (c) c.viewsCount += 1;
+        break;
+      }
+      case 'training_referral': {
+        this.state.analytics.trainingReferrals += 1;
+        this.state.analytics.dailyEngagement[today].referrals += 1;
+        const c = this.state.courses.find((x) => x.id === entityId);
+        if (c) c.referralsCount += 1;
+        break;
+      }
+      case 'scheme_referral': {
+        this.state.analytics.schemeReferrals += 1;
+        this.state.analytics.dailyEngagement[today].referrals += 1;
+        const s = this.state.schemes.find((x) => x.id === entityId);
+        if (s) s.referralsCount += 1;
+        break;
+      }
+      case 'business_visit': {
+        this.state.analytics.businessDirectoryVisits += 1;
+        const b = this.state.businesses.find((x) => x.id === entityId);
+        if (b) b.visitsCount += 1;
+        break;
+      }
+      case 'workshop_interest': {
+        this.state.analytics.workshopInterestCount += 1;
+        break;
+      }
+      case 'checklist_completed': {
+        this.state.analytics.checklistsCompleted += 1;
+        break;
+      }
+      case 'fraud_check_completed': {
+        this.state.analytics.fraudChecksCompleted += 1;
+        break;
+      }
+      case 'local_help_click': {
+        this.state.analytics.localHelpClicks += 1;
+        this.state.analytics.dailyEngagement[today].referrals += 1;
+        const h = this.state.assistanceCentres.find((x) => x.id === entityId);
+        if (h) h.referralsCount += 1;
+        break;
+      }
+      case 'voice_assistant_use': {
+        this.state.analytics.voiceAssistantUses += 1;
+        break;
+      }
+    }
+    this.save();
+  }
+
+  getAnalyticsSummary(): PlatformAnalytics {
+    const s = this.state;
+    const verifiedJobs = s.jobs.filter((j) => isPubliclyVerifiedStatus(j.verificationStatus));
+    const verifiedCourses = s.courses.filter((c) => isPubliclyVerifiedStatus(c.verificationStatus));
+    const verifiedSchemes = s.schemes.filter((sc) => isPubliclyVerifiedStatus(sc.verificationStatus));
+    const verifiedBusinesses = s.businesses.filter((b) => isPubliclyVerifiedStatus(b.verificationStatus));
+    const verifiedAssistance = s.assistanceCentres.filter((a) =>
+      isPubliclyVerifiedStatus(a.verificationStatus)
+    );
+
+    const dailyEntries = Object.entries(s.analytics.dailyEngagement)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .slice(-14)
+      .map(([date, val]) => ({ date, visits: val.visits, referrals: val.referrals }));
+
+    return {
+      totalVisits: s.analytics.totalVisits,
+      uniqueVisitorSessions: Math.max(1, s.analytics.visitorSessionIds.length),
+      registeredUsers: s.users.length,
+      jobsViewed: s.analytics.jobsViewed,
+      jobReferrals: s.analytics.jobReferrals,
+      coursesViewed: s.analytics.coursesViewed,
+      trainingReferrals: s.analytics.trainingReferrals,
+      schemeReferrals: s.analytics.schemeReferrals,
+      businessDirectoryVisits: s.analytics.businessDirectoryVisits,
+      workshopInterestCount: s.analytics.workshopInterestCount,
+      checklistsCompleted: s.analytics.checklistsCompleted,
+      fraudChecksCompleted: s.analytics.fraudChecksCompleted,
+      localHelpClicks: s.analytics.localHelpClicks,
+      voiceAssistantUses: s.analytics.voiceAssistantUses,
+      updateSubscribersCount: s.updateSubscriptions.filter((u) => u.active).length,
+      feedbackCount: s.feedback.length,
+      openReportsCount: s.reports.filter((r) => r.status === 'Open').length,
+      verifiedCounts: {
+        jobs: verifiedJobs.length,
+        demoJobs: verifiedJobs.filter((j) => j.isDemo).length,
+        courses: verifiedCourses.length,
+        schemes: verifiedSchemes.length,
+        businesses: verifiedBusinesses.length,
+        assistanceCentres: verifiedAssistance.length,
+      },
+      dailyEngagement: dailyEntries,
+    };
+  }
+}
+
+export const store = new PlatformStore();
+
