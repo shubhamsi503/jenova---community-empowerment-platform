@@ -121,7 +121,7 @@ export function buildWhatsAppShareUrl(title: string, details: string, pathSuffix
 // Non-sensitive offline cache (never store Aadhaar, OTPs, PINs, or tokens here)
 export function readOfflineCache<T>(key: string, fallback: T): T {
   try {
-    const raw = localStorage.getItem(`jenova_cache_v2_${key}`);
+    const raw = localStorage.getItem(`jenova_cache_v3_${key}`);
     if (!raw) return fallback;
     const parsed = JSON.parse(raw) as T;
     // Never hydrate an empty array from stale cache over a non-empty fallback
@@ -137,7 +137,7 @@ export function readOfflineCache<T>(key: string, fallback: T): T {
 export function writeOfflineCache<T>(key: string, value: T): void {
   try {
     if (Array.isArray(value) && value.length === 0) return;
-    localStorage.setItem(`jenova_cache_v2_${key}`, JSON.stringify(value));
+    localStorage.setItem(`jenova_cache_v3_${key}`, JSON.stringify(value));
   } catch {
     // Ignore quota or private-mode errors
   }

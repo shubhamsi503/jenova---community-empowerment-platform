@@ -153,7 +153,7 @@ function computeVerdict(
   if (preset.scheme?.scope === 'West Bengal' && answers.wbResident === 'no') {
     return 'Important Requirements Not Met';
   }
-  if (id.includes('lakshmir')) {
+  if (id.includes('annapurna')) {
     if (answers.wbResident === 'no' || answers.isGovtEmployee === 'yes') {
       return 'Important Requirements Not Met';
     }

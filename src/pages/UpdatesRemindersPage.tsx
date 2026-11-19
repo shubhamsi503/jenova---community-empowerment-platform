@@ -425,7 +425,7 @@ export function UpdatesRemindersPage() {
               onChange={(e) => setRemTitle(e.target.value)}
               placeholder={
                 language === 'bn'
-                  ? 'রিমাইন্ডার লিখুন (যেমন: BSK-তে লক্ষ্মীর ভাণ্ডার ফর্ম জমা)'
+                  ? 'রিমাইন্ডার লিখুন (যেমন: BSK-তে অন্নপূর্ণা যোজনা ফর্ম জমা)'
                   : 'Reminder title (e.g. Visit BSK for scholarship renewal)'
               }
               className="w-full rounded-lg border border-[#D8D5CC] bg-white px-3 py-2 text-sm"

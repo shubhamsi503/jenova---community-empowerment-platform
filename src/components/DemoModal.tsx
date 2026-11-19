@@ -36,7 +36,7 @@ const DEMO_SLIDES = [
     title: 'JENOVA Schemes',
     subtitle: 'Verified West Bengal & Central Government Schemes',
     description:
-      'Explore Lakshmir Bhandar, Kanyashree, Swasthya Sathi, Krishak Bandhu, e-Shram and more in clear everyday language with direct links to official .gov.in portals.',
+      'Explore Annapurna Yojana, Kanyashree, Swasthya Sathi, Krishak Bandhu, e-Shram and more in clear everyday language with direct links to official .gov.in portals.',
     route: '/schemes',
     cta: 'Explore JENOVA Schemes',
     icon: Schemes3DIcon,

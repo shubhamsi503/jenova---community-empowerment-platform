@@ -40,9 +40,9 @@ const DEMO_STEPS = [
     titleEn: 'Discover Verified State & Central Welfare Schemes',
     titleBn: 'যাচাইকৃত রাজ্য ও কেন্দ্রীয় সরকারি প্রকল্প সহজে জানুন',
     summaryEn:
-      'Filter West Bengal and Government of India schemes like Lakshmir Bhandar, Kanyashree, Swasthya Sathi, and e-Shram in plain language, with direct links to official .gov.in portals.',
+      'Filter West Bengal and Government of India schemes like Annapurna Yojana, Kanyashree, Swasthya Sathi, and e-Shram in plain language, with direct links to official .gov.in portals.',
     summaryBn:
-      'লক্ষ্মীর ভাণ্ডার, কন্যাশ্রী, স্বাস্থ্য সাথী ও ই-শ্রম-এর মতো সরকারি প্রকল্প সহজ বাংলায় বুঝুন এবং সরাসরি অফিসিয়াল .gov.in পোর্টালে যান।',
+      'অন্নপূর্ণা যোজনা, কন্যাশ্রী, স্বাস্থ্য সাথী ও ই-শ্রম-এর মতো সরকারি প্রকল্প সহজ বাংলায় বুঝুন এবং সরাসরি অফিসিয়াল .gov.in পোর্টালে যান।',
     highlightsEn: [
       'Plain-language Bengali, English & Hindi summaries',
       'Built-in Scheme Discovery Assistant filter',

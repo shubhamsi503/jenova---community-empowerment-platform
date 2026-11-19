@@ -46,7 +46,7 @@ export function AssistantPage() {
         path: '/local-help',
       };
     }
-    if (/(প্রকল্প|লক্ষ্মীর|কন্যাশ্রী|বিধবা|scheme|योजना)/i.test(q)) {
+    if (/(প্রকল্প|অন্নপূর্ণা|কন্যাশ্রী|বিধবা|scheme|annapurna|योजना|अन्नपूर्णा)/i.test(q)) {
       return {
         label: language === 'bn' ? 'সরকারি প্রকল্প ডিরেক্টরি খুলুন' : 'Open Government Schemes',
         path: '/schemes',
@@ -96,20 +96,20 @@ export function AssistantPage() {
     language === 'bn'
       ? [
           'আমি বিধবা ভাতা সম্পর্কে জানতে চাই।',
-          'লক্ষ্মীর ভাণ্ডারের জন্য কী কী কাগজ লাগবে?',
+          'অন্নপূর্ণা যোজনার জন্য কী কী কাগজ লাগবে?',
           'চাকরির জন্য ১,৫০০ টাকা চাইছে — এটা কি প্রতারণা?',
           'আমার জেলায় বিনামূল্যে কম্পিউটার বা সেলাই কোথায় শিখব?',
         ]
       : language === 'hi'
         ? [
-            'लक्ष्मीर भंडार के लिए कौन से दस्तावेज़ चाहिए?',
+            'अन्नपूर्णा योजना के लिए कौन से दस्तावेज़ चाहिए?',
             'नौकरी के लिए पैसे मांगना क्या धोखाधड़ी है?',
             'निःशुल्क कंप्यूटर या सिलाई प्रशिक्षण कहां सीखें?',
             'निकटतम BSK या BDO सहायता कैसे खोजें?',
           ]
         : [
             'I want to know about widow pension and welfare schemes.',
-            'What documents do I need for Lakshmir Bhandar?',
+            'What documents do I need for Annapurna Yojana?',
             'Someone is asking ₹1,500 for a job — is it a scam?',
             'Where can I learn free computer or tailoring skills in my district?',
           ];

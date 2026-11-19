@@ -125,7 +125,7 @@ function inferSuggestedActions(text: string, lang: Language): SuggestedAction[] 
     });
   }
   if (
-    /(scheme|bhandar|kanyashree|swasthya|pension|widow|krishak|shram|প্রকল্প|ভাতা|বিধবা|লক্ষ্মীর|কন্যাশ্রী|স্বাস্থ্য|योजना|पेंशन)/i.test(
+    /(scheme|annapurna|kanyashree|swasthya|pension|widow|krishak|shram|প্রকল্প|ভাতা|বিধবা|অন্নপূর্ণা|কন্যাশ্রী|স্বাস্থ্য|योजना|अन्नपूर्णा|पेंशन)/i.test(
       lower
     )
   ) {

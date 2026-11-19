@@ -73,8 +73,8 @@ interface LocalDbState {
   };
 }
 
-const DB_STORAGE_KEY = 'jenova_local_db_v3';
-const DB_VERSION = 3;
+const DB_STORAGE_KEY = 'jenova_local_db_v4';
+const DB_VERSION = 4;
 
 const ROLE_RANK: Record<UserRole, number> = {
   user: 1,
@@ -195,8 +195,8 @@ function createInitialDb(): LocalDbState {
       {
         id: 'vlog-init-1',
         entityType: 'scheme',
-        entityId: 'sch-lakshmir-bhandar',
-        entityTitle: 'Lakshmir Bhandar Scheme',
+        entityId: 'sch-annapurna-yojana',
+        entityTitle: 'Annapurna Yojana',
         previousStatus: 'Pending Verification',
         newStatus: 'Officially Verified',
         reviewerName: 'Verification Desk',

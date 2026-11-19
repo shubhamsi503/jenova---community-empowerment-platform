@@ -136,7 +136,7 @@ const FRAUD_RULES: { regex: RegExp; match: RuleMatch }[] = [
     },
   },
   {
-    regex: /\b(lakshmir|kanyashree|pm\s*kisan|pm\s*awas|swasthya\s*sathi|ration\s*card|scholarship|সরকারি\s*প্রকল্প|ভাতা|লক্ষ্মীর)\b/i,
+    regex: /(?:\b(?:annapurna|kanyashree|pm\s*kisan|pm\s*awas|swasthya\s*sathi|ration\s*card|scholarship)\b|সরকারি\s*প্রকল্প|ভাতা|অন্নপূর্ণা|अन्नपूर्णा)/i,
     match: {
       code: 'SCHEME_MENTION_CHECK_DOMAIN',
       severity: 'medium',
@@ -230,7 +230,7 @@ function inspectUrls(urls: string[], lang: Language): { indicators: FraudIndicat
     const isOfficialGov = hostname.endsWith('.gov.in') || hostname.endsWith('.nic.in');
     const looksLikeGovImpersonation =
       !isOfficialGov &&
-      /(gov|sarkar|yojana|kisan|bhandar|aadhaar|uidai|sbi|rbi|npci|epfo|udyam|eshram|india-post)/i.test(
+      /(gov|sarkar|yojana|kisan|annapurna|aadhaar|uidai|sbi|rbi|npci|epfo|udyam|eshram|india-post)/i.test(
         hostname
       );
 

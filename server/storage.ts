@@ -105,7 +105,7 @@ export function isPubliclyVerifiedStatus(status: string): boolean {
   );
 }
 
-const CURRENT_SEED_VERSION = 2;
+const CURRENT_SEED_VERSION = 3;
 
 function createInitialState(): DatabaseState {
   const today = todayKey();
@@ -141,8 +141,8 @@ function createInitialState(): DatabaseState {
       {
         id: 'vlog-init-1',
         entityType: 'scheme',
-        entityId: 'sch-lakshmir-bhandar',
-        entityTitle: 'Lakshmir Bhandar Scheme',
+        entityId: 'sch-annapurna-yojana',
+        entityTitle: 'Annapurna Yojana',
         previousStatus: 'Pending Verification',
         newStatus: 'Officially Verified',
         reviewerName: 'Verification Desk',
