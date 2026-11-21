@@ -8,6 +8,10 @@ export const VISUAL_ASSETS = {
     src: '/src/assets/images/hero_community_empowerment_1795068308541.jpg',
     alt: '3D illustration symbolizing community empowerment, financial independence, education, and opportunity across India',
   },
+  aboutPathwaysOpportunity: {
+    src: '/assets/aistudio/Pathways_to_Opportunity_and_Community_69a65adf.png',
+    alt: 'Pathways to Opportunity and Community — illustration showing a student with a friendly robot along a glowing golden pathway surrounded by government schemes, job search, digital safety, and education icons',
+  },
   employmentProfessionals: {
     src: '/src/assets/images/employment_indian_professionals_1795068308120.jpg',
     alt: 'Young Indian office professionals collaborating over a laptop in a modern local workplace',
@@ -51,5 +55,33 @@ export const VISUAL_ASSETS = {
   bgCreamAbstract: {
     src: '/src/assets/images/bg_cream_organic_abstract_1795068307917.jpg',
     alt: 'Soft cream, deep green, and warm orange organic abstract background texture',
+  },
+  udaanHeroLearner: {
+    src: '/src/assets/images/udaan_hero_learner_1795204110657.jpg',
+    alt: 'Confident young Indian learner holding notebooks in a bright sunlit skill development studio',
+  },
+  udaanInterviewPrep: {
+    src: '/src/assets/images/udaan_interview_prep_1795204110403.jpg',
+    alt: 'Young Indian professional smiling confidently during a one-on-one job interview in a sunlit office',
+  },
+  udaanBusinessPlan: {
+    src: '/src/assets/images/udaan_business_plan_1795204112946.jpg',
+    alt: 'Indian entrepreneur mapping out a practical startup plan and budget ledger with calculator and notebook',
+  },
+  udaanSoftSkills: {
+    src: '/src/assets/images/udaan_soft_skills_1795204110533.jpg',
+    alt: 'Facilitator leading an interactive communication and personality development workshop for young Indian learners',
+  },
+  udaanDigitalSkills: {
+    src: '/src/assets/images/udaan_digital_skills_1795204109900.jpg',
+    alt: 'Modern laptop showing structured spreadsheets and presentation layouts on a warm wooden workspace desk',
+  },
+  udaanMsmeEntrepreneur: {
+    src: '/src/assets/images/udaan_msme_entrepreneur_1795204111572.jpg',
+    alt: 'Smiling Indian micro-entrepreneur standing proudly behind the counter of an organized local retail store',
+  },
+  udaanPracticalExec: {
+    src: '/src/assets/images/udaan_practical_exec_1795204110940.jpg',
+    alt: 'Two focused Indian vocational trainees collaborating hands-on at a practical workshop workbench',
   },
 } as const satisfies Record<string, VisualAsset>;

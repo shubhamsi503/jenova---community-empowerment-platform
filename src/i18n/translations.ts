@@ -4,6 +4,165 @@ export function pickText(text: LocalizedText, lang: Language): string {
   return text[lang] || text.en || text.bn;
 }
 
+/** Concise trilingual text picker ensuring Bengali (bn), Hindi (hi), and English (en) are always handled. */
+export function tr(lang: Language, bn: string, hi: string, en: string): string {
+  if (lang === 'bn') return bn;
+  if (lang === 'hi') return hi;
+  return en;
+}
+
+const JOB_CATEGORY_MAP: Record<string, LocalizedText> = {
+  Local: { bn: 'স্থানীয়', hi: 'स्थानीय', en: 'Local' },
+  'Part-Time': { bn: 'পার্ট-টাইম', hi: 'पार्ट-टाइम', en: 'Part-Time' },
+  'Full-Time': { bn: 'ফুল-টাইম', hi: 'फुल-टाइम', en: 'Full-Time' },
+  'Work From Home': { bn: 'বাড়ি থেকে কাজ', hi: 'वर्क फ्रॉम होम', en: 'Work From Home' },
+  'Government Notification': { bn: 'সরকারি বিজ্ঞপ্তি', hi: 'सरकारी अधिसूचना', en: 'Government Notification' },
+  'Private Sector': { bn: 'বেসরকারি ক্ষেত্র', hi: 'निजी क्षेत्र', en: 'Private Sector' },
+  Internship: { bn: 'ইন্টার্নশিপ', hi: 'इंटर्नशिप', en: 'Internship' },
+  'Daily Wage': { bn: 'দৈনিক মজুরি', hi: 'दैनिक मजदूरी', en: 'Daily Wage' },
+};
+
+const SKILL_CATEGORY_MAP: Record<string, LocalizedText> = {
+  'Digital Literacy': { bn: 'ডিজিটাল সাক্ষরতা', hi: 'डिजिटल साक्षरता', en: 'Digital Literacy' },
+  'Computer Education': { bn: 'কম্পিউটার শিক্ষা', hi: 'कंप्यूटर शिक्षा', en: 'Computer Education' },
+  Programming: { bn: 'প্রোগ্রামিং', hi: 'प्रोग्रामिंग', en: 'Programming' },
+  'Graphic Design': { bn: 'গ্রাফিক ডিজাইন', hi: 'ग्राफिक डिज़ाइन', en: 'Graphic Design' },
+  'Digital Marketing': { bn: 'ডিজিটাল মার্কেটিং', hi: 'डिजिटल मार्केटिंग', en: 'Digital Marketing' },
+  'Video Editing': { bn: 'ভিডিও এডিটিং', hi: 'वीडियो एडिटिंग', en: 'Video Editing' },
+  'Communication Skills': { bn: 'যোগাযোগ দক্ষতা', hi: 'संचार कौशल', en: 'Communication Skills' },
+  'Vocational Training': { bn: 'কারিগরি প্রশিক্ষণ', hi: 'व्यावसायिक प्रशिक्षण', en: 'Vocational Training' },
+  Entrepreneurship: { bn: 'উদ্যোক্তা উন্নয়ন', hi: 'उद्यमिता', en: 'Entrepreneurship' },
+  'Professional Development': { bn: 'পেশাগত উন্নয়ন', hi: 'पेशेवर विकास', en: 'Professional Development' },
+};
+
+const SCHEME_CATEGORY_MAP: Record<string, LocalizedText> = {
+  Education: { bn: 'শিক্ষা', hi: 'शिक्षा', en: 'Education' },
+  Scholarships: { bn: 'বৃত্তি', hi: 'छात्रवृत्ति', en: 'Scholarships' },
+  'Women Empowerment': { bn: 'নারী ক্ষমতায়ন', hi: 'महिला सशक्तिकरण', en: 'Women Empowerment' },
+  Employment: { bn: 'কর্মসংস্থান', hi: 'रोजगार', en: 'Employment' },
+  Healthcare: { bn: 'স্বাস্থ্যসেবা', hi: 'स्वास्थ्य सेवा', en: 'Healthcare' },
+  Housing: { bn: 'আবাসন', hi: 'आवास', en: 'Housing' },
+  Agriculture: { bn: 'কৃষি ও কৃষক', hi: 'कृषि एवं किसान', en: 'Agriculture' },
+  'Social Security': { bn: 'সামাজিক সুরক্ষা', hi: 'सामाजिक सुरक्षा', en: 'Social Security' },
+  'Skill Development': { bn: 'দক্ষতা উন্নয়ন', hi: 'कौशल विकास', en: 'Skill Development' },
+  'MSME Support': { bn: 'ক্ষুদ্র ব্যবসা (MSME)', hi: 'लघु व्यवसाय (MSME)', en: 'MSME Support' },
+};
+
+const SCOPE_MAP: Record<string, LocalizedText> = {
+  'West Bengal': { bn: 'পশ্চিমবঙ্গ রাজ্য', hi: 'पश्चिम बंगाल राज्य', en: 'West Bengal' },
+  'Central India': { bn: 'কেন্দ্রীয় সরকার (ভারত)', hi: 'केंद्र सरकार (भारत)', en: 'Central India' },
+};
+
+const MODE_MAP: Record<string, LocalizedText> = {
+  Online: { bn: 'অনলাইন', hi: 'ऑनलाइन', en: 'Online' },
+  Offline: { bn: 'অফলাইন', hi: 'ऑफलाइन', en: 'Offline' },
+  Hybrid: { bn: 'হাইব্রিড (অনলাইন ও অফলাইন)', hi: 'हाइब्रिड (ऑनलाइन व ऑफलाइन)', en: 'Hybrid' },
+};
+
+const VERDICT_MAP: Record<string, LocalizedText> = {
+  'Potentially Eligible': { bn: 'সম্ভাব্য যোগ্য', hi: 'संभावित रूप से पात्र', en: 'Potentially Eligible' },
+  'More Information Required': {
+    bn: 'আরও তথ্য প্রয়োজন',
+    hi: 'अधिक जानकारी आवश्यक',
+    en: 'More Information Required',
+  },
+  'Important Requirements Not Met': {
+    bn: 'গুরুত্বপূর্ণ শর্ত পূরণ হয়নি',
+    hi: 'महत्वपूर्ण शर्तें पूरी नहीं हुईं',
+    en: 'Important Requirements Not Met',
+  },
+  'Confirm With Official Authority': {
+    bn: 'অফিসিয়াল কর্তৃপক্ষের কাছে যাচাই করুন',
+    hi: 'आधिकारिक प्राधिकरण से पुष्टि करें',
+    en: 'Confirm With Official Authority',
+  },
+};
+
+const ASSISTANCE_CATEGORY_MAP: Record<string, LocalizedText> = {
+  'Bangla Sahayata Kendra': {
+    bn: 'বাংলা সহায়তা কেন্দ্র (BSK)',
+    hi: 'बांग्ला सहायता केंद्र (BSK)',
+    en: 'Bangla Sahayata Kendra',
+  },
+  'Government Office': { bn: 'সরকারি দপ্তর', hi: 'सरकारी कार्यालय', en: 'Government Office' },
+  'Skill & Training Centre': {
+    bn: 'দক্ষতা ও প্রশিক্ষণ কেন্দ্র',
+    hi: 'कौशल एवं प्रशिक्षण केंद्र',
+    en: 'Skill & Training Centre',
+  },
+  'Employment Support': { bn: 'কর্মসংস্থান সহায়তা', hi: 'रोजगार सहायता', en: 'Employment Support' },
+  'Cyber & Legal Safety': {
+    bn: 'সাইবার ও আইনি সুরক্ষা',
+    hi: 'साइबर एवं कानूनी सुरक्षा',
+    en: 'Cyber & Legal Safety',
+  },
+  'Community Assistance': { bn: 'কমিউনিটি সহায়তা', hi: 'सामुदायिक सहायता', en: 'Community Assistance' },
+};
+
+const SCAM_TYPE_MAP: Record<string, LocalizedText> = {
+  'OTP / UPI Trap': { bn: 'OTP / UPI ফাঁদ', hi: 'OTP / UPI जाल', en: 'OTP / UPI Trap' },
+  'Advance-Fee Job': { bn: 'অগ্রিম ফি ভুয়া চাকরি', hi: 'अग्रिम शुल्क नकली नौकरी', en: 'Advance-Fee Job' },
+  'Fake Scheme Link': { bn: 'ভুয়া প্রকল্প লিঙ্ক', hi: 'नकली योजना लिंक', en: 'Fake Scheme Link' },
+  'Loan App Trap': { bn: 'ভুয়া লোন অ্যাপ ফাঁদ', hi: 'नकली लोन ऐप जाल', en: 'Loan App Trap' },
+  'Remote Access App': { bn: 'রিমোট অ্যাক্সেস অ্যাপ', hi: 'रिमोट एक्सेस ऐप', en: 'Remote Access App' },
+  Impersonation: { bn: 'ছদ্মবেশী প্রতারণা', hi: 'छद्मवेशी धोखाधड़ी', en: 'Impersonation' },
+};
+
+const BOOKMARK_TYPE_MAP: Record<string, LocalizedText> = {
+  job: { bn: 'কর্মসংস্থান', hi: 'रोजगार', en: 'Job' },
+  course: { bn: 'দক্ষতা কোর্স', hi: 'कौशल पाठ्यक्रम', en: 'Course' },
+  scheme: { bn: 'সরকারি প্রকল্প', hi: 'सरकारी योजना', en: 'Scheme' },
+  business: { bn: 'স্থানীয় ব্যবসা', hi: 'स्थानीय व्यवसाय', en: 'Business' },
+};
+
+const ANNOUNCEMENT_CATEGORY_MAP: Record<string, LocalizedText> = {
+  Safety: { bn: 'সুরক্ষা সতর্কতা', hi: 'सुरक्षा चेतावनी', en: 'Safety' },
+  Scheme: { bn: 'সরকারি প্রকল্প', hi: 'सरकारी योजना', en: 'Scheme' },
+  Skills: { bn: 'দক্ষতা উন্নয়ন', hi: 'कौशल विकास', en: 'Skills' },
+  Community: { bn: 'কমিউনিটি', hi: 'समुदाय', en: 'Community' },
+  Notice: { bn: 'বিজ্ঞপ্তি', hi: 'सूचना', en: 'Notice' },
+};
+
+export function localizeJobCategory(cat: string, lang: Language): string {
+  return JOB_CATEGORY_MAP[cat] ? pickText(JOB_CATEGORY_MAP[cat], lang) : cat;
+}
+
+export function localizeSkillCategory(cat: string, lang: Language): string {
+  return SKILL_CATEGORY_MAP[cat] ? pickText(SKILL_CATEGORY_MAP[cat], lang) : cat;
+}
+
+export function localizeSchemeCategory(cat: string, lang: Language): string {
+  return SCHEME_CATEGORY_MAP[cat] ? pickText(SCHEME_CATEGORY_MAP[cat], lang) : cat;
+}
+
+export function localizeScope(scope: string, lang: Language): string {
+  return SCOPE_MAP[scope] ? pickText(SCOPE_MAP[scope], lang) : scope;
+}
+
+export function localizeMode(mode: string, lang: Language): string {
+  return MODE_MAP[mode] ? pickText(MODE_MAP[mode], lang) : mode;
+}
+
+export function localizeVerdict(verdict: string, lang: Language): string {
+  return VERDICT_MAP[verdict] ? pickText(VERDICT_MAP[verdict], lang) : verdict;
+}
+
+export function localizeAssistanceCategory(cat: string, lang: Language): string {
+  return ASSISTANCE_CATEGORY_MAP[cat] ? pickText(ASSISTANCE_CATEGORY_MAP[cat], lang) : cat;
+}
+
+export function localizeScamType(scamType: string, lang: Language): string {
+  return SCAM_TYPE_MAP[scamType] ? pickText(SCAM_TYPE_MAP[scamType], lang) : scamType;
+}
+
+export function localizeBookmarkType(type: string, lang: Language): string {
+  return BOOKMARK_TYPE_MAP[type] ? pickText(BOOKMARK_TYPE_MAP[type], lang) : type;
+}
+
+export function localizeAnnouncementCategory(cat: string, lang: Language): string {
+  return ANNOUNCEMENT_CATEGORY_MAP[cat] ? pickText(ANNOUNCEMENT_CATEGORY_MAP[cat], lang) : cat;
+}
+
 export interface UIStrings {
   brandName: string;
   locationLabel: string;

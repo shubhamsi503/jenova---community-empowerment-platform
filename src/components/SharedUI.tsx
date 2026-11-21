@@ -63,10 +63,10 @@ export function VerificationLabel({
       <span
         className={`inline-flex items-center gap-1 ${
           isVerified
-            ? 'text-[#138A45] dark:text-emerald-300'
+            ? 'text-[#27845B] dark:text-[#45B884]'
             : isDanger
               ? 'text-red-700 dark:text-red-400'
-              : 'text-[#B56A10] dark:text-[#FFC45C]'
+              : 'text-[#A85B0A] dark:text-[#FFD19A]'
         }`}
       >
         {isVerified ? (
@@ -104,14 +104,14 @@ export function ActionToolbar({
   const waHref = buildWhatsAppShareUrl(title, shareSummary, sharePath);
 
   return (
-    <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-[#E5E3DC] dark:border-slate-700/70">
+    <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-[#F2DCC1] dark:border-[#3F2E1E]">
       {externalUrl && (
         <a
           href={externalUrl}
           target="_blank"
           rel="noopener noreferrer"
           onClick={onExternalClick}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#138A45] hover:bg-[#0D6E36] rounded-lg transition-colors whitespace-nowrap shrink-0"
+          className="jenova-saffron-btn inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg transition-all whitespace-nowrap shrink-0"
         >
           <span>{externalLabel || t.common.officialPortal}</span>
           <ExternalLink className="w-3.5 h-3.5" />
@@ -123,11 +123,11 @@ export function ActionToolbar({
         onClick={() => toggleBookmark(itemType, itemId)}
         className={`inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
           saved
-            ? 'bg-[#EBF4F0] dark:bg-emerald-950/60 border-[#138A45]/30 dark:border-emerald-500/40 text-[#138A45] dark:text-emerald-300'
-            : 'bg-white dark:bg-slate-800/80 border-[#E5E3DC] dark:border-slate-700 text-[#252525] dark:text-slate-200 hover:bg-[#F5F4EF] dark:hover:bg-slate-700'
+            ? 'bg-[#FFE5C2] dark:bg-[#382616] border-[#F4A340]/60 dark:border-[#F4A340]/50 text-[#26364B] dark:text-[#FFD19A]'
+            : 'bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#3F2E1E] text-[#26364B] dark:text-[#FFF5E8] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]'
         }`}
       >
-        <Bookmark className={`w-3.5 h-3.5 ${saved ? 'fill-current' : ''}`} />
+        <Bookmark className={`w-3.5 h-3.5 ${saved ? 'fill-current text-[#A85B0A] dark:text-[#FFD19A]' : ''}`} />
         <span>{saved ? t.common.bookmarked : t.common.bookmark}</span>
       </button>
 
@@ -135,16 +135,16 @@ export function ActionToolbar({
         href={waHref}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E3DC] dark:border-slate-700 bg-white dark:bg-slate-800/80 text-[#252525] dark:text-slate-200 hover:bg-[#F5F4EF] dark:hover:bg-slate-700 transition-colors whitespace-nowrap shrink-0"
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#F2DCC1] dark:border-[#3F2E1E] bg-white dark:bg-[#241B13] text-[#26364B] dark:text-[#FFF5E8] hover:bg-[#FFF1DF] dark:hover:bg-[#382616] transition-colors whitespace-nowrap shrink-0"
       >
-        <Share2 className="w-3.5 h-3.5 text-[#138A45] dark:text-emerald-400" />
+        <Share2 className="w-3.5 h-3.5 text-[#27845B] dark:text-[#45B884]" />
         <span>{t.common.shareWhatsApp}</span>
       </a>
 
       <button
         type="button"
         onClick={() => openReportModal({ targetType: itemType, targetId: itemId, targetTitle: title })}
-        className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#5C5C58] dark:text-slate-400 hover:text-red-700 dark:hover:text-red-400 transition-colors whitespace-nowrap shrink-0 cursor-pointer ml-auto"
+        className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#665B4F] dark:text-[#B6A695] hover:text-red-700 dark:hover:text-red-400 transition-colors whitespace-nowrap shrink-0 cursor-pointer ml-auto"
       >
         <Flag className="w-3.5 h-3.5" />
         <span>{t.common.reportIssue}</span>
@@ -173,10 +173,10 @@ export function PageHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="border-b border-[#E5E3DC] dark:border-slate-800 pb-6 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div className="border-b border-[#F2DCC1] dark:border-[#3F2E1E] pb-6 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div className="max-w-3xl">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#092B55] dark:text-white">{title}</h1>
-        <p className="mt-2 text-sm sm:text-base text-[#5C5C58] dark:text-slate-300 leading-relaxed">{subtitle}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#26364B] dark:text-[#FFF5E8]">{title}</h1>
+        <p className="mt-2 text-sm sm:text-base text-[#454545] dark:text-[#DDD2C5] leading-relaxed">{subtitle}</p>
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>
@@ -190,6 +190,7 @@ export function ResilientImage({
   containerClassName = '',
   eager = false,
   fallbackLabel,
+  objectFit = 'cover',
 }: {
   src: string;
   alt: string;
@@ -197,6 +198,7 @@ export function ResilientImage({
   containerClassName?: string;
   eager?: boolean;
   fallbackLabel?: string;
+  objectFit?: 'cover' | 'contain';
 }) {
   const [failed, setFailed] = React.useState(false);
 
@@ -205,25 +207,28 @@ export function ResilientImage({
       <div
         role="img"
         aria-label={alt}
-        className={`flex flex-col items-center justify-center bg-[#EBF4F0] text-[#176B4D] p-4 text-center ${containerClassName}`}
+        className={`flex flex-col items-center justify-center bg-[#FFF1DF] dark:bg-[#2A1E14] text-[#A85B0A] dark:text-[#FFD19A] p-4 text-center ${containerClassName}`}
       >
         <CheckCircle2 className="w-6 h-6 opacity-70 mb-1.5" />
-        <span className="text-xs font-medium text-[#11533B] max-w-[200px]">
+        <span className="text-xs font-medium text-[#26364B] dark:text-[#FFF5E8] max-w-[200px]">
           {fallbackLabel || alt}
         </span>
       </div>
     );
   }
 
+  const defaultBgClass = /\bbg-/.test(containerClassName) ? '' : 'bg-[#FFF1DF] dark:bg-[#221911]';
+  const fitClass = objectFit === 'contain' ? 'object-contain object-center' : 'object-cover';
+
   return (
-    <div className={`overflow-hidden bg-[#F2F0E8] ${containerClassName}`}>
+    <div className={`overflow-hidden ${defaultBgClass} ${containerClassName}`}>
       <img
         src={src}
         alt={alt}
         loading={eager ? 'eager' : 'lazy'}
         referrerPolicy="no-referrer"
         onError={() => setFailed(true)}
-        className={`w-full h-full object-cover ${className}`}
+        className={`w-full h-full ${fitClass} ${className}`}
       />
     </div>
   );

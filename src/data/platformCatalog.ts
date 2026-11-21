@@ -13,6 +13,51 @@ import type {
 // Verified career opportunities & official employment pathways across all 8 job categories
 export const SEED_JOBS: JobListing[] = [
   {
+    id: 'job-wb-employment-bank',
+    title: {
+      bn: 'এমপ্লয়মেন্ট ব্যাংক — পশ্চিমবঙ্গ সরকারের উদ্যোগ (অফিসিয়াল চাকরি ও নিবন্ধন পোর্টাল)',
+      en: 'Employment Bank — Government of West Bengal Initiative',
+      hi: 'एम्प्लॉयमेंट बैंक — पश्चिम बंगाल सरकार की पहल (आधिकारिक रोजगार पोर्टल)',
+    },
+    employerName: 'Department of Labour, Government of West Bengal',
+    description: {
+      bn: 'পশ্চিমবঙ্গ সরকারের শ্রম দপ্তরের অফিসিয়াল এমপ্লয়মেন্ট ব্যাংক পোর্টাল। চাকরিপ্রার্থীদের বিনামূল্যে নিবন্ধন, সরকারি ও বেসরকারি চাকরির বিজ্ঞপ্তি, যুবশ্রী ও দক্ষতা প্রশিক্ষণের সরাসরি সংযোগ এবং জেলাভিত্তিক এমপ্লয়মেন্ট এক্সচেঞ্জ সহায়তা।',
+      en: 'Official job portal initiated by the Department of Labour, Government of West Bengal. Offers 100% free job-seeker enrolment, verified state and private-sector job openings, employment exchange verification, and direct career notifications across West Bengal.',
+      hi: 'पश्चिम बंगाल सरकार के श्रम विभाग की आधिकारिक एम्प्लॉयमेंट बैंक पहल। यहाँ 100% निःशुल्क नौकरी पंजीकरण, सत्यापित सरकारी व निजी क्षेत्र की रिक्तियां और राज्य स्तरीय रोजगार सहायता उपलब्ध है।',
+    },
+    salaryMin: 12000,
+    salaryMax: 56100,
+    salaryUnit: 'monthly',
+    salaryDisplay: {
+      bn: 'সরকারি ও অনুমোদিত বেতন কাঠামো অনুযায়ী',
+      en: 'As per Official Notification & Employer Norms',
+      hi: 'आधिकारिक अधिसूचना एवं नियोक्ता मानदंडों के अनुसार',
+    },
+    location: 'West Bengal (All Districts — Online Portal)',
+    category: 'Government Notification',
+    qualification: '8th Pass / Madhyamik / 12th / ITI / Diploma / Graduate / Post-Graduate',
+    experience: 'Freshers & Experienced',
+    workingHours: '24x7 Official Online Registration Portal',
+    applicationInstructions: {
+      bn: 'https://employmentbankwb.gov.in/ ওয়েবসাইটে গিয়ে “New Enrolment Job Seeker” অপশনে ক্লিক করে সম্পূর্ণ বিনামূল্যে নিবন্ধন করুন এবং ৬০ দিনের মধ্যে নিকটবর্তী এমপ্লয়মেন্ট এক্সচেঞ্জে মূল নথি যাচাই করুন।',
+      en: 'Visit https://employmentbankwb.gov.in/, select "New Enrolment Job Seeker" to register free of cost, and verify original documents at your nearest Employment Exchange within 60 days.',
+      hi: 'https://employmentbankwb.gov.in/ पर जाएं, "New Enrolment Job Seeker" चुनकर निःशुल्क पंजीकरण करें और 60 दिनों के भीतर नज़दीकी एम्प्लॉयमेंट एक्सचेंज में मूल दस्तावेज़ सत्यापित कराएं।',
+    },
+    contactInfo: 'Official Portal: employmentbankwb.gov.in (Dept. of Labour, Govt. of WB)',
+    applicationUrl: 'https://employmentbankwb.gov.in/',
+    deadline: 'Ongoing Official Initiative',
+    isDemo: false,
+    sourceName: 'Employment Bank — Government of West Bengal',
+    sourceUrl: 'https://employmentbankwb.gov.in/',
+    verificationStatus: 'Officially Verified',
+    dateVerified: '2026-11-20',
+    lastUpdated: '2026-11-20',
+    reviewer: 'JENOVA Verification Desk',
+    expiryDate: '2027-12-31',
+    viewsCount: 0,
+    referralsCount: 0,
+  },
+  {
     id: 'job-local-1',
     title: {
       bn: 'কমিউনিটি ডিজিটাল সার্ভিস ও বিলিং কো-অর্ডিনেটর',

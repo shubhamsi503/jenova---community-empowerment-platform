@@ -18,7 +18,7 @@ import {
   trackAnalyticsEvent,
   writeOfflineCache,
 } from '../lib/api';
-import { pickText } from '../i18n/translations';
+import { localizeAssistanceCategory, pickText, tr } from '../i18n/translations';
 import type { AssistanceCentreCategory, LocalAssistanceCentre } from '../types/platform';
 import { PageHeader, SafetyNotice, VerificationLabel } from '../components/SharedUI';
 import { ReadAloudButton } from '../components/VoiceAccessibility';
@@ -77,7 +77,7 @@ export function LocalHelpPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div className="rounded-2xl bg-gradient-to-r from-[#EAF6FE] via-white to-[#ECFBF2] dark:from-[#082447] dark:via-[#0A2242] dark:to-[#072C2A] border border-[#0E7490]/25 dark:border-[#36E7F2]/30 p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl bg-gradient-to-r from-[#FFF1DF] via-white to-[#FFE5C2]/65 dark:from-[#261B12] dark:via-[#241B13] dark:to-[#2D1E12] border border-[#F2DCC1] dark:border-[#4A3522] p-5 sm:p-6 shadow-sm">
         <JenovaLocalLogo
           size="lg"
           theme={theme}
@@ -110,7 +110,7 @@ export function LocalHelpPage() {
           <button
             type="button"
             onClick={() => navigate('/checklist')}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#176B4D] hover:bg-[#11533B] text-white text-sm font-semibold cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl jenova-saffron-btn text-sm font-semibold cursor-pointer"
           >
             {language === 'bn'
               ? 'JENOVA Checklist খুলুন'
@@ -133,9 +133,9 @@ export function LocalHelpPage() {
       />
 
       {/* Search & Filter */}
-      <div className="rounded-2xl bg-white border border-[#E5E3DC] p-4 sm:p-5 space-y-4">
+      <div className="rounded-2xl bg-white border border-[#F2DCC1] p-4 sm:p-5 space-y-4">
         <div className="relative">
-          <Search className="w-4 h-4 text-[#5C5C58] absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#454545] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
@@ -147,7 +147,7 @@ export function LocalHelpPage() {
                   ? 'केंद्र का नाम, BSK, BDO, RSETI या साइबर हेल्पलाइन खोजें...'
                   : 'Search BSK, BDO, Duare Sarkar, RSETI, Cyber Helpline...'
             }
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#D8D5CC] bg-[#FAF9F5] text-sm focus:outline-none focus:ring-2 focus:ring-[#176B4D] focus:bg-white"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#F2DCC1] bg-[#FFF1DF] text-sm focus:outline-none focus:ring-2 focus:ring-[#F4A340] focus:bg-white"
           />
         </div>
         <div className="flex flex-wrap gap-2">
@@ -158,8 +158,8 @@ export function LocalHelpPage() {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium border transition-colors cursor-pointer min-h-[40px] ${
                 selectedCategory === cat.id
-                  ? 'bg-[#176B4D] text-white border-[#176B4D]'
-                  : 'bg-[#FAF9F5] text-[#252525] border-[#E5E3DC] hover:bg-[#EBF4F0]'
+                  ? 'jenova-saffron-btn border-[#E69228]'
+                  : 'bg-[#FFF1DF] text-[#26364B] border-[#F2DCC1] hover:bg-[#FFE5C2]'
               }`}
             >
               {language === 'bn' ? cat.bn : language === 'hi' ? cat.hi : cat.en}
@@ -170,7 +170,7 @@ export function LocalHelpPage() {
 
       {/* Results */}
       {loading ? (
-        <div className="py-12 text-center text-sm text-[#5C5C58]">
+        <div className="py-12 text-center text-sm text-[#454545]">
           {language === 'bn'
             ? 'তথ্য লোড হচ্ছে...'
             : language === 'hi'
@@ -178,7 +178,7 @@ export function LocalHelpPage() {
               : 'Loading verified local assistance centres...'}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl bg-white border border-[#E5E3DC] p-10 text-center text-sm text-[#5C5C58]">
+        <div className="rounded-2xl bg-white border border-[#F2DCC1] p-10 text-center text-sm text-[#454545]">
           {language === 'bn'
             ? 'এই ফিল্টারে কোনো সহায়তা কেন্দ্র পাওয়া যায়নি।'
             : language === 'hi'
@@ -194,16 +194,18 @@ export function LocalHelpPage() {
             return (
               <article
                 key={centre.id}
-                className="rounded-2xl bg-white border border-[#E5E3DC] p-6 flex flex-col justify-between gap-4"
+                className="rounded-2xl bg-white border border-[#F2DCC1] p-6 flex flex-col justify-between gap-4"
               >
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-xs font-semibold text-[#176B4D]">{centre.category}</span>
+                    <span className="text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A]">
+                      {localizeAssistanceCategory(centre.category, language)}
+                    </span>
                     <VerificationLabel status={centre.verificationStatus} />
                   </div>
 
                   <div className="flex items-start justify-between gap-3">
-                    <h2 className="text-lg font-bold text-[#252525] leading-snug">{nameText}</h2>
+                    <h2 className="text-lg font-bold text-[#26364B] leading-snug">{nameText}</h2>
                     <ReadAloudButton
                       compact
                       lang={language}
@@ -211,52 +213,55 @@ export function LocalHelpPage() {
                     />
                   </div>
 
-                  <p className="text-xs sm:text-sm text-[#5C5C58] leading-relaxed">{descText}</p>
+                  <p className="text-xs sm:text-sm text-[#454545] leading-relaxed">{descText}</p>
 
-                <div className="space-y-1.5 text-xs sm:text-sm text-[#4A4A46]">
+                  <div className="space-y-1.5 text-xs sm:text-sm text-[#454545]">
                     <p className="flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-[#176B4D] shrink-0 mt-0.5" />
+                      <MapPin className="w-4 h-4 text-[#A85B0A] dark:text-[#FFD19A] shrink-0 mt-0.5" />
                       <span>
-                        <strong className="text-[#252525]">{centre.locationArea}:</strong>{' '}
+                        <strong className="text-[#26364B]">{centre.locationArea}:</strong>{' '}
                         {centre.address ||
-                          (language === 'bn' ? 'যাচাই বাকি (Verification pending)' : 'Verification pending')}
+                          tr(language, 'যাচাই বাকি', 'सत्यापन लंबित', 'Verification pending')}
                       </span>
                     </p>
                     <p className="flex items-start gap-2">
-                      <Clock className="w-4 h-4 text-[#176B4D] shrink-0 mt-0.5" />
+                      <Clock className="w-4 h-4 text-[#A85B0A] dark:text-[#FFD19A] shrink-0 mt-0.5" />
                       <span>
                         {centre.timingsNote ||
-                          (language === 'bn' ? 'যাচাই বাকি (Verification pending)' : 'Verification pending')}
+                          tr(language, 'যাচাই বাকি', 'सत्यापन लंबित', 'Verification pending')}
                       </span>
                     </p>
                     <p className="flex items-start gap-2">
-                      <Phone className="w-4 h-4 text-[#176B4D] shrink-0 mt-0.5" />
+                      <Phone className="w-4 h-4 text-[#A85B0A] dark:text-[#FFD19A] shrink-0 mt-0.5" />
                       <span>
                         {centre.publicContact ||
-                          (language === 'bn' ? 'যাচাই বাকি (Verification pending)' : 'Verification pending')}
+                          tr(language, 'যাচাই বাকি', 'सत्यापन लंबित', 'Verification pending')}
                       </span>
                     </p>
                   </div>
 
                   {centre.needsLocalFieldVerification && (
                     <div className="rounded-xl bg-[#FEF4E6] border border-[#F4A340]/50 px-3.5 py-2.5 text-xs text-[#6B3F06] flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-[#B56A10] shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-4 h-4 text-[#A85B0A] shrink-0 mt-0.5" />
                       <span>
-                        {language === 'bn'
-                          ? 'যাচাই বাকি (Verification pending): স্থানীয় কাউন্টারের ঠিকানা ও সময় যাওয়ার আগে অফিসিয়াল পোর্টালে দেখে নিন।'
-                          : 'Verification pending (local field check): Confirm exact ward/panchayat counter timings on the official portal before travelling.'}
+                        {tr(
+                          language,
+                          'যাচাই বাকি: স্থানীয় কাউন্টারের ঠিকানা ও সময় যাওয়ার আগে অফিসিয়াল পোর্টালে দেখে নিন।',
+                          'स्थानीय पुष्टि लंबित: यात्रा करने से पहले आधिकारिक पोर्टल पर सटीक काउंटर समय की पुष्टि कर लें।',
+                          'Verification pending (local field check): Confirm exact ward/panchayat counter timings on the official portal before travelling.'
+                        )}
                       </span>
                     </div>
                   )}
 
                   <div className="pt-1">
-                    <p className="text-xs font-semibold text-[#5C5C58] mb-1.5">
-                      {language === 'bn' ? 'প্রধান পরিষেবা:' : 'Services Available:'}
+                    <p className="text-xs font-semibold text-[#454545] mb-1.5">
+                      {tr(language, 'প্রধান পরিষেবা:', 'उपलब्ध सेवाएं:', 'Services Available:')}
                     </p>
-                    <ul className="space-y-1 text-xs sm:text-sm text-[#252525]">
+                    <ul className="space-y-1 text-xs sm:text-sm text-[#26364B]">
                       {centre.servicesOffered.map((srv, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <ShieldCheck className="w-3.5 h-3.5 text-[#176B4D] shrink-0 mt-1" />
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#27845B] dark:text-[#45B884] shrink-0 mt-1" />
                           <span>{srv}</span>
                         </li>
                       ))}
@@ -264,14 +269,15 @@ export function LocalHelpPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#E5E3DC] space-y-2.5">
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#5C5C58]">
+                <div className="pt-3 border-t border-[#F2DCC1] space-y-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#454545]">
                     <span>
-                      {language === 'bn' ? 'সূত্র:' : 'Source:'} {centre.sourceName}
+                      {tr(language, 'সূত্র:', 'स्रोत:', 'Source:')} {centre.sourceName}
                     </span>
                     <span>
-                      {language === 'bn' ? 'যাচাই:' : 'Verified:'} {centre.dateVerified || centre.lastUpdated} ·{' '}
-                      {language === 'bn' ? 'পর্যালোচনা:' : 'Review:'} {centre.expiryDate || '—'}
+                      {tr(language, 'যাচাই:', 'सत्यापित:', 'Verified:')}{' '}
+                      {centre.dateVerified || centre.lastUpdated} ·{' '}
+                      {tr(language, 'পর্যালোচনা:', 'समीक्षा:', 'Review:')} {centre.expiryDate || '—'}
                     </span>
                   </div>
 
@@ -282,9 +288,9 @@ export function LocalHelpPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => trackAnalyticsEvent('local_help_click', centre.id)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#176B4D] hover:bg-[#11533B] text-white text-xs font-semibold transition-colors min-h-[40px]"
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl jenova-saffron-btn text-xs font-semibold transition-colors min-h-[40px]"
                       >
-                        {language === 'bn' ? 'অফিসিয়াল পোর্টাল' : 'Official Portal'}
+                        {tr(language, 'অফিসিয়াল পোর্টাল', 'आधिकारिक पोर्टल', 'Official Portal')}
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
                     )}
@@ -295,10 +301,10 @@ export function LocalHelpPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => trackAnalyticsEvent('local_help_click', centre.id)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#E5E3DC] hover:border-[#176B4D] text-[#252525] text-xs font-semibold min-h-[40px]"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#FFF1DF] border border-[#F2DCC1] hover:border-[#F4A340] text-[#26364B] text-xs font-semibold min-h-[40px]"
                     >
-                      <Navigation className="w-3.5 h-3.5 text-[#176B4D]" />
-                      {language === 'bn' ? 'দিকনির্দেশ (Map)' : 'Directions'}
+                      <Navigation className="w-3.5 h-3.5 text-[#A85B0A] dark:text-[#FFD19A]" />
+                      {tr(language, 'দিকনির্দেশ (Map)', 'दिशा-निर्देश (Map)', 'Directions')}
                     </a>
                     {(() => {
                       const phoneMatch = centre.publicContact.match(/\b(\d{4}|\+?\d[\d\s-]{8,13}\d)\b/);
@@ -311,7 +317,7 @@ export function LocalHelpPage() {
                           className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#FEF4E6] border border-[#F4A340]/60 text-[#6B3F06] text-xs font-semibold min-h-[40px]"
                         >
                           <Phone className="w-3.5 h-3.5" />
-                          {language === 'bn' ? `কল করুন (${telNum})` : `Call ${telNum}`}
+                          {tr(language, `কল করুন (${telNum})`, `कॉल करें (${telNum})`, `Call ${telNum}`)}
                         </a>
                       );
                     })()}
@@ -324,10 +330,10 @@ export function LocalHelpPage() {
                           targetTitle: nameText,
                         })
                       }
-                      className="inline-flex items-center gap-1 px-3 py-2 text-xs text-[#5C5C58] hover:text-red-700 ml-auto cursor-pointer"
+                      className="inline-flex items-center gap-1 px-3 py-2 text-xs text-[#454545] hover:text-red-700 ml-auto cursor-pointer"
                     >
                       <Flag className="w-3.5 h-3.5" />
-                      {language === 'bn' ? 'ভুল তথ্য রিপোর্ট' : 'Report Update'}
+                      {tr(language, 'ভুল তথ্য রিপোর্ট', 'अपडेट रिपोर्ट करें', 'Report Update')}
                     </button>
                   </div>
                 </div>

@@ -260,11 +260,15 @@ function inspectUrls(urls: string[], lang: Language): { indicators: FraudIndicat
         title:
           lang === 'bn'
             ? `অবিশ্বস্ত ওয়েবসাইট ডোমেইন (${hostname})`
-            : `High-Risk Unfamiliar Domain (${hostname})`,
+            : lang === 'hi'
+              ? `अविश्वसनीय वेबसाइट डोमेन (${hostname})`
+              : `High-Risk Unfamiliar Domain (${hostname})`,
         explanation:
           lang === 'bn'
             ? 'অপরিচিত এক্সটেনশন (.xyz, .top, .click বা সরাসরি IP) যুক্ত লিঙ্ক ফিশিং প্রতারণায় বেশি ব্যবহৃত হয়।'
-            : 'Links using low-trust extensions (.xyz, .top, .click) or raw IP addresses are commonly associated with phishing pages.',
+            : lang === 'hi'
+              ? 'अपरिचित एक्सटेंशन (.xyz, .top, .click) या सीधे IP पते वाले लिंक अक्सर फ़िशिंग धोखाधड़ी में उपयोग होते हैं।'
+              : 'Links using low-trust extensions (.xyz, .top, .click) or raw IP addresses are commonly associated with phishing pages.',
       });
     } else if (!isOfficialGov) {
       score += 12;
@@ -274,11 +278,15 @@ function inspectUrls(urls: string[], lang: Language): { indicators: FraudIndicat
         title:
           lang === 'bn'
             ? `যাচাইবিহীন বাহ্যিক লিঙ্ক (${hostname})`
-            : `Unverified External Website (${hostname})`,
+            : lang === 'hi'
+              ? `असत्यापित बाहरी लिंक (${hostname})`
+              : `Unverified External Website (${hostname})`,
         explanation:
           lang === 'bn'
             ? 'এই ওয়েবসাইটটি অফিসিয়াল সরকারি ডোমেইন নয়। কোনো ব্যক্তিগত তথ্য দেওয়ার আগে স্বাধীনভাবে যাচাই করুন।'
-            : 'This link is not an official government domain. Do not enter personal details without independent verification.',
+            : lang === 'hi'
+              ? 'यह वेबसाइट आधिकारिक सरकारी डोमेन नहीं है। कोई भी व्यक्तिगत जानकारी देने से पहले स्वतंत्र रूप से जांच करें।'
+              : 'This link is not an official government domain. Do not enter personal details without independent verification.',
       });
     }
   }
@@ -333,7 +341,9 @@ export function analyzeFraudRisk(
       explanation:
         lang === 'bn'
           ? 'সরকারি দপ্তর বা প্রতিষ্ঠিত নিয়োগকর্তা কখনো ব্যক্তিগত UPI আইডিতে ফি নিতে বলে না।'
-          : 'Government departments and legitimate recruiters do not collect application fees on personal UPI IDs.',
+          : lang === 'hi'
+            ? 'सरकारी विभाग या प्रामाणिक नियोक्ता कभी निजी UPI आईडी पर आवेदन शुल्क नहीं लेते।'
+            : 'Government departments and legitimate recruiters do not collect application fees on personal UPI IDs.',
     });
   }
 
@@ -345,11 +355,15 @@ export function analyzeFraudRisk(
       title:
         lang === 'bn'
           ? 'অচেনা পেমেন্ট রিকোয়েস্ট সাবধানে যাচাই করুন'
-          : 'Verify Any Unsolicited Payment Request Independently',
+          : lang === 'hi'
+            ? 'किसी भी अनजान पेमेंट अनुरोध की स्वतंत्र जांच करें'
+            : 'Verify Any Unsolicited Payment Request Independently',
       explanation:
         lang === 'bn'
           ? 'টাকা পাঠানোর আগে প্রাপককে সরাসরি পরিচিত নম্বরে ফোন করে নিশ্চিত হোন।'
-          : 'Confirm the sender’s identity through an independent, trusted phone number before approving any payment.',
+          : lang === 'hi'
+            ? 'पैसे भेजने से पहले विश्वसनीय फ़ोन नंबर पर कॉल करके प्राप्तकर्ता की पहचान की पुष्टि करें।'
+            : 'Confirm the sender’s identity through an independent, trusted phone number before approving any payment.',
     });
   }
 
@@ -450,20 +464,47 @@ export function analyzeFraudRisk(
     whatToAvoid,
     officialReporting: [
       {
-        name: lang === 'bn' ? 'জাতীয় সাইবার ক্রাইম হেল্পলাইন ১৯৩০' : 'National Cyber Crime Helpline 1930',
+        name:
+          lang === 'bn'
+            ? 'জাতীয় সাইবার ক্রাইম হেল্পলাইন ১৯৩০'
+            : lang === 'hi'
+              ? 'राष्ट्रीय साइबर क्राइम हेल्पलाइन 1930'
+              : 'National Cyber Crime Helpline 1930',
         detail:
           lang === 'bn'
             ? 'আর্থিক প্রতারণা হলে দ্রুত ১৯৩০ নম্বরে কল করুন (২৪×৭)।'
-            : 'Call 1930 immediately if you experience financial cyber fraud (24x7).',
+            : lang === 'hi'
+              ? 'वित्तीय साइबर धोखाधड़ी होने पर तुरंत 1930 पर कॉल करें (24×7)।'
+              : 'Call 1930 immediately if you experience financial cyber fraud (24x7).',
       },
       {
-        name: 'National Cyber Crime Reporting Portal',
-        detail: 'cybercrime.gov.in — File an official online complaint',
+        name:
+          lang === 'bn'
+            ? 'জাতীয় সাইবার ক্রাইম রিপোর্টিং পোর্টাল'
+            : lang === 'hi'
+              ? 'राष्ट्रीय साइबर क्राइम रिपोर्टिंग पोर्टल'
+              : 'National Cyber Crime Reporting Portal',
+        detail:
+          lang === 'bn'
+            ? 'cybercrime.gov.in — অনলাইনে অফিসিয়াল অভিযোগ দায়ের করুন'
+            : lang === 'hi'
+              ? 'cybercrime.gov.in — आधिकारिक ऑनलाइन शिकायत दर्ज करें'
+              : 'cybercrime.gov.in — File an official online complaint',
         url: 'https://cybercrime.gov.in/',
       },
       {
-        name: 'Sanchar Saathi — Chakshu (Dept. of Telecom)',
-        detail: 'sancharsaathi.gov.in — Report suspected fraud calls, SMS, or WhatsApp messages',
+        name:
+          lang === 'bn'
+            ? 'সঞ্চার সাথী — চক্ষু (টেলিকম দপ্তর)'
+            : lang === 'hi'
+              ? 'संचार साथी — चक्षु (दूरसंचार विभाग)'
+              : 'Sanchar Saathi — Chakshu (Dept. of Telecom)',
+        detail:
+          lang === 'bn'
+            ? 'sancharsaathi.gov.in — সন্দেহজনক কল, SMS বা হোয়াটসঅ্যাপ মেসেজ রিপোর্ট করুন'
+            : lang === 'hi'
+              ? 'sancharsaathi.gov.in — संदिग्ध कॉल, SMS या व्हाट्सएप संदेश की रिपोर्ट करें'
+              : 'sancharsaathi.gov.in — Report suspected fraud calls, SMS, or WhatsApp messages',
         url: 'https://sancharsaathi.gov.in/',
       },
     ],
@@ -473,7 +514,9 @@ export function analyzeFraudRisk(
     },
     disclaimer:
       lang === 'bn'
-        ? 'সতর্কতা: JENOVA Protect (প্রতারণা যাচাই) একটি প্রাথমিক ঝুঁকি বিশ্লেষণ সহায়ক টুল। এটি কোনো ব্যক্তি বা সংস্থাকে চূড়ান্তভাবে প্রতারক বা ১০০% নিরাপদ ঘোষণা করে না।'
-        : 'Disclaimer: JENOVA Protect is an automated risk-awareness helper. It cannot guarantee that a message is safe, nor does it make legal accusations against any person or business.',
+        ? 'সতর্কতা: JENOVA Protect একটি প্রাথমিক ঝুঁকি বিশ্লেষণ সহায়ক টুল। এটি কোনো ব্যক্তি বা সংস্থাকে চূড়ান্তভাবে প্রতারক বা ১০০% নিরাপদ ঘোষণা করে না।'
+        : lang === 'hi'
+          ? 'अस्वीकरण: JENOVA Protect एक स्वचालित जोखिम-जागरूकता सहायक टूल है। यह किसी संदेश के 100% सुरक्षित होने की गारंटी नहीं देता और न ही किसी व्यक्ति या व्यवसाय पर कानूनी आरोप लगाता है।'
+          : 'Disclaimer: JENOVA Protect is an automated risk-awareness helper. It cannot guarantee that a message is safe, nor does it make legal accusations against any person or business.',
   };
 }

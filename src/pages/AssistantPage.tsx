@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Send, User } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { tr } from '../i18n/translations';
 import { apiFetch, trackAnalyticsEvent } from '../lib/api';
+import type { Language } from '../types/platform';
 import { PageHeader, ResilientImage, SafetyNotice } from '../components/SharedUI';
 import { VISUAL_ASSETS } from '../lib/visualAssets';
 import { ReadAloudButton, VoiceInputButton } from '../components/VoiceAccessibility';
@@ -16,10 +18,48 @@ interface ChatMessage {
   role: 'user' | 'assistant';
   text: string;
   suggestedActions?: SuggestedAction[];
+  sourceLabel?: 'ai_grounded_in_verified_records' | 'welcome_guide';
+}
+
+function buildWelcomeMessage(language: Language): ChatMessage {
+  return {
+    id: 'welcome',
+    role: 'assistant',
+    text: tr(
+      language,
+      'নমস্কার! আমি "JENOVA Voice" — আপনার বাংলা ভয়েস ও টেক্সট সহায়ক।\nনিচের বড় মাইক্রোফোন বোতামে চাপ দিয়ে বাংলায় বলুন অথবা টাইপ করুন: সরকারি প্রকল্প, কাগজপত্রের তালিকা, সন্দেহজনক মেসেজ যাচাই, ফ্রি প্রশিক্ষণ বা কাজ খোঁজা।',
+      'नमस्ते! मैं "JENOVA Voice" — आपका वॉइस और टेक्स्ट सहायक हूं।\nनीचे बड़े माइक्रोफ़ोन बटन को दबाकर हिंदी में बोलें या टाइप करें: सरकारी योजनाएं, दस्तावेज़ सूची, धोखाधड़ी जांच, निःशुल्क प्रशिक्षण या रोजगार।',
+      'Hello! I am JENOVA Voice — JENOVA’s multilingual AI voice and text assistant. Tap the large microphone button to speak, or type below about welfare schemes, document folders, scam checks, free skills, or jobs.'
+    ),
+    suggestedActions: [
+      {
+        label: tr(language, 'JENOVA Checklist শুরু করুন', 'JENOVA Checklist खोलें', 'Open JENOVA Checklist'),
+        path: '/checklist',
+      },
+      {
+        label: tr(
+          language,
+          'JENOVA Protect (প্রতারণা যাচাই)',
+          'JENOVA Protect (धोखाधड़ी जांच)',
+          'Open JENOVA Protect'
+        ),
+        path: '/scam-check',
+      },
+      {
+        label: tr(
+          language,
+          'JENOVA Local (নিকটস্থ BSK)',
+          'JENOVA Local (स्थानीय सहायता)',
+          'Open JENOVA Local'
+        ),
+        path: '/local-help',
+      },
+    ],
+  };
 }
 
 export function AssistantPage() {
-  const { language, setLanguage, t, navigate } = useApp();
+  const { language, setLanguage, t, navigate, profile } = useApp();
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,63 +70,93 @@ export function AssistantPage() {
     const q = spoken.toLowerCase();
     if (/(প্রতারণা|সন্দেহজনক|scam|fraud|धोखाधड़ी)/i.test(q)) {
       return {
-        label: language === 'bn' ? 'প্রতারণা যাচাই খুলুন' : 'Open Scam Checker',
+        label: tr(language, 'প্রতারণা যাচাই খুলুন', 'धोखाधड़ी जांच खोलें', 'Open Scam Checker'),
         path: '/scam-check',
       };
     }
     if (/(ফোল্ডার|কাগজ|নথি|checklist|document|दस्तावेज़)/i.test(q)) {
       return {
-        label: language === 'bn' ? 'ফোল্ডার চেক খুলুন' : 'Open Document Checklist',
+        label: tr(language, 'ফোল্ডার চেক খুলুন', 'दस्तावेज़ चेकलिस्ट खोलें', 'Open Document Checklist'),
         path: '/checklist',
       };
     }
     if (/(স্থানীয়|বিএসকে|bsk|bdo|local help|সাহায্য কেন্দ্র|स्थानीय सहायता)/i.test(q)) {
       return {
-        label: language === 'bn' ? 'স্থানীয় সহায়তা কেন্দ্র খুলুন' : 'Open Local Assistance Finder',
+        label: tr(
+          language,
+          'স্থানীয় সহায়তা কেন্দ্র খুলুন',
+          'स्थानीय सहायता केंद्र खोलें',
+          'Open Local Assistance Finder'
+        ),
         path: '/local-help',
       };
     }
     if (/(প্রকল্প|অন্নপূর্ণা|কন্যাশ্রী|বিধবা|scheme|annapurna|योजना|अन्नपूर्णा)/i.test(q)) {
       return {
-        label: language === 'bn' ? 'সরকারি প্রকল্প ডিরেক্টরি খুলুন' : 'Open Government Schemes',
+        label: tr(
+          language,
+          'সরকারি প্রকল্প ডিরেক্টরি খুলুন',
+          'सरकारी योजना निर्देशिका खोलें',
+          'Open Government Schemes'
+        ),
         path: '/schemes',
       };
     }
     if (/(বায়োডাটা|সিভি|biodata|cv|resume)/i.test(q)) {
       return {
-        label: language === 'bn' ? '১-মিনিট বায়োডাটা টুল খুলুন' : 'Open 1-Minute Biodata Builder',
+        label: tr(
+          language,
+          '১-মিনিট বায়োডাটা টুল খুলুন',
+          '1-मिनट बायोडाटा टूल खोलें',
+          'Open 1-Minute Biodata Builder'
+        ),
         path: '/jobs/biodata',
+      };
+    }
+    if (/(উড়ান|udaan|ইন্টারভিউ|interview|সফট স্কিল|soft skill|প্রশিক্ষণ|training)/i.test(q)) {
+      return {
+        label: tr(
+          language,
+          'JENOVA UDAAN প্রশিক্ষণ খুলুন',
+          'JENOVA UDAAN प्रशिक्षण खोलें',
+          'Open JENOVA UDAAN Training'
+        ),
+        path: '/udaan',
+      };
+    }
+    if (/(পাসপোর্ট|passport|লক্ষ্য|action plan|ট্র্যাকার)/i.test(q)) {
+      return {
+        label: tr(
+          language,
+          'JENOVA Action Passport খুলুন',
+          'JENOVA Action Passport खोलें',
+          'Open Action Passport'
+        ),
+        path: '/passport',
+      };
+    }
+    if (/(ব্যবসা|business|উদ্যম|udyam|দোকান|সেলাই|tailoring|tiffin|msme|व्यापार|व्यवसाय)/i.test(q)) {
+      return {
+        label: tr(
+          language,
+          'ব্যবসা পরিকল্পনা বিল্ডার খুলুন',
+          'व्यवसाय योजना बिल्डर खोलें',
+          'Open Business Plan Builder'
+        ),
+        path: '/msme/planner',
       };
     }
     return null;
   };
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'welcome',
-      role: 'assistant',
-      text:
-        language === 'bn'
-          ? 'নমস্কার! আমি "JENOVA Voice" — আপনার বাংলা ভয়েস ও টেক্সট সহায়ক।\nনিচের বড় মাইক্রোফোন বোতামে চাপ দিয়ে বাংলায় বলুন অথবা টাইপ করুন: সরকারি প্রকল্প, কাগজপত্রের তালিকা, সন্দেহজনক মেসেজ যাচাই, ফ্রি প্রশিক্ষণ বা কাজ খোঁজা।'
-          : language === 'hi'
-            ? 'नमस्ते! मैं "JENOVA Voice" — आपका वॉइस और टेक्स्ट सहायक हूं। सरकारी योजनाओं, दस्तावेज़ सूची, धोखाधड़ी जांच या निःशुल्क प्रशिक्षण के बारे में बोलकर या लिखकर पूछें।'
-            : 'Hello! I am JENOVA Voice — JENOVA’s Bengali-first AI voice and text assistant. Tap the large microphone button to speak, or type below about welfare schemes, document folders, scam checks, free skills, or jobs.',
-      suggestedActions: [
-        {
-          label: language === 'bn' ? 'JENOVA Checklist শুরু করুন' : 'Open JENOVA Checklist',
-          path: '/checklist',
-        },
-        {
-          label: language === 'bn' ? 'JENOVA Protect (প্রতারণা যাচাই)' : 'Open JENOVA Protect',
-          path: '/scam-check',
-        },
-        {
-          label: language === 'bn' ? 'JENOVA Local (নিকটস্থ BSK)' : 'Open JENOVA Local',
-          path: '/local-help',
-        },
-      ],
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [buildWelcomeMessage(language)]);
+
+  // Keep the welcome message synchronized whenever the user switches site language
+  useEffect(() => {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === 'welcome' ? buildWelcomeMessage(language) : m))
+    );
+  }, [language]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -136,12 +206,21 @@ export function AssistantPage() {
       const res = await apiFetch<{
         reply: string;
         suggestedActions?: SuggestedAction[];
+        sourceLabel?: 'ai_grounded_in_verified_records';
       }>('/api/ai/assistant', {
         method: 'POST',
         body: JSON.stringify({
           message: trimmed,
           language,
           history: nextMessages.slice(-6).map((m) => ({ role: m.role, text: m.text })),
+          profileContext: {
+            state: profile.location.state,
+            district: profile.location.district,
+            education: profile.education,
+            employmentStatus: profile.employmentStatus,
+            careerGoals: profile.careerGoals.slice(0, 4),
+            skills: profile.skills.slice(0, 6),
+          },
         }),
       });
       setMessages((prev) => [
@@ -151,13 +230,19 @@ export function AssistantPage() {
           role: 'assistant',
           text: res.reply,
           suggestedActions: res.suggestedActions || [],
+          sourceLabel: res.sourceLabel || 'ai_grounded_in_verified_records',
         },
       ]);
     } catch (err: unknown) {
       setError(
         err instanceof Error
           ? err.message
-          : 'Unable to reach JENOVA Voice right now. Please try again or use our direct tools below.'
+          : tr(
+              language,
+              'এই মুহূর্তে JENOVA Voice-এর সাথে সংযোগ করা যাচ্ছে না। অনুগ্রহ করে আবার চেষ্টা করুন।',
+              'इस समय JENOVA Voice से संपर्क नहीं हो सका। कृपया पुनः प्रयास करें।',
+              'Unable to reach JENOVA Voice right now. Please try again or use our direct tools below.'
+            )
       );
     } finally {
       setLoading(false);
@@ -172,47 +257,54 @@ export function AssistantPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
       <PageHeader
-        title={
-          language === 'bn'
-            ? 'JENOVA Voice — বাংলা ভয়েস ও টেক্সট সহায়ক'
-            : language === 'hi'
-              ? 'JENOVA Voice — वॉइस और टेक्स्ट सहायक'
-              : 'JENOVA Voice — Bengali-First AI Voice Assistant'
-        }
-        subtitle={
-          language === 'bn'
-            ? 'টাইপ করতে অসুবিধা? বড় মাইক্রোফোন বোতামে চাপ দিয়ে সহজ বাংলায় বলুন। প্রতিটি উত্তর আপনি শুনেও নিতে পারবেন এবং সরাসরি পরবর্তী ধাপে যেতে পারবেন।'
-            : 'Speak naturally in Bengali, Hindi, or English — or type below. Every reply includes Read-Aloud audio and clickable next actions grounded in verified platform records.'
-        }
+        title={tr(
+          language,
+          'JENOVA Voice — বাংলা ভয়েস ও টেক্সট সহায়ক',
+          'JENOVA Voice — हिंदी वॉइस और टेक्स्ट सहायक',
+          'JENOVA Voice — Multilingual AI Voice Assistant'
+        )}
+        subtitle={tr(
+          language,
+          'টাইপ করতে অসুবিধা? বড় মাইক্রোফোন বোতামে চাপ দিয়ে সহজ বাংলায় বলুন। প্রতিটি উত্তর আপনি শুনেও নিতে পারবেন এবং সরাসরি পরবর্তী ধাপে যেতে পারবেন।',
+          'टाइप करने में कठिनाई? बड़े माइक्रोफ़ोन बटन को दबाकर सरल हिंदी में बोलें। हर उत्तर आप सुन सकते हैं और सीधे अगले कदम पर जा सकते हैं।',
+          'Speak naturally in Bengali, Hindi, or English — or type below. Every reply includes Read-Aloud audio and clickable next actions grounded in verified platform records.'
+        )}
       />
 
       <SafetyNotice
-        message={
-          language === 'bn'
-            ? 'সতর্কতা: এখানে কখনোই আপনার আধার নম্বর, ব্যাংক অ্যাকাউন্ট নম্বর, OTP, UPI PIN বা পাসওয়ার্ড বলবেন না বা লিখবেন না।'
-            : 'Safety Notice: Never speak or type Aadhaar numbers, UPI PINs, OTPs, bank account numbers, or passwords here.'
-        }
+        message={tr(
+          language,
+          'সতর্কতা: এখানে কখনোই আপনার আধার নম্বর, ব্যাংক অ্যাকাউন্ট নম্বর, OTP, UPI PIN বা পাসওয়ার্ড বলবেন না বা লিখবেন না।',
+          'सुरक्षा सूचना: यहां कभी भी अपना आधार नंबर, बैंक खाता संख्या, OTP, UPI PIN या पासवर्ड न बोलें और न लिखें।',
+          'Safety Notice: Never speak or type Aadhaar numbers, UPI PINs, OTPs, bank account numbers, or passwords here.'
+        )}
       />
 
       {/* Voice-First Hero Action Card */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#E5E3DC] flex flex-col sm:flex-row items-center gap-5">
+      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#F2DCC1] flex flex-col sm:flex-row items-center gap-5">
         <ResilientImage
           src={VISUAL_ASSETS.aiAssistantMascot.src}
           alt={VISUAL_ASSETS.aiAssistantMascot.alt}
           eager
-          containerClassName="w-24 h-24 rounded-2xl border border-[#E5E3DC] shrink-0"
+          containerClassName="w-24 h-24 rounded-2xl border border-[#F2DCC1] shrink-0"
         />
         <div className="flex-1 space-y-3 text-center sm:text-left">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-[#252525]">
-              {language === 'bn'
-                ? 'কথা বলে সাহায্য নিন (বাংলা / হিন্দি / ইংরেজি)'
-                : 'Ask by Voice or Text (Bengali · Hindi · English)'}
+            <h2 className="text-base sm:text-lg font-bold text-[#26364B]">
+              {tr(
+                language,
+                'কথা বলে সাহায্য নিন (বাংলা / হিন্দি / ইংরেজি)',
+                'बोलकर या लिखकर मदद लें (हिंदी · बंगाली · अंग्रेजी)',
+                'Ask by Voice or Text (Bengali · Hindi · English)'
+              )}
             </h2>
-            <p className="text-xs sm:text-sm text-[#5C5C58] mt-1 leading-relaxed">
-              {language === 'bn'
-                ? 'মাইক্রোফোনে বললে আপনার প্রশ্নটি সাথে সাথে চলে যাবে। ব্রাউজারে ভয়েস না থাকলে নিচের বক্সে টাইপ করুন।'
-                : 'Tap the microphone to ask your question aloud. If microphone access is unavailable, typing works identically below.'}
+            <p className="text-xs sm:text-sm text-[#454545] mt-1 leading-relaxed">
+              {tr(
+                language,
+                'মাইক্রোফোনে বললে আপনার প্রশ্নটি সাথে সাথে চলে যাবে। ব্রাউজারে ভয়েস না থাকলে নিচের বক্সে টাইপ করুন।',
+                'माइक्रोफ़ोन पर बोलकर अपना सवाल पूछें। यदि माइक्रोफ़ोन उपलब्ध न हो, तो नीचे टाइप करके भी वही सहायता पा सकते हैं।',
+                'Tap the microphone to ask your question aloud. If microphone access is unavailable, typing works identically below.'
+              )}
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
@@ -225,7 +317,7 @@ export function AssistantPage() {
               }}
             />
             <div
-              className="inline-flex items-center rounded-xl border border-[#E5E3DC] bg-[#FAF9F5] p-1 text-xs font-semibold"
+              className="inline-flex items-center rounded-xl border border-[#F2DCC1] bg-[#FFF1DF] p-1 text-xs font-semibold"
               role="group"
               aria-label="Voice assistant language"
             >
@@ -242,8 +334,8 @@ export function AssistantPage() {
                   onClick={() => setLanguage(opt.code)}
                   className={`px-3 py-2 rounded-lg cursor-pointer transition-colors ${
                     language === opt.code
-                      ? 'bg-[#176B4D] text-white'
-                      : 'text-[#5C5C58] hover:text-[#252525]'
+                      ? 'jenova-saffron-btn'
+                      : 'text-[#454545] hover:text-[#26364B]'
                   }`}
                 >
                   {opt.label}
@@ -253,16 +345,19 @@ export function AssistantPage() {
           </div>
 
           {voiceNavHint && (
-            <div className="rounded-xl bg-[#EBF4F0] border border-[#176B4D]/30 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span className="font-medium text-[#11533B]">
-                {language === 'bn'
-                  ? 'ভয়েস নেভিগেশন শর্টকাট:'
-                  : 'Voice-Guided Navigation Shortcut:'}
+            <div className="rounded-xl bg-[#FFE5C2] border border-[#F4A340]/30 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span className="font-medium text-[#26364B] dark:text-[#FFD19A]">
+                {tr(
+                  language,
+                  'ভয়েস নেভিগেশন শর্টকাট:',
+                  'वॉयस नेविगेशन शॉर्टकट:',
+                  'Voice-Guided Navigation Shortcut:'
+                )}
               </span>
               <button
                 type="button"
                 onClick={() => navigate(voiceNavHint.path)}
-                className="inline-flex items-center gap-1 font-bold text-[#176B4D] hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
               >
                 <span>{voiceNavHint.label}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -274,10 +369,13 @@ export function AssistantPage() {
 
       {/* Starter Prompt Buttons */}
       <div className="space-y-2">
-        <p className="text-xs font-semibold text-[#5C5C58]">
-          {language === 'bn'
-            ? 'এক ট্যাপে জিজ্ঞাসা করুন:'
-            : 'Or tap a common question to start:'}
+        <p className="text-xs font-semibold text-[#454545]">
+          {tr(
+            language,
+            'এক ট্যাপে জিজ্ঞাসা করুন:',
+            'एक टैप में सवाल पूछें:',
+            'Or tap a common question to start:'
+          )}
         </p>
         <div className="flex flex-wrap gap-2">
           {samplePrompts.map((q) => (
@@ -286,7 +384,7 @@ export function AssistantPage() {
               type="button"
               disabled={loading}
               onClick={() => sendQuestion(q, false)}
-              className="px-3.5 py-2.5 text-xs sm:text-sm font-medium rounded-xl bg-white border border-[#E5E3DC] text-[#252525] hover:border-[#176B4D] hover:bg-[#EBF4F0] hover:text-[#11533B] transition-colors cursor-pointer text-left min-h-[42px]"
+              className="px-3.5 py-2.5 text-xs sm:text-sm font-medium rounded-xl bg-white border border-[#F2DCC1] text-[#26364B] hover:border-[#F4A340] hover:bg-[#FFE5C2] hover:text-[#26364B] dark:text-[#FFF5E8] dark:hover:text-[#FFD19A] transition-colors cursor-pointer text-left min-h-[42px]"
             >
               {q}
             </button>
@@ -295,7 +393,7 @@ export function AssistantPage() {
       </div>
 
       {/* Conversation Box */}
-      <div className="rounded-2xl bg-white border border-[#E5E3DC] flex flex-col min-h-[440px] max-h-[640px]">
+      <div className="rounded-2xl bg-white border border-[#F2DCC1] flex flex-col min-h-[440px] max-h-[640px]">
         <div className="flex-1 overflow-y-auto p-5 space-y-5">
           {messages.map((msg) => (
             <div
@@ -305,22 +403,32 @@ export function AssistantPage() {
               }`}
             >
               {msg.role === 'user' ? (
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-[#176B4D] text-white">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 jenova-saffron-btn">
                   <User className="w-4 h-4" />
                 </div>
               ) : (
                 <ResilientImage
                   src={VISUAL_ASSETS.aiAssistantMascot.src}
                   alt="JENOVA Voice Assistant"
-                  containerClassName="w-9 h-9 rounded-xl border border-[#E5E3DC] shrink-0"
+                  containerClassName="w-9 h-9 rounded-xl border border-[#F2DCC1] shrink-0"
                 />
               )}
               <div className={`max-w-[88%] space-y-2.5 ${msg.role === 'user' ? 'items-end' : ''}`}>
+                {msg.role === 'assistant' && msg.id !== 'welcome' && (
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-[#454545]">
+                    {tr(
+                      language,
+                      'AI-তৈরি ব্যাখ্যা · যাচাইকৃত JENOVA রেকর্ডের ওপর ভিত্তি করে',
+                      'AI-जनित व्याख्या · सत्यापित JENOVA रिकॉर्ड पर आधारित',
+                      'AI-Generated Explanation · Grounded in Verified JENOVA Records'
+                    )}
+                  </p>
+                )}
                 <div
                   className={`rounded-2xl px-4 py-3.5 text-sm sm:text-[15px] leading-relaxed whitespace-pre-wrap ${
                     msg.role === 'user'
-                      ? 'bg-[#176B4D] text-white'
-                      : 'bg-[#FAF9F5] border border-[#E5E3DC] text-[#252525]'
+                      ? 'jenova-saffron-btn'
+                      : 'bg-[#FFF1DF] border border-[#F2DCC1] text-[#26364B]'
                   }`}
                 >
                   {msg.text}
@@ -334,7 +442,7 @@ export function AssistantPage() {
                         key={`${msg.id}-${act.path}`}
                         type="button"
                         onClick={() => navigate(act.path)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#EBF4F0] hover:bg-[#176B4D] text-[#11533B] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FFE5C2] hover:bg-[#F4A340] text-[#26364B] dark:text-[#FFD19A] hover:text-[#26364B] dark:hover:text-[#1C140E] text-xs font-semibold transition-colors cursor-pointer"
                       >
                         <span>{act.label}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -347,11 +455,14 @@ export function AssistantPage() {
           ))}
 
           {loading && (
-            <div className="flex items-center gap-2 text-xs text-[#5C5C58] pl-12">
+            <div className="flex items-center gap-2 text-xs text-[#454545] pl-12">
               <span>
-                {language === 'bn'
-                  ? 'যাচাইকৃত তথ্য মিলিয়ে উত্তর তৈরি হচ্ছে...'
-                  : 'Checking verified platform records...'}
+                {tr(
+                  language,
+                  'যাচাইকৃত তথ্য মিলিয়ে উত্তর তৈরি হচ্ছে...',
+                  'सत्यापित रिकॉर्ड की जांच की जा रही है...',
+                  'Checking verified platform records...'
+                )}
               </span>
             </div>
           )}
@@ -366,23 +477,24 @@ export function AssistantPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="p-4 border-t border-[#E5E3DC] flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 bg-[#FAF9F5] rounded-b-2xl"
+          className="p-4 border-t border-[#F2DCC1] flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 bg-[#FFF1DF] rounded-b-2xl"
         >
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={
-              language === 'bn'
-                ? 'এখানে বাংলা বা ইংরেজিতে লিখুন...'
-                : 'Type your question in Bengali, English, or Hindi...'
-            }
-            className="flex-1 rounded-xl border border-[#D8D5CC] bg-white px-4 py-3 text-sm text-[#252525] min-h-[46px]"
+            placeholder={tr(
+              language,
+              'এখানে বাংলা বা ইংরেজিতে লিখুন...',
+              'यहां हिंदी, बंगाली या अंग्रेजी में अपना प्रश्न लिखें...',
+              'Type your question in Bengali, English, or Hindi...'
+            )}
+            className="flex-1 rounded-xl border border-[#F2DCC1] bg-white px-4 py-3 text-sm text-[#26364B] min-h-[46px]"
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="inline-flex items-center justify-center gap-1.5 px-5 py-3 text-sm font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-xl disabled:opacity-50 cursor-pointer whitespace-nowrap min-h-[46px]"
+            className="inline-flex items-center justify-center gap-1.5 px-5 py-3 text-sm font-semibold jenova-saffron-btn rounded-xl disabled:opacity-50 cursor-pointer whitespace-nowrap min-h-[46px]"
           >
             <Send className="w-4 h-4" />
             <span>{t.common.submit}</span>

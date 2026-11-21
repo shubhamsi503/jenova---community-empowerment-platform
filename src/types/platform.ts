@@ -42,6 +42,10 @@ export interface LocalAssistanceCentre extends VerificationMeta {
   needsLocalFieldVerification: boolean;
   officialPortalUrl: string;
   referralsCount: number;
+  state?: string;
+  district?: string;
+  lat?: number;
+  lng?: number;
 }
 
 export interface FraudAlert {
@@ -103,6 +107,8 @@ export interface UpdateSubscription {
 
 export type UserRole =
   | 'user'
+  | 'regional_contributor'
+  | 'training_manager'
   | 'content_reviewer'
   | 'content_admin'
   | 'super_admin';
@@ -155,6 +161,12 @@ export interface JobListing extends VerificationMeta {
   submittedBy?: string;
   viewsCount: number;
   referralsCount: number;
+  state?: string;
+  district?: string;
+  lat?: number;
+  lng?: number;
+  isRemote?: boolean;
+  skillsRequired?: string[];
 }
 
 export type SkillCategory =
@@ -227,13 +239,21 @@ export interface SchemeEligibilityProfile {
   )[];
   lowIncomeFocused: boolean;
   westBengalResidentOnly: boolean;
+  applicableStates?: string[];
 }
 
 export interface WelfareScheme extends VerificationMeta {
   id: string;
   officialName: LocalizedText;
   department: LocalizedText;
-  scope: 'West Bengal' | 'Central India';
+  scope: string;
+  applicableState?: string;
+  schemeLevel?: 'Central' | 'State' | 'District';
+  eligibleGeography?: string;
+  targetBeneficiaries?: string[];
+  ageCriteria?: string;
+  incomeCriteria?: LocalizedText;
+  importantDates?: string;
   category: SchemeCategory;
   description: LocalizedText;
   benefits: LocalizedText;
@@ -349,6 +369,187 @@ export interface VerificationLog {
   timestamp: string;
 }
 
+export interface UserLocationPreference {
+  country: string;
+  state: string;
+  district: string;
+  city: string;
+  locality: string;
+  isGpsDerived?: boolean;
+}
+
+export interface UserLivelihoodProfile {
+  education: string;
+  skills: string[];
+  interests: string[];
+  careerGoals: string[];
+  employmentStatus: string;
+  businessInterests: string[];
+  preferredOpportunityTypes: string[];
+  learningPreference: 'self_paced' | 'guided_practice' | 'voice_assisted';
+  location: UserLocationPreference;
+  updatedAt: string;
+}
+
+export type RadiusMode = '5' | '10' | '25' | '50' | '100' | 'custom' | 'nationwide' | 'remote';
+
+export interface ActiveLocation {
+  country?: string;
+  state: string;
+  district: string;
+  cityOrLocality?: string;
+  lat?: number;
+  lng?: number;
+  radiusMode: RadiusMode;
+  customRadiusKm?: number;
+  isGpsDerived?: boolean;
+  source?: 'manual' | 'gps' | string;
+}
+
+export interface UserPersonalisationProfile {
+  preferredName?: string;
+  state?: string;
+  district?: string;
+  cityOrLocality?: string;
+  educationLevel?: string;
+  employmentStatus?: string;
+  ageGroup?: string;
+  gender?: string;
+  skills?: string[];
+  careerInterests?: string[];
+  preferredJobCategory?: string;
+  preferredTravelRadiusKm?: number;
+  radiusMode?: RadiusMode;
+  assistancePreferences?: string[];
+}
+
+export type UdaanCategory =
+  | 'Interview Preparation'
+  | 'Business Plan Executive'
+  | 'Personality & Soft Skills'
+  | 'Professional Digital'
+  | 'MSME & Entrepreneurship'
+  | 'Practical Executive';
+
+export interface UdaanLesson {
+  id: string;
+  durationMinutes: number;
+  title: LocalizedText;
+  content: LocalizedText;
+  keyTakeaways: LocalizedText[];
+}
+
+export interface UdaanQuizQuestion {
+  id: string;
+  question: LocalizedText;
+  options: LocalizedText[];
+  correctIndex: number;
+  explanation: LocalizedText;
+}
+
+export interface UdaanAssignment {
+  title: LocalizedText;
+  prompt: LocalizedText;
+  rubricPoints: LocalizedText[];
+}
+
+export interface UdaanProgramme {
+  id: string;
+  slug: string;
+  category: UdaanCategory;
+  level: 'Beginner' | 'Intermediate';
+  estimatedMinutes: number;
+  formatNote: LocalizedText;
+  title: LocalizedText;
+  tagline: LocalizedText;
+  summary: LocalizedText;
+  targetAudience: string[];
+  skillTags: string[];
+  relatedRoutes: { path: string; label: LocalizedText }[];
+  lessons: UdaanLesson[];
+  assignment: UdaanAssignment;
+  quiz: UdaanQuizQuestion[];
+}
+
+export interface UdaanEnrolment {
+  id: string;
+  userId: string;
+  programmeId: string;
+  enrolledAt: string;
+  updatedAt: string;
+  completedLessonIds: string[];
+  quizScore?: number;
+  quizTotal?: number;
+  quizCompletedAt?: string;
+  assignmentResponse?: string;
+  assignmentFeedback?: string;
+  assignmentUpdatedAt?: string;
+}
+
+export type ActionPassportStatus =
+  | 'Not Started'
+  | 'In Progress'
+  | 'Ready for Next Step'
+  | 'Action Taken'
+  | 'User Reported Completed';
+
+export type ActionPassportCategory =
+  | 'skill'
+  | 'training'
+  | 'business'
+  | 'scheme'
+  | 'job'
+  | 'documents';
+
+export interface ActionPassportStep {
+  id: string;
+  title: string;
+  done: boolean;
+  officialUrl?: string;
+}
+
+export interface ActionPassportGoal {
+  id: string;
+  userId: string;
+  title: string;
+  category: ActionPassportCategory;
+  status: ActionPassportStatus;
+  linkedPath?: string;
+  officialUrl?: string;
+  steps: ActionPassportStep[];
+  documentsChecklist: { id: string; label: string; ready: boolean }[];
+  notes: string;
+  reminderDate?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BusinessStartupCostItem {
+  id: string;
+  item: string;
+  amount: number;
+}
+
+export interface SavedBusinessPlan {
+  id: string;
+  userId: string;
+  businessName: string;
+  category: string;
+  location: string;
+  targetCustomers: string;
+  valueProposition: string;
+  startupCosts: BusinessStartupCostItem[];
+  unitPrice: number;
+  unitCost: number;
+  expectedMonthlyUnits: number;
+  fixedMonthlyCost: number;
+  customerResearchChecks: { id: string; label: string; done: boolean }[];
+  marketingSteps: string[];
+  readinessChecks: { id: string; label: string; done: boolean }[];
+  notes: string;
+  updatedAt: string;
+}
+
 export interface PlatformAnalytics {
   totalVisits: number;
   uniqueVisitorSessions: number;
@@ -364,6 +565,11 @@ export interface PlatformAnalytics {
   fraudChecksCompleted: number;
   localHelpClicks: number;
   voiceAssistantUses: number;
+  udaanEnrolments?: number;
+  udaanLessonsCompleted?: number;
+  udaanAssessmentsTaken?: number;
+  businessPlansCreated?: number;
+  passportGoalsCreated?: number;
   updateSubscribersCount: number;
   feedbackCount: number;
   openReportsCount: number;
@@ -381,4 +587,5 @@ export interface PlatformAnalytics {
     referrals: number;
   }[];
 }
+
 

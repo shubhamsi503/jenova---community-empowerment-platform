@@ -14,7 +14,13 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { pickText } from '../i18n/translations';
+import {
+  localizeSchemeCategory,
+  localizeScope,
+  localizeVerdict,
+  pickText,
+  tr,
+} from '../i18n/translations';
 import { apiFetch, readOfflineCache, trackAnalyticsEvent, writeOfflineCache } from '../lib/api';
 import type { EligibilityVerdict, SchemeCategory, WelfareScheme } from '../types/platform';
 import {
@@ -171,7 +177,7 @@ export function SchemesDirectoryPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="rounded-2xl bg-gradient-to-r from-[#FFF5EB] via-white to-[#EEF7FF] dark:from-[#2C1A0B] dark:via-[#0A2242] dark:to-[#082447] border border-[#FF8A18]/30 dark:border-[#FFC45C]/30 p-5 sm:p-6 shadow-sm mb-6">
+      <div className="rounded-2xl bg-gradient-to-r from-[#FFF1DF] via-white to-[#FFE5C2]/65 dark:from-[#261B12] dark:via-[#241B13] dark:to-[#2D1E12] border border-[#F2DCC1] dark:border-[#4A3522] p-5 sm:p-6 shadow-sm mb-6">
         <JenovaSchemesLogo
           size="lg"
           theme={theme}
@@ -203,28 +209,28 @@ export function SchemesDirectoryPage() {
       />
 
       {/* Neutral 3D Community Welfare Visual Banner */}
-      <div className="rounded-xl bg-white border border-[#E5E3DC] overflow-hidden mb-8 grid grid-cols-1 lg:grid-cols-12 items-center">
+      <div className="rounded-xl bg-white border border-[#F2DCC1] overflow-hidden mb-8 grid grid-cols-1 lg:grid-cols-12 items-center">
         <ResilientImage
           src={VISUAL_ASSETS.schemesCommunityWelfare.src}
           alt={VISUAL_ASSETS.schemesCommunityWelfare.alt}
           containerClassName="lg:col-span-5 aspect-[16/9] lg:aspect-auto lg:h-full w-full"
         />
         <div className="lg:col-span-7 p-6 space-y-2.5">
-          <p className="text-xs font-semibold text-[#176B4D]">
+          <p className="text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A]">
             {language === 'bn'
               ? 'শিক্ষা · স্বাস্থ্য · নারী ক্ষমতায়ন · কৃষক সহায়তা · আবাসন · সামাজিক সুরক্ষা'
               : language === 'hi'
                 ? 'शिक्षा · स्वास्थ्य · महिला सशक्तिकरण · किसान सहायता · आवास · सामाजिक सुरक्षा'
                 : 'Education · Healthcare · Women Empowerment · Farmers · Housing · Social Security'}
           </p>
-          <h2 className="text-lg sm:text-xl font-bold text-[#252525]">
+          <h2 className="text-lg sm:text-xl font-bold text-[#26364B]">
             {language === 'bn'
               ? 'সরকারি প্রকল্পের সহজ তথ্য, সরাসরি অফিসিয়াল পোর্টালে'
               : language === 'hi'
                 ? 'सरकारी योजनाओं की सरल जानकारी, सीधे आधिकारिक पोर्टल पर'
                 : 'Clear Citizen Summaries Linking Directly to Official Portals'}
           </h2>
-          <p className="text-sm text-[#5C5C58] leading-relaxed">
+          <p className="text-sm text-[#454545] leading-relaxed">
             {language === 'bn'
               ? 'প্রতিটি প্রকল্পের সাথে প্রয়োজনীয় কাগজপত্রের তালিকা এবং সরাসরি পশ্চিমবঙ্গ বা ভারত সরকারের অফিসিয়াল পোর্টাল লিঙ্ক দেওয়া আছে — কোনো দালাল ছাড়া।'
               : language === 'hi'
@@ -235,19 +241,19 @@ export function SchemesDirectoryPage() {
       </div>
 
       {/* Scheme Discovery Assistant */}
-      <section className="rounded-xl bg-white border border-[#E5E3DC] mb-8 overflow-hidden">
-        <div className="px-6 py-4 bg-[#EBF4F0] border-b border-[#176B4D]/15 flex items-center justify-between gap-4">
+      <section className="rounded-xl bg-white border border-[#F2DCC1] mb-8 overflow-hidden">
+        <div className="px-6 py-4 bg-[#FFE5C2] border-b border-[#F4A340]/15 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <Compass className="w-5 h-5 text-[#176B4D]" />
+            <Compass className="w-5 h-5 text-[#A85B0A] dark:text-[#FFD19A]" />
             <div>
-              <h2 className="text-sm sm:text-base font-bold text-[#11533B]">
+              <h2 className="text-sm sm:text-base font-bold text-[#26364B] dark:text-[#FFD19A]">
                 {language === 'bn'
                   ? 'প্রকল্প অনুসন্ধান সহায়ক (Scheme Discovery Assistant)'
                   : language === 'hi'
                     ? 'योजना खोज सहायक (Scheme Discovery Assistant)'
                     : 'Scheme Discovery Assistant'}
               </h2>
-              <p className="text-xs text-[#176B4D]">
+              <p className="text-xs text-[#A85B0A] dark:text-[#FFD19A]">
                 {language === 'bn'
                   ? 'সাধারণ তথ্য নির্বাচন করে সম্ভাব্য প্রাসঙ্গিক প্রকল্প দেখুন (এটি সরকারি যোগ্যতার চূড়ান্ত নিশ্চয়তা নয়)।'
                   : language === 'hi'
@@ -259,15 +265,11 @@ export function SchemesDirectoryPage() {
           <button
             type="button"
             onClick={() => setAssistantOpen((v) => !v)}
-            className="text-xs font-semibold text-[#176B4D] hover:underline whitespace-nowrap cursor-pointer"
+            className="text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap cursor-pointer"
           >
             {assistantOpen
-              ? language === 'hi'
-                ? 'छिपाएं'
-                : 'Hide'
-              : language === 'hi'
-                ? 'खोलें'
-                : 'Open'}
+              ? tr(language, 'লুকান', 'छिपाएं', 'Hide')
+              : tr(language, 'খুলুন', 'खोलें', 'Open')}
           </button>
         </div>
 
@@ -275,66 +277,80 @@ export function SchemesDirectoryPage() {
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#252525] mb-1">Gender</label>
+                <label className="block text-xs font-semibold text-[#26364B] mb-1">
+                  {tr(language, 'লিঙ্গ', 'लिंग', 'Gender')}
+                </label>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value as typeof gender)}
-                  className="w-full rounded-lg border border-[#E5E3DC] bg-[#FAF9F5] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] bg-[#FFF1DF] px-3 py-2 text-sm"
                 >
-                  <option value="any">Any</option>
-                  <option value="female">Female / Woman</option>
-                  <option value="male">Male</option>
+                  <option value="any">{tr(language, 'যেকোনো', 'कोई भी', 'Any')}</option>
+                  <option value="female">{tr(language, 'মহিলা / নারী', 'महिला', 'Female / Woman')}</option>
+                  <option value="male">{tr(language, 'পুরুষ', 'पुरुष', 'Male')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#252525] mb-1">Age (Years)</label>
+                <label className="block text-xs font-semibold text-[#26364B] mb-1">
+                  {tr(language, 'বয়স (বছর)', 'आयु (वर्ष)', 'Age (Years)')}
+                </label>
                 <input
                   type="number"
                   min={5}
                   max={100}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  placeholder="e.g. 24"
-                  className="w-full rounded-lg border border-[#E5E3DC] bg-[#FAF9F5] px-3 py-2 text-sm font-mono tabular-nums"
+                  placeholder={tr(language, 'যেমন: 24', 'जैसे: 24', 'e.g. 24')}
+                  className="w-full rounded-lg border border-[#F2DCC1] bg-[#FFF1DF] px-3 py-2 text-sm font-mono tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#252525] mb-1">
-                  Primary Role / Occupation
+                <label className="block text-xs font-semibold text-[#26364B] mb-1">
+                  {tr(language, 'মূল পেশা / ভূমিকা', 'मुख्य व्यवसाय / भूमिका', 'Primary Role / Occupation')}
                 </label>
                 <select
                   value={occupation}
                   onChange={(e) => setOccupation(e.target.value)}
-                  className="w-full rounded-lg border border-[#E5E3DC] bg-[#FAF9F5] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] bg-[#FFF1DF] px-3 py-2 text-sm"
                 >
-                  <option value="any">Any</option>
-                  <option value="student">Student</option>
-                  <option value="unemployed">Unemployed Youth</option>
-                  <option value="homemaker">Homemaker / Woman</option>
-                  <option value="daily_wage">Daily-Wage / Unorganised Worker</option>
-                  <option value="farmer">Farmer / Sharecropper</option>
-                  <option value="small_business">Small Business / Artisan</option>
+                  <option value="any">{tr(language, 'যেকোনো', 'कोई भी', 'Any')}</option>
+                  <option value="student">{tr(language, 'ছাত্র / ছাত্রী', 'छात्र / छात्रा', 'Student')}</option>
+                  <option value="unemployed">{tr(language, 'কর্মপ্রার্থী যুবক/যুবতী', 'बेरोजगार युवा', 'Unemployed Youth')}</option>
+                  <option value="homemaker">{tr(language, 'গৃহবধূ / মহিলা', 'गृहिणी / महिला', 'Homemaker / Woman')}</option>
+                  <option value="daily_wage">
+                    {tr(language, 'দৈনিক মজুরি / অসংগঠিত শ্রমিক', 'दैनिक मजदूर / असंगठित श्रमिक', 'Daily-Wage / Unorganised Worker')}
+                  </option>
+                  <option value="farmer">{tr(language, 'কৃষক / ভাগচাষি', 'किसान / बटाईदार', 'Farmer / Sharecropper')}</option>
+                  <option value="small_business">
+                    {tr(language, 'ক্ষুদ্র ব্যবসায়ী / কারিগর', 'छोटे व्यवसायी / कारीगर', 'Small Business / Artisan')}
+                  </option>
                 </select>
               </div>
               <div className="flex flex-col justify-end">
-                <label className="inline-flex items-center gap-2 text-sm text-[#252525] py-2 cursor-pointer">
+                <label className="inline-flex items-center gap-2 text-sm text-[#26364B] py-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={wbResident}
                     onChange={(e) => setWbResident(e.target.checked)}
-                    className="accent-[#176B4D] w-4 h-4"
+                    className="accent-[#F4A340] w-4 h-4"
                   />
-                  <span>West Bengal Resident</span>
+                  <span>
+                    {tr(language, 'পশ্চিমবঙ্গের বাসিন্দা', 'पश्चिम बंगाल निवासी', 'West Bengal Resident')}
+                  </span>
                 </label>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#E5E3DC]">
-              <p className="text-xs text-[#5C5C58] inline-flex items-center gap-1.5">
-                <Info className="w-3.5 h-3.5 text-[#176B4D] shrink-0" />
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#F2DCC1]">
+              <p className="text-xs text-[#454545] inline-flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-[#A85B0A] dark:text-[#FFD19A] shrink-0" />
                 <span>
-                  Shows potentially relevant schemes only. Always verify official rules at the
-                  linked government website or BDO / Duare Sarkar office.
+                  {tr(
+                    language,
+                    'কেবল সম্ভাব্য প্রাসঙ্গিক প্রকল্প দেখানো হয়। অফিসিয়াল নিয়ম সর্বদা সংযুক্ত সরকারি ওয়েবসাইট বা BDO / দুয়ারে সরকার অফিসে যাচাই করুন।',
+                    'केवल संभावित उपयुक्त योजनाएं दिखाई जाती हैं। आधिकारिक नियम हमेशा संबंधित सरकारी वेबसाइट या BDO / सहायता केंद्र पर जांचें।',
+                    'Shows potentially relevant schemes only. Always verify official rules at the linked government website or BDO / Duare Sarkar office.'
+                  )}
                 </span>
               </p>
               <div className="flex items-center gap-2.5">
@@ -348,17 +364,22 @@ export function SchemesDirectoryPage() {
                       setOccupation('any');
                       setWbResident(true);
                     }}
-                    className="px-3.5 py-2 text-xs font-medium text-[#5C5C58] hover:text-[#252525] cursor-pointer"
+                    className="px-3.5 py-2 text-xs font-medium text-[#454545] hover:text-[#26364B] cursor-pointer"
                   >
-                    Reset
+                    {tr(language, 'রিসেট', 'रीसेट', 'Reset')}
                   </button>
                 )}
                 <button
                   type="button"
                   onClick={() => setAssistantApplied(true)}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+                  className="px-4 py-2 text-xs font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
                 >
-                  Show Potentially Relevant Schemes
+                  {tr(
+                    language,
+                    'সম্ভাব্য প্রাসঙ্গিক প্রকল্প দেখুন',
+                    'संभावित उपयुक्त योजनाएं देखें',
+                    'Show Potentially Relevant Schemes'
+                  )}
                 </button>
               </div>
             </div>
@@ -367,37 +388,43 @@ export function SchemesDirectoryPage() {
       </section>
 
       {/* Search & Category Filter */}
-      <div className="p-5 rounded-xl bg-white border border-[#E5E3DC] mb-8 space-y-4">
+      <div className="p-5 rounded-xl bg-white border border-[#F2DCC1] mb-8 space-y-4">
         <div className="flex flex-col md:flex-row gap-3.5">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-[#85847C] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#665B4F] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t.common.searchPlaceholder}
-              className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-[#E5E3DC] text-sm bg-[#FAF9F5] focus:bg-white"
+              className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-[#F2DCC1] text-sm bg-[#FFF1DF] focus:bg-white"
             />
           </div>
           <select
             value={scope}
             onChange={(e) => setScope(e.target.value as typeof scope)}
-            className="rounded-lg border border-[#E5E3DC] bg-[#FAF9F5] px-3 py-2.5 text-sm"
+            className="rounded-lg border border-[#F2DCC1] bg-[#FFF1DF] px-3 py-2.5 text-sm"
           >
-            <option value="ALL">West Bengal & Central India</option>
-            <option value="West Bengal">West Bengal State Schemes</option>
-            <option value="Central India">Central Government Schemes</option>
+            <option value="ALL">
+              {tr(language, 'পশ্চিমবঙ্গ ও কেন্দ্রীয় সরকার', 'पश्चिम बंगाल एवं केंद्र सरकार', 'West Bengal & Central India')}
+            </option>
+            <option value="West Bengal">
+              {tr(language, 'পশ্চিমবঙ্গ রাজ্য প্রকল্প', 'पश्चिम बंगाल राज्य योजनाएं', 'West Bengal State Schemes')}
+            </option>
+            <option value="Central India">
+              {tr(language, 'কেন্দ্রীয় সরকারি প্রকল্প', 'केंद्र सरकार की योजनाएं', 'Central Government Schemes')}
+            </option>
           </select>
         </div>
 
-        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[#E5E3DC]">
+        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[#F2DCC1]">
           <button
             type="button"
             onClick={() => setCategory('ALL')}
             className={`px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer ${
               category === 'ALL'
-                ? 'bg-[#176B4D] text-white'
-                : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
+                ? 'jenova-saffron-btn'
+                : 'bg-[#FFF1DF] text-[#454545] hover:text-[#26364B]'
             }`}
           >
             {t.common.all} ({categoryCounts.ALL || 0})
@@ -409,11 +436,11 @@ export function SchemesDirectoryPage() {
               onClick={() => setCategory(cat)}
               className={`px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer ${
                 category === cat
-                  ? 'bg-[#176B4D] text-white'
-                  : 'bg-[#FAF9F5] text-[#5C5C58] hover:text-[#252525]'
+                  ? 'jenova-saffron-btn'
+                  : 'bg-[#FFF1DF] text-[#454545] hover:text-[#26364B]'
               }`}
             >
-              {cat} ({categoryCounts[cat] || 0})
+              {localizeSchemeCategory(cat, language)} ({categoryCounts[cat] || 0})
             </button>
           ))}
         </div>
@@ -421,10 +448,10 @@ export function SchemesDirectoryPage() {
 
       {/* Scheme Results */}
       {loading ? (
-        <p className="text-sm text-[#5C5C58] py-12 text-center">{t.common.loading}</p>
+        <p className="text-sm text-[#454545] py-12 text-center">{t.common.loading}</p>
       ) : filtered.length === 0 ? (
-        <div className="p-10 rounded-xl bg-white border border-[#E5E3DC] text-center space-y-3">
-          <p className="text-sm text-[#5C5C58]">{t.common.noResults}</p>
+        <div className="p-10 rounded-xl bg-white border border-[#F2DCC1] text-center space-y-3">
+          <p className="text-sm text-[#454545]">{t.common.noResults}</p>
           <button
             type="button"
             onClick={() => {
@@ -432,9 +459,9 @@ export function SchemesDirectoryPage() {
               setScope('ALL');
               setSearch('');
             }}
-            className="px-4 py-2 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+            className="px-4 py-2 text-xs font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
           >
-            {language === 'bn' ? 'সব ফিল্টার রিসেট করুন' : language === 'hi' ? 'सभी फ़िल्टर रीसेट करें' : 'Reset Filters'}
+            {tr(language, 'সব ফিল্টার রিসেট করুন', 'सभी फ़िल्टर रीसेट करें', 'Reset Filters')}
           </button>
         </div>
       ) : (
@@ -442,12 +469,12 @@ export function SchemesDirectoryPage() {
           {filtered.map((sch) => (
             <article
               key={sch.id}
-              className="p-6 rounded-xl bg-white border border-[#E5E3DC] flex flex-col justify-between gap-4"
+              className="p-6 rounded-xl bg-white border border-[#F2DCC1] flex flex-col justify-between gap-4"
             >
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#5C5C58] mb-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#454545] mb-2">
                   <span>
-                    {sch.scope} · {sch.category}
+                    {localizeScope(sch.scope, language)} · {localizeSchemeCategory(sch.category, language)}
                   </span>
                   <VerificationLabel status={sch.verificationStatus} />
                 </div>
@@ -455,18 +482,20 @@ export function SchemesDirectoryPage() {
                 <button
                   type="button"
                   onClick={() => navigate(`/schemes/${sch.id}`)}
-                  className="text-left text-lg font-bold text-[#252525] hover:text-[#176B4D] transition-colors cursor-pointer"
+                  className="text-left text-lg font-bold text-[#26364B] hover:text-[#A85B0A] dark:hover:text-[#FFD19A] transition-colors cursor-pointer"
                 >
                   {pickText(sch.officialName, language)}
                 </button>
-                <p className="text-xs text-[#5C5C58] mt-1">{pickText(sch.department, language)}</p>
-                <p className="text-sm text-[#5C5C58] mt-3 leading-relaxed">
+                <p className="text-xs text-[#454545] mt-1">{pickText(sch.department, language)}</p>
+                <p className="text-sm text-[#454545] mt-3 leading-relaxed">
                   {pickText(sch.description, language)}
                 </p>
 
-                <div className="mt-4 p-3.5 rounded-lg bg-[#FAF9F5] border border-[#E5E3DC] text-xs space-y-1.5">
-                  <p className="font-semibold text-[#252525]">Key Benefits:</p>
-                  <p className="text-[#5C5C58] leading-relaxed">{pickText(sch.benefits, language)}</p>
+                <div className="mt-4 p-3.5 rounded-lg bg-[#FFF1DF] border border-[#F2DCC1] text-xs space-y-1.5">
+                  <p className="font-semibold text-[#26364B]">
+                    {tr(language, 'প্রধান সুবিধা:', 'मुख्य लाभ:', 'Key Benefits:')}
+                  </p>
+                  <p className="text-[#454545] leading-relaxed">{pickText(sch.benefits, language)}</p>
                 </div>
 
                 {(() => {
@@ -474,13 +503,13 @@ export function SchemesDirectoryPage() {
                   if (!evalRes) return null;
                   const tone =
                     evalRes.verdict === 'Potentially Eligible'
-                      ? 'bg-[#EBF4F0] border-[#176B4D]/35 text-[#0F4D37]'
+                      ? 'bg-[#E9F5EF] dark:bg-[#143022] border-[#27845B]/40 text-[#1F6A49] dark:text-[#7DE0B0]'
                       : evalRes.verdict === 'Important Requirements Not Met'
                         ? 'bg-red-50 border-red-200 text-red-900'
                         : 'bg-[#FEF4E6] border-[#F4A340]/50 text-[#6B3F06]';
                   return (
                     <div className={`mt-3 p-3 rounded-lg border text-xs space-y-0.5 ${tone}`}>
-                      <p className="font-bold">{evalRes.verdict}</p>
+                      <p className="font-bold">{localizeVerdict(evalRes.verdict, language)}</p>
                       <p className="leading-relaxed opacity-90">{evalRes.reason}</p>
                     </div>
                   );
@@ -488,16 +517,16 @@ export function SchemesDirectoryPage() {
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs text-[#85847C]">
+                <div className="flex items-center justify-between text-xs text-[#665B4F]">
                   <span>
                     {t.common.lastVerified}: {sch.dateVerified}
                   </span>
                   <button
                     type="button"
                     onClick={() => navigate(`/schemes/${sch.id}`)}
-                    className="font-semibold text-[#176B4D] hover:underline cursor-pointer"
+                    className="font-semibold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
                   >
-                    Documents & Process →
+                    {tr(language, 'নথি ও আবেদন প্রক্রিয়া →', 'दस्तावेज़ और प्रक्रिया →', 'Documents & Process →')}
                   </button>
                 </div>
 
@@ -567,7 +596,12 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
       setAiError(
         err instanceof Error
           ? err.message
-          : 'AI Scheme Explanation is currently unavailable. Please refer to the verified guide above.'
+          : tr(
+              language,
+              'এই মুহূর্তে AI ব্যাখ্যা উপলব্ধ নয়। অনুগ্রহ করে উপরের যাচাইকৃত নির্দেশিকা দেখুন।',
+              'इस समय AI योजना विवरण उपलब्ध नहीं है। कृपया ऊपर दिए गए सत्यापित विवरण को देखें।',
+              'AI Scheme Explanation is currently unavailable. Please refer to the verified guide above.'
+            )
       );
     } finally {
       setAiLoading(false);
@@ -575,17 +609,19 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
   };
 
   if (loading) {
-    return <div className="max-w-4xl mx-auto px-4 py-16 text-sm text-[#5C5C58]">{t.common.loading}</div>;
+    return <div className="max-w-4xl mx-auto px-4 py-16 text-sm text-[#454545]">{t.common.loading}</div>;
   }
 
   if (!scheme) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 space-y-4">
-        <p className="font-semibold">Scheme information not found.</p>
+        <p className="font-semibold">
+          {tr(language, 'প্রকল্পের তথ্য পাওয়া যায়নি।', 'योजना की जानकारी नहीं मिली।', 'Scheme information not found.')}
+        </p>
         <button
           type="button"
           onClick={() => navigate('/schemes')}
-          className="text-sm font-semibold text-[#176B4D] hover:underline cursor-pointer"
+          className="text-sm font-semibold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
         >
           ← {t.common.back}
         </button>
@@ -598,27 +634,28 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
       <button
         type="button"
         onClick={() => navigate('/schemes')}
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5C5C58] hover:text-[#176B4D] cursor-pointer"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#454545] hover:text-[#A85B0A] dark:hover:text-[#FFD19A] cursor-pointer"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>{t.common.back}</span>
       </button>
 
       {/* 9-Part Action-Oriented Scheme Guide */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E5E3DC] space-y-6">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#F2DCC1] space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[#5C5C58] mb-2">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#454545] mb-2">
               <span>
-                {scheme.scope} · {scheme.category}
+                {localizeScope(scheme.scope, language)} ·{' '}
+                {localizeSchemeCategory(scheme.category, language)}
               </span>
               <span>·</span>
               <VerificationLabel status={scheme.verificationStatus} />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#252525]">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#26364B]">
               {pickText(scheme.officialName, language)}
             </h1>
-            <p className="mt-1 text-sm text-[#5C5C58]">{pickText(scheme.department, language)}</p>
+            <p className="mt-1 text-sm text-[#454545]">{pickText(scheme.department, language)}</p>
           </div>
           <ReadAloudButton
             lang={language}
@@ -627,72 +664,103 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
         </div>
 
         {/* Immediate Practical Action Banner: JENOVA Checklist */}
-        <div className="rounded-xl bg-[#EBF4F0] border border-[#176B4D]/30 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="rounded-xl bg-[#FFE5C2] border border-[#F4A340]/30 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <ClipboardCheck className="w-6 h-6 text-[#176B4D] shrink-0 mt-0.5" />
+            <ClipboardCheck className="w-6 h-6 text-[#A85B0A] dark:text-[#FFD19A] shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold text-sm sm:text-base text-[#0F4D37]">
-                {language === 'bn'
-                  ? 'JENOVA Checklist — অফিস বা BSK যাওয়ার আগে কাগজপত্র চেক করুন'
-                  : 'JENOVA Checklist — Check Your Documents Before Visiting Any Office'}
+              <p className="font-bold text-sm sm:text-base text-[#26364B] dark:text-[#FFD19A]">
+                {tr(
+                  language,
+                  'JENOVA Checklist — অফিস বা BSK যাওয়ার আগে কাগজপত্র চেক করুন',
+                  'JENOVA Checklist — कार्यालय या BSK जाने से पहले दस्तावेज़ जांचें',
+                  'JENOVA Checklist — Check Your Documents Before Visiting Any Office'
+                )}
               </p>
-              <p className="text-xs text-[#176B4D] mt-0.5">
-                {language === 'bn'
-                  ? 'কোন কাগজ প্রস্তুত আর কোনটি বাকি তা টিক দিয়ে সেভ করুন ও প্রিন্ট নিন।'
-                  : 'Mark each document Ready or Missing, run a quick preliminary check, and print/share your checklist.'}
+              <p className="text-xs text-[#A85B0A] dark:text-[#FFD19A] mt-0.5">
+                {tr(
+                  language,
+                  'কোন কাগজ প্রস্তুত আর কোনটি বাকি তা টিক দিয়ে সেভ করুন ও প্রিন্ট নিন।',
+                  'हर दस्तावेज़ को तैयार या अधूरा चिह्नित करें, जांच करें और प्रिंट/शेयर करें।',
+                  'Mark each document Ready or Missing, run a quick preliminary check, and print/share your checklist.'
+                )}
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => navigate(`/checklist/${scheme.id}`)}
-            className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#176B4D] hover:bg-[#11533B] text-white text-xs sm:text-sm font-semibold whitespace-nowrap cursor-pointer min-h-[44px]"
+            className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl jenova-saffron-btn text-xs sm:text-sm font-semibold whitespace-nowrap cursor-pointer min-h-[44px]"
           >
-            <span>{language === 'bn' ? 'JENOVA Checklist শুরু করুন' : 'Open JENOVA Checklist'}</span>
+            <span>
+              {tr(
+                language,
+                'JENOVA Checklist শুরু করুন',
+                'JENOVA Checklist खोलें',
+                'Open JENOVA Checklist'
+              )}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
         {/* 1. What is this service? */}
         <div className="space-y-2">
-          <h2 className="text-base font-bold text-[#252525]">
-            {language === 'bn' ? '১. এই প্রকল্পটি কী ও কী সুবিধা পাওয়া যায়?' : '1. What Is This Scheme & Key Benefits'}
+          <h2 className="text-base font-bold text-[#26364B]">
+            {tr(
+              language,
+              '১. এই প্রকল্পটি কী ও কী সুবিধা পাওয়া যায়?',
+              '1. यह योजना क्या है और इसके मुख्य लाभ क्या हैं?',
+              '1. What Is This Scheme & Key Benefits'
+            )}
           </h2>
-          <p className="text-sm text-[#4A4A46] leading-relaxed">
+          <p className="text-sm text-[#454545] leading-relaxed">
             {pickText(scheme.description, language)}
           </p>
-          <p className="text-sm font-medium text-[#11533B] bg-[#FAF9F5] border border-[#E5E3DC] rounded-xl p-3.5 leading-relaxed">
+          <p className="text-sm font-medium text-[#26364B] dark:text-[#FFD19A] bg-[#FFF1DF] border border-[#F2DCC1] rounded-xl p-3.5 leading-relaxed">
             {pickText(scheme.benefits, language)}
           </p>
         </div>
 
         {/* 2. Who may qualify? */}
         <div className="space-y-2">
-          <h2 className="text-base font-bold text-[#252525]">
-            {language === 'bn' ? '২. কারা আবেদন করার উপযুক্ত হতে পারেন?' : '2. Who May Qualify? (Confirm With Official Authority)'}
+          <h2 className="text-base font-bold text-[#26364B]">
+            {tr(
+              language,
+              '২. কারা আবেদন করার উপযুক্ত হতে পারেন?',
+              '2. कौन पात्र हो सकते हैं? (आधिकारिक प्राधिकरण से पुष्टि करें)',
+              '2. Who May Qualify? (Confirm With Official Authority)'
+            )}
           </h2>
-          <p className="text-sm text-[#4A4A46] leading-relaxed">
+          <p className="text-sm text-[#454545] leading-relaxed">
             {pickText(scheme.eligibilityRequirements, language)}
           </p>
           <p className="text-xs text-[#6B3F06] bg-[#FEF4E6] border border-[#F4A340]/40 rounded-lg px-3.5 py-2">
-            {language === 'bn'
-              ? 'দ্রষ্টব্য: JENOVA কোনো সরকারি দপ্তর নয় এবং ভাতা অনুমোদনের নিশ্চয়তা দেয় না। চূড়ান্ত যোগ্যতা কেবল অফিসিয়াল কর্তৃপক্ষ যাচাই করে।'
-              : 'Note: JENOVA provides plain-language guidance only and cannot guarantee approval. Final eligibility is decided strictly by the official authority.'}
+            {tr(
+              language,
+              'দ্রষ্টব্য: JENOVA কোনো সরকারি দপ্তর নয় এবং ভাতা অনুমোদনের নিশ্চয়তা দেয় না। চূড়ান্ত যোগ্যতা কেবল অফিসিয়াল কর্তৃপক্ষ যাচাই করে।',
+              'नोट: JENOVA केवल सरल मार्गदर्शन देता है और स्वीकृति की गारंटी नहीं देता। अंतिम पात्रता केवल आधिकारिक विभाग तय करता है।',
+              'Note: JENOVA provides plain-language guidance only and cannot guarantee approval. Final eligibility is decided strictly by the official authority.'
+            )}
           </p>
         </div>
 
         {/* 3. Documents Required */}
-        <div className="p-5 rounded-xl bg-[#FAF9F5] border border-[#E5E3DC] space-y-3">
-          <h2 className="text-base font-bold text-[#252525] inline-flex items-center gap-2">
-            <FileCheck2 className="w-4 h-4 text-[#176B4D]" />
+        <div className="p-5 rounded-xl bg-[#FFF1DF] border border-[#F2DCC1] space-y-3">
+          <h2 className="text-base font-bold text-[#26364B] inline-flex items-center gap-2">
+            <FileCheck2 className="w-4 h-4 text-[#A85B0A] dark:text-[#FFD19A]" />
             <span>
-              {language === 'bn' ? '৩. সাধারণত প্রয়োজনীয় কাগজপত্র' : '3. Commonly Required Documents'}
+              {tr(
+                language,
+                '৩. সাধারণত প্রয়োজনীয় কাগজপত্র',
+                '3. सामान्यतः आवश्यक दस्तावेज़',
+                '3. Commonly Required Documents'
+              )}
             </span>
           </h2>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm text-[#252525]">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm text-[#26364B]">
             {scheme.requiredDocuments.map((doc) => (
               <li key={doc} className="inline-flex items-start gap-2">
-                <CheckSquare className="w-4 h-4 text-[#176B4D] shrink-0 mt-0.5" />
+                <CheckSquare className="w-4 h-4 text-[#A85B0A] dark:text-[#FFD19A] shrink-0 mt-0.5" />
                 <span>{doc}</span>
               </li>
             ))}
@@ -701,103 +769,142 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
 
         {/* 4. What to prepare before visiting */}
         <div className="space-y-2">
-          <h2 className="text-base font-bold text-[#252525]">
-            {language === 'bn' ? '৪. যাওয়ার আগে যা অবশ্যই মিলিয়ে নেবেন' : '4. What to Prepare Before Applying'}
+          <h2 className="text-base font-bold text-[#26364B]">
+            {tr(
+              language,
+              '৪. যাওয়ার আগে যা অবশ্যই মিলিয়ে নেবেন',
+              '4. आवेदन से पहले क्या तैयार रखें',
+              '4. What to Prepare Before Applying'
+            )}
           </h2>
-          <ul className="space-y-1.5 text-sm text-[#4A4A46] list-disc pl-5">
+          <ul className="space-y-1.5 text-sm text-[#454545] list-disc pl-5">
             <li>
-              {language === 'bn'
-                ? 'আধার কার্ড, ভোটার/রেশন কার্ড ও ব্যাংক পাশবইয়ে আপনার নামের বানান ও জন্মতারিখ একই আছে কিনা মিলিয়ে নিন।'
-                : 'Check that your name spelling and date of birth match across Aadhaar, ID proof, and Bank Passbook.'}
+              {tr(
+                language,
+                'আধার কার্ড, ভোটার/রেশন কার্ড ও ব্যাংক পাশবইয়ে আপনার নামের বানান ও জন্মতারিখ একই আছে কিনা মিলিয়ে নিন।',
+                'सुनिश्चित करें कि आधार, पहचान पत्र और बैंक पासबुक में आपके नाम की वर्तनी और जन्मतिथि एक जैसी हो।',
+                'Check that your name spelling and date of birth match across Aadhaar, ID proof, and Bank Passbook.'
+              )}
             </li>
             <li>
-              {language === 'bn'
-                ? 'ব্যাংক অ্যাকাউন্টটি চালু (Active) আছে এবং Aadhaar DBT / NPCI সিডিং করা আছে কিনা নিশ্চিত করুন।'
-                : 'Confirm your single-holder bank account is active and seeded with Aadhaar DBT / NPCI.'}
+              {tr(
+                language,
+                'ব্যাংক অ্যাকাউন্টটি চালু (Active) আছে এবং Aadhaar DBT / NPCI সিডিং করা আছে কিনা নিশ্চিত করুন।',
+                'सुनिश्चित करें कि आपका एकल बैंक खाता सक्रिय है और आधार DBT / NPCI से जुड़ा है।',
+                'Confirm your single-holder bank account is active and seeded with Aadhaar DBT / NPCI.'
+              )}
             </li>
             <li>
-              {language === 'bn'
-                ? 'মূল কপির সাথে অন্তত ২ সেট স্পষ্ট ফটোকপি ও সদ্য তোলা পাসপোর্ট ছবি রাখুন।'
-                : 'Carry originals along with 2 clear photocopy sets and recent passport-size photographs.'}
+              {tr(
+                language,
+                'মূল কপির সাথে অন্তত ২ সেট স্পষ্ট ফটোকপি ও সদ্য তোলা পাসপোর্ট ছবি রাখুন।',
+                'मूल दस्तावेज़ों के साथ कम से कम 2 स्पष्ट फोटोकॉपी सेट और हाल की पासपोर्ट फोटो रखें।',
+                'Carry originals along with 2 clear photocopy sets and recent passport-size photographs.'
+              )}
             </li>
           </ul>
         </div>
 
         {/* 5 & 6. Next Step & Official Application Process */}
         <div className="space-y-2">
-          <h2 className="text-base font-bold text-[#252525]">
-            {language === 'bn' ? '৫ ও ৬. পরবর্তী ধাপ ও অফিসিয়াল আবেদন প্রক্রিয়া' : '5 & 6. Next Step & Where to Apply Officially'}
+          <h2 className="text-base font-bold text-[#26364B]">
+            {tr(
+              language,
+              '৫ ও ৬. পরবর্তী ধাপ ও অফিসিয়াল আবেদন প্রক্রিয়া',
+              '5 व 6. अगला कदम और आधिकारिक आवेदन प्रक्रिया',
+              '5 & 6. Next Step & Where to Apply Officially'
+            )}
           </h2>
-          <p className="text-sm text-[#4A4A46] leading-relaxed">
+          <p className="text-sm text-[#454545] leading-relaxed">
             {pickText(scheme.applicationProcess, language)}
           </p>
         </div>
 
         {/* 7. Where to receive local assistance */}
-        <div className="rounded-xl bg-[#FAF9F5] border border-[#E5E3DC] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="rounded-xl bg-[#FFF1DF] border border-[#F2DCC1] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-start gap-2.5">
-            <MapPin className="w-5 h-5 text-[#176B4D] shrink-0 mt-0.5" />
+            <MapPin className="w-5 h-5 text-[#A85B0A] dark:text-[#FFD19A] shrink-0 mt-0.5" />
             <div>
-              <h2 className="text-sm font-bold text-[#252525]">
-                {language === 'bn' ? '৭. স্থানীয় সহায়তা কোথায় পাবেন?' : '7. Where to Get Local Assistance'}
+              <h2 className="text-sm font-bold text-[#26364B]">
+                {tr(
+                  language,
+                  '৭. স্থানীয় সহায়তা কোথায় পাবেন?',
+                  '7. स्थानीय सहायता कहां से प्राप्त करें?',
+                  '7. Where to Get Local Assistance'
+                )}
               </h2>
-              <p className="text-xs text-[#5C5C58] mt-0.5">
-                {language === 'bn'
-                  ? 'বাংলা সহায়তা কেন্দ্র (BSK), কমন সার্ভিস সেন্টার (CSC), জেলা/বিডিও পোর্টাল বা দুয়ারে সরকার ডিরেক্টরি দেখুন।'
-                  : language === 'hi'
-                    ? 'सत्यापित CSC डिजिटल सेवा, बांग्ला सहायता केंद्र (BSK), जिला/BDO पोर्टल और आधिकारिक हेल्पडेस्क देखें।'
-                    : 'Find verified Bangla Sahayata Kendra (BSK), CSC Digital Seva desks, District/BDO portals, and official helpdesks.'}
+              <p className="text-xs text-[#454545] mt-0.5">
+                {tr(
+                  language,
+                  'বাংলা সহায়তা কেন্দ্র (BSK), কমন সার্ভিস সেন্টার (CSC), জেলা/বিডিও পোর্টাল বা দুয়ারে সরকার ডিরেক্টরি দেখুন।',
+                  'सत्यापित CSC डिजिटल सेवा, बांग्ला सहायता केंद्र (BSK), जिला/BDO पोर्टल और आधिकारिक हेल्पडेस्क देखें।',
+                  'Find verified Bangla Sahayata Kendra (BSK), CSC Digital Seva desks, District/BDO portals, and official helpdesks.'
+                )}
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => navigate('/local-help')}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#176B4D]/40 bg-white text-xs font-semibold text-[#176B4D] hover:bg-[#EBF4F0] whitespace-nowrap cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#F4A340]/40 bg-white text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A] hover:bg-[#FFE5C2] whitespace-nowrap cursor-pointer"
           >
-            <span>{language === 'bn' ? 'JENOVA Local দেখুন' : 'Open JENOVA Local'}</span>
+            <span>
+              {tr(language, 'JENOVA Local দেখুন', 'JENOVA Local खोलें', 'Open JENOVA Local')}
+            </span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* 8. What to Avoid (Fraud & Middleman Warning) */}
         <div className="rounded-xl bg-[#FEF4E6] border border-[#F4A340]/50 p-4 flex items-start gap-3">
-          <ShieldAlert className="w-5 h-5 text-[#B56A10] shrink-0 mt-0.5" />
+          <ShieldAlert className="w-5 h-5 text-[#A85B0A] shrink-0 mt-0.5" />
           <div className="space-y-1 text-xs sm:text-sm text-[#6B3F06]">
             <p className="font-bold">
-              {language === 'bn' ? '৮. কী এড়িয়ে চলবেন (প্রতারণা সতর্কতা)' : '8. What to Avoid (Scam Warning)'}
+              {tr(
+                language,
+                '৮. কী এড়িয়ে চলবেন (প্রতারণা সতর্কতা)',
+                '8. किससे बचें (धोखाधड़ी चेतावनी)',
+                '8. What to Avoid (Scam Warning)'
+              )}
             </p>
             <p>
-              {language === 'bn'
-                ? 'সরকারি প্রকল্পের ফর্ম বা ভাতা পাইয়ে দেওয়ার নামে কখনোই কাউকে অগ্রিম টাকা, OTP বা UPI PIN দেবেন না। সন্দেহজনক মেসেজ পেলে আমাদের "JENOVA Protect" টুলে পরীক্ষা করুন।'
-                : 'Never pay middlemen or share OTPs/UPI PINs for government welfare schemes. If you receive a suspicious scheme message or link, check it in JENOVA Protect.'}
+              {tr(
+                language,
+                'সরকারি প্রকল্পের ফর্ম বা ভাতা পাইয়ে দেওয়ার নামে কখনোই কাউকে অগ্রিম টাকা, OTP বা UPI PIN দেবেন না। সন্দেহজনক মেসেজ পেলে আমাদের "JENOVA Protect" টুলে পরীক্ষা করুন।',
+                'सरकारी योजनाओं के नाम पर कभी भी बिचौलियों को पैसे, OTP या UPI PIN न दें। संदिग्ध संदेश या लिंक मिलने पर JENOVA Protect में जांच करें।',
+                'Never pay middlemen or share OTPs/UPI PINs for government welfare schemes. If you receive a suspicious scheme message or link, check it in JENOVA Protect.'
+              )}
             </p>
             <button
               type="button"
               onClick={() => navigate('/scam-check')}
-              className="text-xs font-bold text-[#176B4D] hover:underline cursor-pointer"
+              className="text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
             >
-              {language === 'bn' ? 'JENOVA Protect খুলুন →' : 'Open JENOVA Protect →'}
+              {tr(language, 'JENOVA Protect খুলুন →', 'JENOVA Protect खोलें →', 'Open JENOVA Protect →')}
             </button>
           </div>
         </div>
 
         {/* Interactive AI Scheme Explanation (Grounded in Official Record) */}
-        <div className="rounded-2xl bg-[#FAF9F5] border border-[#E5E3DC] p-5 space-y-4">
+        <div className="rounded-2xl bg-[#FFF1DF] border border-[#F2DCC1] p-5 space-y-4">
           <div className="flex items-start gap-2.5">
-            <Bot className="w-5 h-5 text-[#176B4D] shrink-0 mt-0.5" />
+            <Bot className="w-5 h-5 text-[#A85B0A] dark:text-[#FFD19A] shrink-0 mt-0.5" />
             <div>
-              <h2 className="text-base font-bold text-[#252525]">
-                {language === 'bn'
-                  ? 'সহজ বাংলায় প্রকল্পটি বুঝুন (AI Scheme Guide)'
-                  : language === 'hi'
-                    ? 'सरल भाषा में योजना समझें (AI Scheme Guide)'
-                    : 'Ask About This Scheme in Plain Language (AI Scheme Guide)'}
+              <h2 className="text-base font-bold text-[#26364B]">
+                {tr(
+                  language,
+                  'সহজ বাংলায় প্রকল্পটি বুঝুন (AI Scheme Guide)',
+                  'सरल हिंदी में योजना समझें (AI Scheme Guide)',
+                  'Ask About This Scheme in Plain Language (AI Scheme Guide)'
+                )}
               </h2>
-              <p className="text-xs text-[#5C5C58] mt-0.5">
-                {language === 'bn'
-                  ? 'যেকোনো প্রশ্নে ট্যাপ করুন বা নিজে লিখুন। উত্তরটি কেবল উপরের যাচাইকৃত সরকারি তথ্যের ওপর ভিত্তি করে দেওয়া হয়।'
-                  : 'Tap a quick question or type your own. Answers are strictly grounded in this verified official record.'}
+              <p className="text-xs text-[#454545] mt-0.5">
+                {tr(
+                  language,
+                  'যেকোনো প্রশ্নে ট্যাপ করুন বা নিজে লিখুন। উত্তরটি কেবল উপরের যাচাইকৃত সরকারি তথ্যের ওপর ভিত্তি করে দেওয়া হয়।',
+                  'किसी त्वरित प्रश्न पर टैप करें या अपना प्रश्न लिखें। उत्तर केवल ऊपर दिए गए सत्यापित आधिकारिक रिकॉर्ड पर आधारित हैं।',
+                  'Tap a quick question or type your own. Answers are strictly grounded in this verified official record.'
+                )}
               </p>
             </div>
           </div>
@@ -811,20 +918,28 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
                   'কীভাবে আবেদন করব?',
                   'স্থানীয় সহায়তা কোথায় পাব?',
                 ]
-              : [
-                  'What is this scheme?',
-                  'Who can apply?',
-                  'What documents are required?',
-                  'How can I apply?',
-                  'Where can I get local assistance?',
-                ]
+              : language === 'hi'
+                ? [
+                    'यह योजना क्या है?',
+                    'कौन आवेदन कर सकता है?',
+                    'कौन से दस्तावेज़ चाहिए?',
+                    'आवेदन कैसे करें?',
+                    'स्थानीय सहायता कहां मिलेगी?',
+                  ]
+                : [
+                    'What is this scheme?',
+                    'Who can apply?',
+                    'What documents are required?',
+                    'How can I apply?',
+                    'Where can I get local assistance?',
+                  ]
             ).map((q) => (
               <button
                 key={q}
                 type="button"
                 disabled={aiLoading}
                 onClick={() => askSchemeAi(q)}
-                className="px-3 py-2 rounded-lg bg-white border border-[#E5E3DC] hover:border-[#176B4D] hover:bg-[#EBF4F0] text-xs font-medium text-[#252525] cursor-pointer transition-colors"
+                className="px-3 py-2 rounded-lg bg-white border border-[#F2DCC1] hover:border-[#F4A340] hover:bg-[#FFE5C2] text-xs font-medium text-[#26364B] cursor-pointer transition-colors"
               >
                 {q}
               </button>
@@ -842,20 +957,23 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
               type="text"
               value={aiQuestion}
               onChange={(e) => setAiQuestion(e.target.value)}
-              placeholder={
-                language === 'bn'
-                  ? 'এই প্রকল্প সম্পর্কে আপনার প্রশ্ন লিখুন...'
-                  : 'Ask a specific question about this scheme...'
-              }
-              className="flex-1 rounded-xl border border-[#D8D5CC] bg-white px-3.5 py-2.5 text-sm"
+              placeholder={tr(
+                language,
+                'এই প্রকল্প সম্পর্কে আপনার প্রশ্ন লিখুন...',
+                'इस योजना के बारे में अपना सवाल लिखें...',
+                'Ask a specific question about this scheme...'
+              )}
+              className="flex-1 rounded-xl border border-[#F2DCC1] bg-white px-3.5 py-2.5 text-sm"
             />
             <button
               type="submit"
               disabled={aiLoading || aiQuestion.trim().length < 3}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#176B4D] hover:bg-[#11533B] text-white text-xs font-semibold disabled:opacity-50 cursor-pointer whitespace-nowrap min-h-[42px]"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl jenova-saffron-btn text-xs font-semibold disabled:opacity-50 cursor-pointer whitespace-nowrap min-h-[42px]"
             >
               <Send className="w-3.5 h-3.5" />
-              <span>{aiLoading ? t.common.loading : language === 'bn' ? 'জিজ্ঞাসা করুন' : 'Ask'}</span>
+              <span>
+                {aiLoading ? t.common.loading : tr(language, 'জিজ্ঞাসা করুন', 'पूछें', 'Ask')}
+              </span>
             </button>
           </form>
 
@@ -866,43 +984,50 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
           )}
 
           {aiAnswer && (
-            <div className="rounded-xl bg-white border border-[#176B4D]/25 p-4 space-y-2.5">
+            <div className="rounded-xl bg-white border border-[#F4A340]/25 p-4 space-y-2.5">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-semibold text-[#176B4D]">
-                  {language === 'bn' ? 'যাচাইকৃত তথ্যের ভিত্তিতে উত্তর' : 'Grounded Plain-Language Answer'}
+                <span className="text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A]">
+                  {tr(
+                    language,
+                    'যাচাইকৃত তথ্যের ভিত্তিতে উত্তর',
+                    'सत्यापित जानकारी के आधार पर उत्तर',
+                    'Grounded Plain-Language Answer'
+                  )}
                 </span>
                 <ReadAloudButton compact lang={language} text={aiAnswer.reply} />
               </div>
-              <p className="text-sm text-[#252525] leading-relaxed whitespace-pre-wrap">
+              <p className="text-sm text-[#26364B] leading-relaxed whitespace-pre-wrap">
                 {aiAnswer.reply}
               </p>
-              <p className="text-[11px] text-[#5C5C58] pt-2 border-t border-[#E5E3DC]">
-                Source: {aiAnswer.sourceName} · {aiAnswer.officialWebsite}
+              <p className="text-[11px] text-[#454545] pt-2 border-t border-[#F2DCC1]">
+                {t.common.sourceLabel}: {aiAnswer.sourceName} · {aiAnswer.officialWebsite}
               </p>
             </div>
           )}
         </div>
 
         {/* 9. Verification Source & Date */}
-        <div className="pt-4 border-t border-[#E5E3DC] grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-[#5C5C58]">
+        <div className="pt-4 border-t border-[#F2DCC1] grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-[#454545]">
           <div>
-            <span className="text-[#85847C]">9. {t.common.sourceLabel}: </span>
+            <span className="text-[#665B4F]">9. {t.common.sourceLabel}: </span>
             <a
               href={scheme.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-[#176B4D] hover:underline"
+              className="font-medium text-[#A85B0A] dark:text-[#FFD19A] hover:underline"
             >
               {scheme.sourceName}
             </a>
           </div>
           <div>
-            <span className="text-[#85847C]">{t.common.lastVerified}: </span>
-            <span className="font-medium text-[#252525]">{scheme.dateVerified}</span>
+            <span className="text-[#665B4F]">{t.common.lastVerified}: </span>
+            <span className="font-medium text-[#26364B]">{scheme.dateVerified}</span>
           </div>
           <div>
-            <span className="text-[#85847C]">Next Scheduled Review: </span>
-            <span className="font-medium text-[#252525]">{scheme.expiryDate}</span>
+            <span className="text-[#665B4F]">
+              {tr(language, 'পরবর্তী পর্যালোচনা:', 'अगली समीक्षा तिथि:', 'Next Scheduled Review:')}{' '}
+            </span>
+            <span className="font-medium text-[#26364B]">{scheme.expiryDate}</span>
           </div>
         </div>
 
@@ -910,12 +1035,15 @@ export function SchemeDetailsPage({ schemeId }: { schemeId: string }) {
           itemType="scheme"
           itemId={scheme.id}
           title={pickText(scheme.officialName, language)}
-          shareSummary={`${pickText(scheme.department, language)} | Official Website: ${scheme.officialWebsite}`}
+          shareSummary={`${pickText(scheme.department, language)} | ${t.common.officialPortal}: ${scheme.officialWebsite}`}
           sharePath={`/schemes/${scheme.id}`}
           externalUrl={scheme.officialWebsite}
-          externalLabel={
-            language === 'bn' ? 'অফিসিয়াল সরকারি ওয়েবসাইট খুলুন' : 'Open Official Government Website'
-          }
+          externalLabel={tr(
+            language,
+            'অফিসিয়াল সরকারি ওয়েবসাইট খুলুন',
+            'आधिकारिक सरकारी वेबसाइट खोलें',
+            'Open Official Government Website'
+          )}
           onExternalClick={() => trackAnalyticsEvent('scheme_referral', scheme.id)}
         />
       </div>

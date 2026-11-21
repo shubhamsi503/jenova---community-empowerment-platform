@@ -102,7 +102,12 @@ export function trackAnalyticsEvent(
     | 'checklist_completed'
     | 'fraud_check_completed'
     | 'local_help_click'
-    | 'voice_assistant_use',
+    | 'voice_assistant_use'
+    | 'udaan_enrol'
+    | 'udaan_lesson_complete'
+    | 'udaan_quiz_submit'
+    | 'business_plan_created'
+    | 'passport_goal_created',
   entityId?: string
 ) {
   apiFetch('/api/analytics/event', {

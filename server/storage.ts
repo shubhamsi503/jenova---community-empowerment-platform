@@ -2,6 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import type {
+  ActionPassportGoal,
   Announcement,
   BookmarkItem,
   BusinessIdea,
@@ -13,9 +14,12 @@ import type {
   JobListing,
   LocalAssistanceCentre,
   PlatformAnalytics,
+  SavedBusinessPlan,
   SavingsGoal,
   TrainingCentre,
+  UdaanEnrolment,
   UpdateSubscription,
+  UserLivelihoodProfile,
   VerificationLog,
   WelfareScheme,
 } from '../src/types/platform.ts';
@@ -47,6 +51,10 @@ export interface DatabaseState {
   updateSubscriptions: UpdateSubscription[];
   bookmarks: BookmarkItem[];
   savingsGoals: SavingsGoal[];
+  userProfiles: Record<string, UserLivelihoodProfile>;
+  udaanEnrolments: UdaanEnrolment[];
+  passportGoals: ActionPassportGoal[];
+  businessPlans: SavedBusinessPlan[];
   reports: ContentReport[];
   feedback: FeedbackSubmission[];
   announcements: Announcement[];
@@ -65,6 +73,11 @@ export interface DatabaseState {
     fraudChecksCompleted: number;
     localHelpClicks: number;
     voiceAssistantUses: number;
+    udaanEnrolments: number;
+    udaanLessonsCompleted: number;
+    udaanAssessmentsTaken: number;
+    businessPlansCreated: number;
+    passportGoalsCreated: number;
     dailyEngagement: Record<string, { visits: number; referrals: number }>;
   };
 }
@@ -105,7 +118,7 @@ export function isPubliclyVerifiedStatus(status: string): boolean {
   );
 }
 
-const CURRENT_SEED_VERSION = 3;
+const CURRENT_SEED_VERSION = 5;
 
 function createInitialState(): DatabaseState {
   const today = todayKey();
@@ -134,6 +147,10 @@ function createInitialState(): DatabaseState {
         updatedAt: new Date().toISOString(),
       },
     ],
+    userProfiles: {},
+    udaanEnrolments: [],
+    passportGoals: [],
+    businessPlans: [],
     reports: [],
     feedback: [],
     announcements: SEED_ANNOUNCEMENTS,
@@ -177,6 +194,11 @@ function createInitialState(): DatabaseState {
       fraudChecksCompleted: 0,
       localHelpClicks: 0,
       voiceAssistantUses: 0,
+      udaanEnrolments: 0,
+      udaanLessonsCompleted: 0,
+      udaanAssessmentsTaken: 0,
+      businessPlansCreated: 0,
+      passportGoalsCreated: 0,
       dailyEngagement: {
         [today]: { visits: 1, referrals: 0 },
       },
@@ -213,6 +235,10 @@ class PlatformStore {
               savingsGoals: Array.isArray(parsed.savingsGoals) && parsed.savingsGoals.length > 0
                 ? parsed.savingsGoals
                 : base.savingsGoals,
+              userProfiles: parsed.userProfiles && typeof parsed.userProfiles === 'object' ? parsed.userProfiles : {},
+              udaanEnrolments: Array.isArray(parsed.udaanEnrolments) ? parsed.udaanEnrolments : [],
+              passportGoals: Array.isArray(parsed.passportGoals) ? parsed.passportGoals : [],
+              businessPlans: Array.isArray(parsed.businessPlans) ? parsed.businessPlans : [],
               reports: Array.isArray(parsed.reports) ? parsed.reports : [],
               feedback: Array.isArray(parsed.feedback) ? parsed.feedback : [],
               analytics: {
@@ -222,6 +248,11 @@ class PlatformStore {
                 fraudChecksCompleted: parsed.analytics?.fraudChecksCompleted ?? 0,
                 localHelpClicks: parsed.analytics?.localHelpClicks ?? 0,
                 voiceAssistantUses: parsed.analytics?.voiceAssistantUses ?? 0,
+                udaanEnrolments: parsed.analytics?.udaanEnrolments ?? 0,
+                udaanLessonsCompleted: parsed.analytics?.udaanLessonsCompleted ?? 0,
+                udaanAssessmentsTaken: parsed.analytics?.udaanAssessmentsTaken ?? 0,
+                businessPlansCreated: parsed.analytics?.businessPlansCreated ?? 0,
+                passportGoalsCreated: parsed.analytics?.passportGoalsCreated ?? 0,
               },
             };
             this.persist(upgraded);
@@ -261,6 +292,10 @@ class PlatformStore {
             updateSubscriptions: Array.isArray(parsed.updateSubscriptions)
               ? parsed.updateSubscriptions
               : [],
+            userProfiles: parsed.userProfiles && typeof parsed.userProfiles === 'object' ? parsed.userProfiles : {},
+            udaanEnrolments: Array.isArray(parsed.udaanEnrolments) ? parsed.udaanEnrolments : [],
+            passportGoals: Array.isArray(parsed.passportGoals) ? parsed.passportGoals : [],
+            businessPlans: Array.isArray(parsed.businessPlans) ? parsed.businessPlans : [],
             analytics: {
               ...base.analytics,
               ...(parsed.analytics || {}),
@@ -268,6 +303,11 @@ class PlatformStore {
               fraudChecksCompleted: parsed.analytics?.fraudChecksCompleted ?? 0,
               localHelpClicks: parsed.analytics?.localHelpClicks ?? 0,
               voiceAssistantUses: parsed.analytics?.voiceAssistantUses ?? 0,
+              udaanEnrolments: parsed.analytics?.udaanEnrolments ?? 0,
+              udaanLessonsCompleted: parsed.analytics?.udaanLessonsCompleted ?? 0,
+              udaanAssessmentsTaken: parsed.analytics?.udaanAssessmentsTaken ?? 0,
+              businessPlansCreated: parsed.analytics?.businessPlansCreated ?? 0,
+              passportGoalsCreated: parsed.analytics?.passportGoalsCreated ?? 0,
             },
           };
           this.persist(hydrated);
@@ -330,7 +370,12 @@ class PlatformStore {
       | 'checklist_completed'
       | 'fraud_check_completed'
       | 'local_help_click'
-      | 'voice_assistant_use',
+      | 'voice_assistant_use'
+      | 'udaan_enrol'
+      | 'udaan_lesson_complete'
+      | 'udaan_quiz_submit'
+      | 'business_plan_created'
+      | 'passport_goal_created',
     entityId?: string
   ) {
     const today = todayKey();
@@ -401,6 +446,26 @@ class PlatformStore {
         this.state.analytics.voiceAssistantUses += 1;
         break;
       }
+      case 'udaan_enrol': {
+        this.state.analytics.udaanEnrolments = (this.state.analytics.udaanEnrolments || 0) + 1;
+        break;
+      }
+      case 'udaan_lesson_complete': {
+        this.state.analytics.udaanLessonsCompleted = (this.state.analytics.udaanLessonsCompleted || 0) + 1;
+        break;
+      }
+      case 'udaan_quiz_submit': {
+        this.state.analytics.udaanAssessmentsTaken = (this.state.analytics.udaanAssessmentsTaken || 0) + 1;
+        break;
+      }
+      case 'business_plan_created': {
+        this.state.analytics.businessPlansCreated = (this.state.analytics.businessPlansCreated || 0) + 1;
+        break;
+      }
+      case 'passport_goal_created': {
+        this.state.analytics.passportGoalsCreated = (this.state.analytics.passportGoalsCreated || 0) + 1;
+        break;
+      }
     }
     this.save();
   }
@@ -435,6 +500,11 @@ class PlatformStore {
       fraudChecksCompleted: s.analytics.fraudChecksCompleted,
       localHelpClicks: s.analytics.localHelpClicks,
       voiceAssistantUses: s.analytics.voiceAssistantUses,
+      udaanEnrolments: Math.max(s.analytics.udaanEnrolments || 0, s.udaanEnrolments.length),
+      udaanLessonsCompleted: s.analytics.udaanLessonsCompleted || 0,
+      udaanAssessmentsTaken: s.analytics.udaanAssessmentsTaken || 0,
+      businessPlansCreated: Math.max(s.analytics.businessPlansCreated || 0, s.businessPlans.length),
+      passportGoalsCreated: Math.max(s.analytics.passportGoalsCreated || 0, s.passportGoals.length),
       updateSubscribersCount: s.updateSubscriptions.filter((u) => u.active).length,
       feedbackCount: s.feedback.length,
       openReportsCount: s.reports.filter((r) => r.status === 'Open').length,

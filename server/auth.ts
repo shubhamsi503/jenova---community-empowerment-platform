@@ -83,9 +83,11 @@ export function requireAuth(req: AuthedRequest, res: Response, next: NextFunctio
 
 const ROLE_WEIGHT: Record<UserRole, number> = {
   user: 0,
-  content_reviewer: 1,
-  content_admin: 2,
-  super_admin: 3,
+  regional_contributor: 1,
+  training_manager: 2,
+  content_reviewer: 2,
+  content_admin: 3,
+  super_admin: 4,
 };
 
 export function requireMinRole(minRole: UserRole) {

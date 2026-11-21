@@ -1,52 +1,97 @@
 {
-  "seedVersion": 2,
+  "seedVersion": 5,
   "users": [
     {
       "id": "usr-super-1",
       "email": "superadmin@jenova.in",
       "name": "Super Admin (JENOVA Core Lead)",
-      "passwordHash": "8d5711f178c14cea577d124800cac0e4d4bdca566262520c02ac3979599599bf6919020cdd5da93351bcb50662f53e3c8b0f1562f7be9e53fbcacd49fb9668fe",
-      "salt": "518f14bcbf3f4e16d6fcdee4cce02885",
+      "passwordHash": "f7b4da987bd802ce0ce6d9db419254953c9216733f501afb3be1903e1c441202e1be3ef34a9444cba8349e6f6d9e542be012860d9d823b5e01bb4d1828280997",
+      "salt": "dc47356da0fc26561e55c7124be73c07",
       "role": "super_admin",
       "town": "Kolkata, West Bengal",
       "preferredLanguage": "bn",
-      "createdAt": "2026-11-19T17:32:06.451Z"
+      "createdAt": "2026-11-20T19:29:15.366Z"
     },
     {
       "id": "usr-content-1",
       "email": "editor@jenova.in",
       "name": "Content Admin (Community Editor)",
-      "passwordHash": "7479bd9861b363335498b8c36279473926a2a8451c89b50f4d40e025b5b2bf4de8c33f3554e56b1654b8fbe434a4b9c7e6cd8da78ca51434751587b6f840d62e",
-      "salt": "5d1506c13802189fbe9e9816d8015b85",
+      "passwordHash": "de0297a43d8ac4c52d3d1d82818ee5e4674f165350e37dd8cfc3255999fce9fec7663e3ebf734fd34f6f154f79caf24e131f46e9ee921a978dd4964b7d47b2bd",
+      "salt": "87c6d3fad04b163531fbad51d4403c7e",
       "role": "content_admin",
       "town": "New Delhi, India",
       "preferredLanguage": "bn",
-      "createdAt": "2026-11-19T17:32:06.451Z"
+      "createdAt": "2026-11-20T19:29:15.366Z"
     },
     {
       "id": "usr-review-1",
       "email": "reviewer@jenova.in",
       "name": "Content Reviewer (Verification Desk)",
-      "passwordHash": "2080e6084cf50d7d9b6482e34a2a0c589b6e7a51291e0a31e6b6930061ead155d367c2f9b450715de1a058a96264ce295912aab09ba9f6584692c35545ecf07c",
-      "salt": "541754296f22c99a203067af5a42289d",
+      "passwordHash": "f8044360956cf4eef163ff192c8cd75680f2bde478bf3c2835ef3ac6109a777eb354232858621ef501f71715c03192183fdc86bfedea742becea5c11d0c9ed98",
+      "salt": "af7ef689063442581d1eb08087f4bd39",
       "role": "content_reviewer",
       "town": "Bengaluru, Karnataka",
       "preferredLanguage": "bn",
-      "createdAt": "2026-11-19T17:32:06.451Z"
+      "createdAt": "2026-11-20T19:29:15.366Z"
     },
     {
       "id": "usr-member-1",
       "email": "member@jenova.in",
       "name": "Ananya Sen (Community Member)",
-      "passwordHash": "467f48c8db68c1ced92a960de7cb0c35f9191387eba8780a541ca1e9f431a98e3215f8d881db36a2755809cb3230e0d5b75b7c1b0fda689ae80d61c6f127f8a9",
-      "salt": "497b9adae649ccb75193e8541ca34e6a",
+      "passwordHash": "4bb81a9b746e1397fc23d5c44f94c893b26839143a3dd40ef17e99fd1ef33660913bc18295ec987e9bea83921f8840658f5d20284f7d14faa3085f781257a144",
+      "salt": "dae25b730eb3e4aabdd2f4056b99b905",
       "role": "user",
       "town": "Kolkata, West Bengal",
       "preferredLanguage": "bn",
-      "createdAt": "2026-11-19T17:32:06.451Z"
+      "createdAt": "2026-11-20T19:29:15.366Z"
     }
   ],
   "jobs": [
+    {
+      "id": "job-wb-employment-bank",
+      "title": {
+        "bn": "এমপ্লয়মেন্ট ব্যাংক — পশ্চিমবঙ্গ সরকারের উদ্যোগ (অফিসিয়াল চাকরি ও নিবন্ধন পোর্টাল)",
+        "en": "Employment Bank — Government of West Bengal Initiative",
+        "hi": "एम्प्लॉयमेंट बैंक — पश्चिम बंगाल सरकार की पहल (आधिकारिक रोजगार पोर्टल)"
+      },
+      "employerName": "Department of Labour, Government of West Bengal",
+      "description": {
+        "bn": "পশ্চিমবঙ্গ সরকারের শ্রম দপ্তরের অফিসিয়াল এমপ্লয়মেন্ট ব্যাংক পোর্টাল। চাকরিপ্রার্থীদের বিনামূল্যে নিবন্ধন, সরকারি ও বেসরকারি চাকরির বিজ্ঞপ্তি, যুবশ্রী ও দক্ষতা প্রশিক্ষণের সরাসরি সংযোগ এবং জেলাভিত্তিক এমপ্লয়মেন্ট এক্সচেঞ্জ সহায়তা।",
+        "en": "Official job portal initiated by the Department of Labour, Government of West Bengal. Offers 100% free job-seeker enrolment, verified state and private-sector job openings, employment exchange verification, and direct career notifications across West Bengal.",
+        "hi": "पश्चिम बंगाल सरकार के श्रम विभाग की आधिकारिक एम्प्लॉयमेंट बैंक पहल। यहाँ 100% निःशुल्क नौकरी पंजीकरण, सत्यापित सरकारी व निजी क्षेत्र की रिक्तियां और राज्य स्तरीय रोजगार सहायता उपलब्ध है।"
+      },
+      "salaryMin": 12000,
+      "salaryMax": 56100,
+      "salaryUnit": "monthly",
+      "salaryDisplay": {
+        "bn": "সরকারি ও অনুমোদিত বেতন কাঠামো অনুযায়ী",
+        "en": "As per Official Notification & Employer Norms",
+        "hi": "आधिकारिक अधिसूचना एवं नियोक्ता मानदंडों के अनुसार"
+      },
+      "location": "West Bengal (All Districts — Online Portal)",
+      "category": "Government Notification",
+      "qualification": "8th Pass / Madhyamik / 12th / ITI / Diploma / Graduate / Post-Graduate",
+      "experience": "Freshers & Experienced",
+      "workingHours": "24x7 Official Online Registration Portal",
+      "applicationInstructions": {
+        "bn": "https://employmentbankwb.gov.in/ ওয়েবসাইটে গিয়ে “New Enrolment Job Seeker” অপশনে ক্লিক করে সম্পূর্ণ বিনামূল্যে নিবন্ধন করুন এবং ৬০ দিনের মধ্যে নিকটবর্তী এমপ্লয়মেন্ট এক্সচেঞ্জে মূল নথি যাচাই করুন।",
+        "en": "Visit https://employmentbankwb.gov.in/, select \"New Enrolment Job Seeker\" to register free of cost, and verify original documents at your nearest Employment Exchange within 60 days.",
+        "hi": "https://employmentbankwb.gov.in/ पर जाएं, \"New Enrolment Job Seeker\" चुनकर निःशुल्क पंजीकरण करें और 60 दिनों के भीतर नज़दीकी एम्प्लॉयमेंट एक्सचेंज में मूल दस्तावेज़ सत्यापित कराएं।"
+      },
+      "contactInfo": "Official Portal: employmentbankwb.gov.in (Dept. of Labour, Govt. of WB)",
+      "applicationUrl": "https://employmentbankwb.gov.in/",
+      "deadline": "Ongoing Official Initiative",
+      "isDemo": false,
+      "sourceName": "Employment Bank — Government of West Bengal",
+      "sourceUrl": "https://employmentbankwb.gov.in/",
+      "verificationStatus": "Officially Verified",
+      "dateVerified": "2026-11-20",
+      "lastUpdated": "2026-11-20",
+      "reviewer": "JENOVA Verification Desk",
+      "expiryDate": "2027-12-31",
+      "viewsCount": 0,
+      "referralsCount": 0
+    },
     {
       "id": "job-local-1",
       "title": {
@@ -969,11 +1014,11 @@
   ],
   "schemes": [
     {
-      "id": "sch-lakshmir-bhandar",
+      "id": "sch-annapurna-yojana",
       "officialName": {
-        "bn": "লক্ষ্মীর ভাণ্ডার প্রকল্প",
-        "en": "Lakshmir Bhandar Scheme",
-        "hi": "लक्ष्मीर भंडार योजना"
+        "bn": "অন্নপূর্ণা যোজনা",
+        "en": "Annapurna Yojana",
+        "hi": "अन्नपूर्णा योजना"
       },
       "department": {
         "bn": "নারী ও শিশু বিকাশ এবং সমাজ কল্যাণ দপ্তর, পশ্চিমবঙ্গ সরকার",
@@ -983,38 +1028,41 @@
       "scope": "West Bengal",
       "category": "Women Empowerment",
       "description": {
-        "bn": "পশ্চিমবঙ্গের প্রাপ্তবয়স্ক মহিলাদের আর্থিক সহায়তা প্রদানের জন্য রাজ্য সরকারের সামাজিক সুরক্ষা প্রকল্প। সর্বশেষ নিয়ম ও ভাতার পরিমাণ অফিসিয়াল পোর্টালে যাচাই করুন।",
-        "en": "West Bengal state financial assistance scheme providing regular direct bank transfer support to eligible adult women residents. Always verify current allowance rates and notifications on the official portal.",
-        "hi": "पश्चिम बंगाल की पात्र वयस्क महिलाओं को नियमित आर्थिक सहायता प्रदान करने वाली राज्य सरकार की योजना।"
+        "bn": "পশ্চিমবঙ্গ সরকারের নারী আর্থিক ক্ষমতায়ন প্রকল্প, যার অধীনে ২৫ থেকে ৬০ বছর বয়সী যোগ্য মহিলাদের আধার-সংযুক্ত ব্যাংক অ্যাকাউন্টে প্রতি মাসে ₹৩,০০০ সরাসরি DBT সহায়তা প্রদান করা হয়।",
+        "en": "West Bengal state women-centric financial empowerment initiative providing ₹3,000 per month directly via Direct Benefit Transfer (DBT) into eligible women beneficiaries’ Aadhaar-linked bank accounts.",
+        "hi": "पश्चिम बंगाल सरकार की महिला वित्तीय सशक्तिकरण योजना, जिसके तहत 25 से 60 वर्ष की पात्र महिलाओं को आधार-लिंक्ड बैंक खाते में प्रति माह ₹3,000 की सीधी DBT सहायता प्रदान की जाती है।"
       },
       "benefits": {
-        "bn": "যোগ্য মহিলাদের আধার-লিঙ্কযুক্ত একক ব্যাংক অ্যাকাউন্টে মাসিক আর্থিক সহায়তা (বর্তমান হার সরকারি পোর্টাল বা দুয়ারে সরকার ক্যাম্পে যাচাই করুন)।",
-        "en": "Monthly direct benefit transfer (DBT) to the beneficiary’s single bank account linked with Aadhaar. Check the official portal or Duare Sarkar camp for current benefit rates.",
-        "hi": "पात्र महिलाओं के आधार-लिंक बैंक खाते में मासिक प्रत्यक्ष लाभ अंतरण। नवीनतम दर आधिकारिक पोर्टल पर जांचें।"
+        "bn": "যোগ্য মহিলা উপভোক্তাদের আধার-সংযুক্ত একক ব্যাংক অ্যাকাউন্টে প্রতি মাসে ₹৩,০০০ সরাসরি DBT আর্থিক সহায়তা।",
+        "en": "₹3,000 per month credited directly via Direct Benefit Transfer (DBT) to the eligible beneficiary’s Aadhaar-linked single-holder bank account. Always verify latest official notifications on socialsecurity.wb.gov.in.",
+        "hi": "पात्र महिला लाभार्थियों के आधार-लिंक्ड एकल बैंक खाते में प्रत्यक्ष लाभ अंतरण (DBT) के माध्यम से प्रति माह ₹3,000 की वित्तीय सहायता।"
       },
       "eligibilityRequirements": {
-        "bn": "পশ্চিমবঙ্গের স্থায়ী মহিলা বাসিন্দা (সাধারণত ২৫ থেকে ৬০ বছর বয়সী), যিনি সরকারি বা সরকার-পোষিত স্থায়ী কর্মচারী নন। সম্পূর্ণ শর্তাবলি অফিসিয়াল পোর্টালে দেখুন।",
-        "en": "Permanent female resident of West Bengal (typically aged 25–60 years) who is not a regular employee of Central/State Government or statutory bodies. Confirm official criteria at the government portal.",
-        "hi": "पश्चिम बंगाल की स्थायी महिला निवासी (सामान्यतः 25-60 वर्ष), जो नियमित सरकारी कर्मचारी न हों।"
+        "bn": "পশ্চিমবঙ্গের স্থায়ী মহিলা বাসিন্দা (বয়স ২৫–৬০ বছর), ব্যক্তিগত মাসিক আয় সাধারণত ₹১০,০০০-এর মধ্যে, আয়করদাতা নন এবং কেন্দ্রীয়/রাজ্য সরকার, PSU বা সরকার-পোষিত সংস্থার স্থায়ী কর্মচারী বা নিয়মিত পেনশনভোগী নন।",
+        "en": "Permanent female resident of West Bengal aged 25 to 60 years; personal monthly income generally within ₹10,000 and non-income-tax payer; not a permanent employee or regular pension holder of Central/State Government, PSUs, local bodies, or govt-aided institutions.",
+        "hi": "पश्चिम बंगाल की स्थायी महिला निवासी (आयु 25–60 वर्ष), मासिक व्यक्तिगत आय सामान्यतः ₹10,000 से कम, आयकरदाता न हों, और किसी सरकारी या सरकार-सहायता प्राप्त संस्थान की स्थायी कर्मचारी या पेंशनभोगी न हों।"
       },
       "requiredDocuments": [
-        "Swasthya Sathi Card (if applicable per current rules)",
-        "Aadhaar Card",
-        "SC/ST Certificate (if applicable)",
-        "Single-holder Bank Passbook (Aadhaar seeded)",
-        "Passport-size photograph"
+        "Aadhaar Card (mandatory for identity & DBT linking)",
+        "Aadhaar-linked single-holder Bank Passbook",
+        "Digital Ration Card (identity & residency proof)",
+        "Voter ID (EPIC) Card",
+        "Income Certificate / Self-Declaration",
+        "Passport-size photographs",
+        "Active Mobile Number linked with Aadhaar",
+        "Swasthya Sathi Card (if applicable)"
       ],
       "applicationProcess": {
-        "bn": "নিকটবর্তী দুয়ারে সরকার ক্যাম্প, ব্লক ডেভেলপমেন্ট অফিস (BDO) বা পৌরসভা অফিসে বিনামূল্যে ফর্ম সংগ্রহ ও জমা দিন। অনলাইনে স্ট্যাটাস দেখুন।",
-        "en": "Collect and submit the free application form at Duare Sarkar camps, your Block Development Officer (BDO) office for rural blocks, or Municipality office. Track status online.",
-        "hi": "दुआरे सरकार शिविर, बीडीओ कार्यालय या नगरपालिका कार्यालय में निःशुल्क आवेदन पत्र जमा करें।"
+        "bn": "অফিসিয়াল পশ্চিমবঙ্গ সোশ্যাল সিকিউরিটি পোর্টাল (socialsecurity.wb.gov.in)-এ অনলাইনে আবেদন বা স্ট্যাটাস যাচাই করুন, অথবা নিকটবর্তী BDO/SDO/পৌরসভা অফিস বা দুয়ারে সরকার / BSK ক্যাম্পে বিনামূল্যে ফর্ম জমা দিন।",
+        "en": "Register online via the official West Bengal Social Security Portal (socialsecurity.wb.gov.in) when application windows are active, or submit the free physical form at your local BDO, SDO, Municipal / KMC office, or Duare Sarkar / BSK outreach camp.",
+        "hi": "आधिकारिक पश्चिम बंगाल सोशल सिक्योरिटी पोर्टल (socialsecurity.wb.gov.in) के माध्यम से ऑनलाइन आवेदन करें या अपने नजदीकी BDO/SDO/नगरपालिका कार्यालय या दुआरे सरकार / BSK शिविर में निःशुल्क फॉर्म जमा करें।"
       },
       "officialWebsite": "https://socialsecurity.wb.gov.in/",
       "sourceName": "Social Security Portal, Govt. of West Bengal",
       "sourceUrl": "https://socialsecurity.wb.gov.in/",
       "verificationStatus": "Officially Verified",
-      "dateVerified": "2026-11-16",
-      "lastUpdated": "2026-11-16",
+      "dateVerified": "2026-11-19",
+      "lastUpdated": "2026-11-19",
       "reviewer": "JENOVA Verification Desk",
       "expiryDate": "2027-06-30",
       "eligibilityProfile": {
@@ -2021,14 +2069,14 @@
       },
       "category": "Government Office",
       "description": {
-        "bn": "লক্ষ্মীর ভাণ্ডার, স্বাস্থ্য সাথী, কৃষক বন্ধু, জাতিগত শংসাপত্র ও বার্ধক্য/বিধবা ভাতার সরকারি ক্যাম্পের তারিখ ও অবস্থান অফিসিয়াল দুয়ারে সরকার পোর্টালে যাচাই করুন।",
+        "bn": "অন্নপূর্ণা যোজনা, স্বাস্থ্য সাথী, কৃষক বন্ধু, জাতিগত শংসাপত্র ও বার্ধক্য/বিধবা ভাতার সরকারি ক্যাম্পের তারিখ ও অবস্থান অফিসিয়াল দুয়ারে সরকার পোর্টালে যাচাই করুন।",
         "en": "Official Government of West Bengal portal to check active Duare Sarkar camp dates, Gram Panchayat locations, and eligible services across all districts.",
-        "hi": "लक्ष्मीर भंडार, स्वास्थ्य साथी और पेंशन योजनाओं के सरकारी शिविरों की तिथि आधिकारिक पोर्टल पर जांचें।"
+        "hi": "अन्नपूर्णा योजना, स्वास्थ्य साथी और पेंशन योजनाओं के सरकारी शिविरों की तिथि आधिकारिक पोर्टल पर जांचें।"
       },
       "address": "Gram Panchayat & Municipal Ward Camps — Check active schedule directly on ds.wb.gov.in",
       "locationArea": "All Districts, West Bengal",
       "servicesOffered": [
-        "Lakshmir Bhandar & Swasthya Sathi camps",
+        "Annapurna Yojana & Swasthya Sathi camps",
         "Krishak Bandhu & Pension applications",
         "Official camp finder by district & block"
       ],
@@ -2275,6 +2323,58 @@
       "updatedAt": "2026-11-19T06:01:32.381Z"
     }
   ],
+  "userProfiles": {
+    "usr-member-1": {
+      "education": "12th Pass",
+      "skills": [
+        "Tailoring",
+        "Basic Computer"
+      ],
+      "interests": [
+        "tailoring",
+        "digital_skills"
+      ],
+      "careerGoals": [
+        "start_business",
+        "learn_skills"
+      ],
+      "employmentStatus": "Self-Employed",
+      "businessInterests": [
+        "Tailoring & Garments"
+      ],
+      "preferredOpportunityTypes": [
+        "business",
+        "training"
+      ],
+      "learningPreference": "guided_practice",
+      "location": {
+        "country": "India",
+        "state": "West Bengal",
+        "district": "Purba Medinipur",
+        "city": "Tamluk",
+        "locality": "",
+        "isGpsDerived": false
+      },
+      "updatedAt": "2026-11-20T19:29:34.161Z"
+    }
+  },
+  "udaanEnrolments": [
+    {
+      "id": "udn-a8e1a3bc",
+      "userId": "usr-member-1",
+      "programmeId": "udaan-interview-prep",
+      "enrolledAt": "2026-11-20T19:29:34.173Z",
+      "updatedAt": "2026-11-20T19:29:34.184Z",
+      "completedLessonIds": [
+        "int-l1"
+      ],
+      "quizScore": 3,
+      "quizTotal": 3,
+      "quizCompletedAt": "2026-11-20T19:29:34.184Z"
+    }
+  ],
+  "passportGoals": [],
+  "businessPlans": [],
   "reports": [],
   "feedback": [],
   "announcements": [
@@ -2319,8 +2419,8 @@
     {
       "id": "vlog-init-1",
       "entityType": "scheme",
-      "entityId": "sch-lakshmir-bhandar",
-      "entityTitle": "Lakshmir Bhandar Scheme",
+      "entityId": "sch-annapurna-yojana",
+      "entityTitle": "Annapurna Yojana",
       "previousStatus": "Pending Verification",
       "newStatus": "Officially Verified",
       "reviewerName": "Verification Desk",
@@ -2357,10 +2457,19 @@
     "fraudChecksCompleted": 15,
     "localHelpClicks": 0,
     "voiceAssistantUses": 0,
+    "udaanEnrolments": 1,
+    "udaanLessonsCompleted": 1,
+    "udaanAssessmentsTaken": 1,
+    "businessPlansCreated": 1,
+    "passportGoalsCreated": 1,
     "dailyEngagement": {
       "2026-11-19": {
         "visits": 3,
         "referrals": 13
+      },
+      "2026-11-20": {
+        "visits": 0,
+        "referrals": 0
       }
     }
   }

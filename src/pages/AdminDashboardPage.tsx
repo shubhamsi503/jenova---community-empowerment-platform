@@ -22,6 +22,7 @@ import {
 } from 'recharts';
 import { useApp } from '../context/AppContext';
 import { apiFetch } from '../lib/api';
+import { tr } from '../i18n/translations';
 import type {
   Announcement,
   AssistanceCentreCategory,
@@ -68,7 +69,7 @@ type AdminTab =
   | 'roles';
 
 export function AdminDashboardPage() {
-  const { user, token, navigate, showToast } = useApp();
+  const { user, token, navigate, showToast, language } = useApp();
   const [data, setData] = useState<AdminOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -132,7 +133,11 @@ export function AdminDashboardPage() {
   const [crsMode, setCrsMode] = useState<'Online' | 'Offline' | 'Hybrid'>('Online');
 
   const isAuthorized = user && user.role !== 'user';
-  const canEditContent = user && (user.role === 'content_admin' || user.role === 'super_admin');
+  const canEditContent =
+    user &&
+    (user.role === 'content_admin' ||
+      user.role === 'training_manager' ||
+      user.role === 'super_admin');
   const isSuperAdmin = user?.role === 'super_admin';
 
   const loadOverview = useCallback(async () => {
@@ -159,18 +164,24 @@ export function AdminDashboardPage() {
   if (!user || !isAuthorized) {
     return (
       <div className="max-w-lg mx-auto px-4 py-16 text-center space-y-4">
-        <Lock className="w-8 h-8 text-[#B56A10] mx-auto" />
-        <h1 className="text-2xl font-bold text-[#252525]">Restricted Administration Area</h1>
-        <p className="text-sm text-[#5C5C58]">
-          Public users cannot access administrative operations. Sign in with an authorized Content
-          Reviewer, Content Administrator, or Super Administrator account.
+        <Lock className="w-8 h-8 text-[#A85B0A] mx-auto" />
+        <h1 className="text-2xl font-bold text-[#26364B]">
+          {tr(language, 'সংরক্ষিত প্রশাসনিক এলাকা', 'प्रतिबंधित प्रशासनिक क्षेत्र', 'Restricted Administration Area')}
+        </h1>
+        <p className="text-sm text-[#454545]">
+          {tr(
+            language,
+            'সাধারণ ব্যবহারকারীরা প্রশাসনিক কাজ করতে পারবেন না। অনুমোদিত কনটেন্ট রিভিউয়ার, কনটেন্ট অ্যাডমিনিস্ট্রেটর বা সুপার অ্যাডমিন অ্যাকাউন্ট দিয়ে সাইন ইন করুন।',
+            'सामान्य उपयोगकर्ता प्रशासनिक कार्यों तक नहीं पहुँच सकते। अधिकृत कंटेंट रिव्यूअर, कंटेंट एडमिनिस्ट्रेटर या सुपर एडमिन खाते से साइन इन करें।',
+            'Public users cannot access administrative operations. Sign in with an authorized Content Reviewer, Content Administrator, or Super Administrator account.'
+          )}
         </p>
         <button
           type="button"
           onClick={() => navigate('/auth')}
-          className="px-6 py-2.5 text-sm font-semibold text-white bg-[#176B4D] rounded-lg cursor-pointer"
+          className="px-6 py-2.5 text-sm font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
         >
-          Sign In to Admin Account
+          {tr(language, 'অ্যাডমিন অ্যাকাউন্টে সাইন ইন করুন', 'एडमिन खाते में साइन इन करें', 'Sign In to Admin Account')}
         </button>
       </div>
     );
@@ -504,7 +515,7 @@ export function AdminDashboardPage() {
             <button
               type="button"
               onClick={handleDownloadBackup}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#176B4D] bg-white border border-[#176B4D]/30 hover:bg-[#EBF4F0] rounded-lg cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A] bg-white border border-[#F4A340]/30 hover:bg-[#FFE5C2] rounded-lg cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export JSON Backup</span>
@@ -514,7 +525,7 @@ export function AdminDashboardPage() {
       />
 
       {/* Tabs */}
-      <div className="flex flex-wrap gap-1.5 p-1.5 rounded-xl bg-white border border-[#E5E3DC] mb-8">
+      <div className="flex flex-wrap gap-1.5 p-1.5 rounded-xl bg-white border border-[#F2DCC1] mb-8">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
@@ -524,8 +535,8 @@ export function AdminDashboardPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? 'bg-[#176B4D] text-white'
-                  : 'text-[#5C5C58] hover:text-[#252525] hover:bg-[#FAF9F5]'
+                  ? 'jenova-saffron-btn'
+                  : 'text-[#454545] hover:text-[#26364B] hover:bg-[#FFF1DF]'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -536,7 +547,7 @@ export function AdminDashboardPage() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-[#5C5C58] py-12">Loading administration console...</p>
+        <p className="text-sm text-[#454545] py-12">Loading administration console...</p>
       ) : error || !data ? (
         <div className="p-6 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">
           {error || 'Unable to load console data.'}
@@ -566,29 +577,34 @@ export function AdminDashboardPage() {
                   { label: 'Job Referrals', val: data.analytics.jobReferrals },
                   { label: 'Training Referrals', val: data.analytics.trainingReferrals },
                   { label: 'Scheme Referrals', val: data.analytics.schemeReferrals },
+                  { label: 'UDAAN Enrolments', val: data.analytics.udaanEnrolments ?? 0 },
+                  { label: 'UDAAN Lessons Completed', val: data.analytics.udaanLessonsCompleted ?? 0 },
+                  { label: 'UDAAN Quizzes Taken', val: data.analytics.udaanAssessmentsTaken ?? 0 },
+                  { label: 'Business Plans Saved', val: data.analytics.businessPlansCreated ?? 0 },
+                  { label: 'Action Passport Goals', val: data.analytics.passportGoalsCreated ?? 0 },
                   { label: 'Open Safety Reports', val: data.analytics.openReportsCount },
                 ].map((m) => (
-                  <div key={m.label} className="p-4 rounded-xl bg-white border border-[#E5E3DC]">
-                    <p className="text-xs text-[#5C5C58]">{m.label}</p>
-                    <p className="mt-1.5 text-2xl font-bold font-mono tabular-nums text-[#176B4D]">
+                  <div key={m.label} className="p-4 rounded-xl bg-white border border-[#F2DCC1]">
+                    <p className="text-xs text-[#454545]">{m.label}</p>
+                    <p className="mt-1.5 text-2xl font-bold font-mono tabular-nums text-[#A85B0A] dark:text-[#FFD19A]">
                       {m.val}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="p-6 rounded-xl bg-white border border-[#E5E3DC]">
-                <h2 className="text-base font-bold text-[#252525] mb-4">
+              <div className="p-6 rounded-xl bg-white border border-[#F2DCC1]">
+                <h2 className="text-base font-bold text-[#26364B] mb-4">
                   Daily Platform Engagement (Visits vs. Official Referrals)
                 </h2>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data.analytics.dailyEngagement}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E3DC" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#F2DCC1" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} />
                       <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
                       <Tooltip />
-                      <Bar dataKey="visits" name="Visits" fill="#176B4D" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="visits" name="Visits" fill="#27845B" radius={[4, 4, 0, 0]} />
                       <Bar dataKey="referrals" name="Referrals" fill="#F4A340" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -616,8 +632,8 @@ export function AdminDashboardPage() {
                     onClick={() => setModEntity(type)}
                     className={`px-4 py-2 text-xs font-semibold rounded-lg cursor-pointer ${
                       modEntity === type
-                        ? 'bg-[#176B4D] text-white'
-                        : 'bg-white border border-[#E5E3DC] text-[#5C5C58]'
+                        ? 'jenova-saffron-btn'
+                        : 'bg-white border border-[#F2DCC1] text-[#454545]'
                     }`}
                   >
                     {label}
@@ -625,17 +641,17 @@ export function AdminDashboardPage() {
                 ))}
               </div>
 
-              <div className="rounded-xl bg-white border border-[#E5E3DC] overflow-x-auto">
+              <div className="rounded-xl bg-white border border-[#F2DCC1] overflow-x-auto">
                 <table className="w-full text-left border-collapse text-sm">
                   <thead>
-                    <tr className="border-b border-[#E5E3DC] bg-[#FAF9F5] text-xs text-[#5C5C58]">
+                    <tr className="border-b border-[#F2DCC1] bg-[#FFF1DF] text-xs text-[#454545]">
                       <th className="py-3 px-4 font-semibold">Listing & Source</th>
                       <th className="py-3 px-4 font-semibold">Current Status</th>
                       <th className="py-3 px-4 font-semibold">Review / Expiry Date</th>
                       <th className="py-3 px-4 font-semibold text-right">Moderation Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E5E3DC]">
+                  <tbody className="divide-y divide-[#F2DCC1]">
                     {(modEntity === 'job'
                       ? data.jobs.map((j) => ({
                           id: j.id,
@@ -686,14 +702,14 @@ export function AdminDashboardPage() {
                                 meta: `${b.lastUpdated} (${b.reviewer})`,
                               }))
                     ).map((row) => (
-                      <tr key={row.id} className="hover:bg-[#FAF9F5]">
+                      <tr key={row.id} className="hover:bg-[#FFF1DF]">
                         <td className="py-3.5 px-4">
-                          <p className="font-semibold text-[#252525]">{row.title}</p>
-                          <p className="text-xs text-[#5C5C58]">{row.sub}</p>
+                          <p className="font-semibold text-[#26364B]">{row.title}</p>
+                          <p className="text-xs text-[#454545]">{row.sub}</p>
                         </td>
                         <td className="py-3.5 px-4">
                           <VerificationLabel status={row.status} isDemo={row.isDemo} />
-                          <p className="text-[11px] text-[#85847C] mt-0.5">{row.meta}</p>
+                          <p className="text-[11px] text-[#665B4F] mt-0.5">{row.meta}</p>
                         </td>
                         <td className="py-3.5 px-4">
                           <input
@@ -705,7 +721,7 @@ export function AdminDashboardPage() {
                                 updateExpiryDate(modEntity, row.id, e.target.value);
                               }
                             }}
-                            className="rounded-lg border border-[#E5E3DC] bg-white px-2.5 py-1 text-xs font-mono text-[#252525]"
+                            className="rounded-lg border border-[#F2DCC1] bg-white px-2.5 py-1 text-xs font-mono text-[#26364B]"
                           />
                         </td>
                         <td className="py-3.5 px-4 text-right">
@@ -719,7 +735,7 @@ export function AdminDashboardPage() {
                                 e.target.value as VerificationStatus
                               )
                             }
-                            className="rounded-lg border border-[#E5E3DC] bg-white px-2.5 py-1.5 text-xs font-medium text-[#252525]"
+                            className="rounded-lg border border-[#F2DCC1] bg-white px-2.5 py-1.5 text-xs font-medium text-[#26364B]"
                           >
                             <option value="Officially Verified">Officially Verified</option>
                             <option value="Independently Verified">Independently Verified</option>
@@ -745,28 +761,28 @@ export function AdminDashboardPage() {
               {/* Add Government Scheme */}
               <form
                 onSubmit={handleAddScheme}
-                className="p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-3 h-fit"
+                className="p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-3 h-fit"
               >
-                <h2 className="text-base font-bold text-[#252525]">Add Government Scheme</h2>
+                <h2 className="text-base font-bold text-[#26364B]">Add Government Scheme</h2>
                 <input
                   required
                   value={schName}
                   onChange={(e) => setSchName(e.target.value)}
                   placeholder="Official Scheme Name *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   required
                   value={schDept}
                   onChange={(e) => setSchDept(e.target.value)}
                   placeholder="Government Department *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <div className="grid grid-cols-2 gap-3">
                   <select
                     value={schScope}
                     onChange={(e) => setSchScope(e.target.value as 'West Bengal' | 'Central India')}
-                    className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm bg-white"
+                    className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm bg-white"
                   >
                     <option value="West Bengal">West Bengal</option>
                     <option value="Central India">Central India</option>
@@ -774,7 +790,7 @@ export function AdminDashboardPage() {
                   <select
                     value={schCategory}
                     onChange={(e) => setSchCategory(e.target.value as WelfareScheme['category'])}
-                    className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm bg-white"
+                    className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm bg-white"
                   >
                     <option value="Social Security">Social Security</option>
                     <option value="Women Empowerment">Women Empowerment</option>
@@ -790,7 +806,7 @@ export function AdminDashboardPage() {
                   value={schUrl}
                   onChange={(e) => setSchUrl(e.target.value)}
                   placeholder="Official Government URL (https://...gov.in) *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <textarea
                   required
@@ -798,31 +814,31 @@ export function AdminDashboardPage() {
                   value={schDesc}
                   onChange={(e) => setSchDesc(e.target.value)}
                   placeholder="Plain-language explanation *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   required
                   value={schBenefits}
                   onChange={(e) => setSchBenefits(e.target.value)}
                   placeholder="Main benefits *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   required
                   value={schEligibility}
                   onChange={(e) => setSchEligibility(e.target.value)}
                   placeholder="Who may qualify *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   value={schDocs}
                   onChange={(e) => setSchDocs(e.target.value)}
                   placeholder="Required documents (comma-separated)"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
                 >
                   Save Scheme (Pending Verification)
                 </button>
@@ -832,9 +848,9 @@ export function AdminDashboardPage() {
                 {/* Edit Existing Scheme */}
                 <form
                   onSubmit={handleEditScheme}
-                  className="p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-3"
+                  className="p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-3"
                 >
-                  <h2 className="text-base font-bold text-[#252525]">Update Existing Scheme Details</h2>
+                  <h2 className="text-base font-bold text-[#26364B]">Update Existing Scheme Details</h2>
                   <select
                     required
                     value={editSchemeId}
@@ -848,7 +864,7 @@ export function AdminDashboardPage() {
                         setEditSchemeExpiry(found.expiryDate);
                       }
                     }}
-                    className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm bg-white"
+                    className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm bg-white"
                   >
                     <option value="">Select a scheme to update...</option>
                     {data.schemes.map((s) => (
@@ -861,26 +877,26 @@ export function AdminDashboardPage() {
                     value={editSchemeBenefits}
                     onChange={(e) => setEditSchemeBenefits(e.target.value)}
                     placeholder="Updated benefits summary"
-                    className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                   />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       value={editSchemeUrl}
                       onChange={(e) => setEditSchemeUrl(e.target.value)}
                       placeholder="Official URL (https://...)"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                     <input
                       type="date"
                       value={editSchemeExpiry}
                       onChange={(e) => setEditSchemeExpiry(e.target.value)}
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm font-mono"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm font-mono"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={!editSchemeId}
-                    className="px-5 py-2.5 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg disabled:opacity-50 cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-semibold jenova-saffron-btn rounded-lg disabled:opacity-50 cursor-pointer"
                   >
                     Update Scheme
                   </button>
@@ -889,23 +905,23 @@ export function AdminDashboardPage() {
                 {/* Publish Verified Job Listing */}
                 <form
                   onSubmit={handlePublishJob}
-                  className="p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-3"
+                  className="p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-3"
                 >
-                  <h2 className="text-base font-bold text-[#252525]">Publish Verified Job Listing</h2>
+                  <h2 className="text-base font-bold text-[#26364B]">Publish Verified Job Listing</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       required
                       value={jobTitle}
                       onChange={(e) => setJobTitle(e.target.value)}
                       placeholder="Job Title *"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                     <input
                       required
                       value={jobEmployer}
                       onChange={(e) => setJobEmployer(e.target.value)}
                       placeholder="Employer / Department *"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -913,26 +929,26 @@ export function AdminDashboardPage() {
                       value={jobLocation}
                       onChange={(e) => setJobLocation(e.target.value)}
                       placeholder="Location"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                     <input
                       value={jobSalary}
                       onChange={(e) => setJobSalary(e.target.value)}
                       placeholder="Salary / Wage"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                     <input
                       type="date"
                       value={jobExpiry}
                       onChange={(e) => setJobExpiry(e.target.value)}
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm font-mono"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm font-mono"
                     />
                   </div>
                   <input
                     value={jobUrl}
                     onChange={(e) => setJobUrl(e.target.value)}
                     placeholder="Official Application URL (optional https://...)"
-                    className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                   />
                   <textarea
                     required
@@ -940,11 +956,11 @@ export function AdminDashboardPage() {
                     value={jobDesc}
                     onChange={(e) => setJobDesc(e.target.value)}
                     placeholder="Role responsibilities & eligibility *"
-                    className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                   />
                   <button
                     type="submit"
-                    className="px-5 py-2.5 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
                   >
                     Publish Verified Job
                   </button>
@@ -953,23 +969,23 @@ export function AdminDashboardPage() {
                 {/* Add Training Course */}
                 <form
                   onSubmit={handleAddCourse}
-                  className="p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-3"
+                  className="p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-3"
                 >
-                  <h2 className="text-base font-bold text-[#252525]">Add Skill Training Opportunity</h2>
+                  <h2 className="text-base font-bold text-[#26364B]">Add Skill Training Opportunity</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       required
                       value={crsName}
                       onChange={(e) => setCrsName(e.target.value)}
                       placeholder="Course Name *"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                     <input
                       required
                       value={crsProvider}
                       onChange={(e) => setCrsProvider(e.target.value)}
                       placeholder="Provider (e.g. PBSSD / Skill India) *"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -978,12 +994,12 @@ export function AdminDashboardPage() {
                       value={crsUrl}
                       onChange={(e) => setCrsUrl(e.target.value)}
                       placeholder="Official Course URL *"
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                     <select
                       value={crsMode}
                       onChange={(e) => setCrsMode(e.target.value as 'Online' | 'Offline' | 'Hybrid')}
-                      className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm bg-white"
+                      className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm bg-white"
                     >
                       <option value="Online">Online</option>
                       <option value="Offline">Offline</option>
@@ -996,11 +1012,11 @@ export function AdminDashboardPage() {
                     value={crsDesc}
                     onChange={(e) => setCrsDesc(e.target.value)}
                     placeholder="Course description & learning outcome *"
-                    className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                   />
                   <button
                     type="submit"
-                    className="px-5 py-2.5 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
                   >
                     Add Training Course
                   </button>
@@ -1014,9 +1030,9 @@ export function AdminDashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <form
                 onSubmit={handleAddAssistanceCentre}
-                className="p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-3.5 h-fit"
+                className="p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-3.5 h-fit"
               >
-                <h2 className="text-base font-bold text-[#252525]">
+                <h2 className="text-base font-bold text-[#26364B]">
                   Add Verified Local Assistance Centre
                 </h2>
                 <input
@@ -1024,19 +1040,19 @@ export function AdminDashboardPage() {
                   value={acNameEn}
                   onChange={(e) => setAcNameEn(e.target.value)}
                   placeholder="Centre Name (English) *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   value={acNameBn}
                   onChange={(e) => setAcNameBn(e.target.value)}
                   placeholder="Centre Name (Bengali)"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <div className="grid grid-cols-2 gap-3">
                   <select
                     value={acCategory}
                     onChange={(e) => setAcCategory(e.target.value as AssistanceCentreCategory)}
-                    className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm bg-white"
+                    className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm bg-white"
                   >
                     <option value="Bangla Sahayata Kendra">Bangla Sahayata Kendra</option>
                     <option value="Government Office">Government Office</option>
@@ -1050,7 +1066,7 @@ export function AdminDashboardPage() {
                     value={acArea}
                     onChange={(e) => setAcArea(e.target.value)}
                     placeholder="Area / Block *"
-                    className="rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                    className="rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                   />
                 </div>
                 <input
@@ -1058,30 +1074,30 @@ export function AdminDashboardPage() {
                   value={acAddress}
                   onChange={(e) => setAcAddress(e.target.value)}
                   placeholder="Verified Location / Counter Note *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   value={acOfficialUrl}
                   onChange={(e) => setAcOfficialUrl(e.target.value)}
                   placeholder="Official URL (https://...)"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   required
                   value={acSourceName}
                   onChange={(e) => setAcSourceName(e.target.value)}
                   placeholder="Verification Source (e.g. Official District / State Portal) *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   value={acServices}
                   onChange={(e) => setAcServices(e.target.value)}
                   placeholder="Services (comma-separated, e.g. BSK form help, Caste certificate)"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
                 >
                   Save Assistance Centre
                 </button>
@@ -1089,9 +1105,9 @@ export function AdminDashboardPage() {
 
               <form
                 onSubmit={handlePublishFraudAlert}
-                className="p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-3.5 h-fit"
+                className="p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-3.5 h-fit"
               >
-                <h2 className="text-base font-bold text-[#252525]">
+                <h2 className="text-base font-bold text-[#26364B]">
                   Publish Community Fraud Alert (JENOVA Protect)
                 </h2>
                 <input
@@ -1099,20 +1115,20 @@ export function AdminDashboardPage() {
                   value={faTitleEn}
                   onChange={(e) => setFaTitleEn(e.target.value)}
                   placeholder="Alert Title (English) *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <input
                   value={faTitleBn}
                   onChange={(e) => setFaTitleBn(e.target.value)}
                   placeholder="Alert Title (Bengali)"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <select
                   value={faScamType}
                   onChange={(e) =>
                     setFaScamType(e.target.value as FraudAlert['scamType'])
                   }
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm bg-white"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm bg-white"
                 >
                   <option value="OTP / UPI Trap">OTP / UPI Trap</option>
                   <option value="Advance-Fee Job">Advance-Fee Job</option>
@@ -1127,7 +1143,7 @@ export function AdminDashboardPage() {
                   value={faSummaryEn}
                   onChange={(e) => setFaSummaryEn(e.target.value)}
                   placeholder="Describe the scam pattern clearly *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <textarea
                   required
@@ -1135,7 +1151,7 @@ export function AdminDashboardPage() {
                   value={faSafeEn}
                   onChange={(e) => setFaSafeEn(e.target.value)}
                   placeholder="How residents should stay safe *"
-                  className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                 />
                 <button
                   type="submit"
@@ -1149,32 +1165,32 @@ export function AdminDashboardPage() {
 
           {/* USER REPORTS TAB */}
           {activeTab === 'reports' && (
-            <div className="rounded-xl bg-white border border-[#E5E3DC] p-6">
-              <h2 className="text-base font-bold text-[#252525] mb-4">
+            <div className="rounded-xl bg-white border border-[#F2DCC1] p-6">
+              <h2 className="text-base font-bold text-[#26364B] mb-4">
                 Community Safety & Incorrect Information Reports
               </h2>
               {data.reports.length === 0 ? (
-                <p className="text-sm text-[#5C5C58]">No user reports submitted yet.</p>
+                <p className="text-sm text-[#454545]">No user reports submitted yet.</p>
               ) : (
-                <div className="divide-y divide-[#E5E3DC]">
+                <div className="divide-y divide-[#F2DCC1]">
                   {data.reports.map((rep) => (
                     <div
                       key={rep.id}
                       className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div>
-                        <p className="text-xs text-[#85847C]">
+                        <p className="text-xs text-[#665B4F]">
                           {rep.targetType.toUpperCase()} · {rep.reportType} · {rep.createdAt.slice(0, 10)}
                         </p>
-                        <p className="text-sm font-bold text-[#252525]">{rep.targetTitle}</p>
-                        <p className="text-sm text-[#5C5C58] mt-1">{rep.details}</p>
+                        <p className="text-sm font-bold text-[#26364B]">{rep.targetTitle}</p>
+                        <p className="text-sm text-[#454545] mt-1">{rep.details}</p>
                       </div>
                       <select
                         value={rep.status}
                         onChange={(e) =>
                           updateReportStatus(rep.id, e.target.value as ContentReport['status'])
                         }
-                        className="rounded-lg border border-[#E5E3DC] bg-white px-3 py-1.5 text-xs font-semibold"
+                        className="rounded-lg border border-[#F2DCC1] bg-white px-3 py-1.5 text-xs font-semibold"
                       >
                         <option value="Open">Open</option>
                         <option value="Reviewed">Reviewed</option>
@@ -1189,25 +1205,25 @@ export function AdminDashboardPage() {
 
           {/* FEEDBACK TAB */}
           {activeTab === 'feedback' && (
-            <div className="rounded-xl bg-white border border-[#E5E3DC] p-6">
-              <h2 className="text-base font-bold text-[#252525] mb-4">
+            <div className="rounded-xl bg-white border border-[#F2DCC1] p-6">
+              <h2 className="text-base font-bold text-[#26364B] mb-4">
                 Feedback, Contact & Assistance Requests
               </h2>
               {data.feedback.length === 0 ? (
-                <p className="text-sm text-[#5C5C58]">No feedback submissions received yet.</p>
+                <p className="text-sm text-[#454545]">No feedback submissions received yet.</p>
               ) : (
-                <div className="divide-y divide-[#E5E3DC]">
+                <div className="divide-y divide-[#F2DCC1]">
                   {data.feedback.map((fb) => (
                     <div
                       key={fb.id}
                       className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div>
-                        <p className="text-xs text-[#85847C]">
+                        <p className="text-xs text-[#665B4F]">
                           {fb.type} · {fb.name} ({fb.contact}) · {fb.createdAt.slice(0, 10)}
                         </p>
-                        <p className="text-sm font-bold text-[#252525]">{fb.subject}</p>
-                        <p className="text-sm text-[#5C5C58] mt-1">{fb.message}</p>
+                        <p className="text-sm font-bold text-[#26364B]">{fb.subject}</p>
+                        <p className="text-sm text-[#454545] mt-1">{fb.message}</p>
                       </div>
                       {canEditContent && (
                         <select
@@ -1215,7 +1231,7 @@ export function AdminDashboardPage() {
                           onChange={(e) =>
                             updateFeedbackStatus(fb.id, e.target.value as FeedbackSubmission['status'])
                           }
-                          className="rounded-lg border border-[#E5E3DC] bg-white px-3 py-1.5 text-xs font-semibold"
+                          className="rounded-lg border border-[#F2DCC1] bg-white px-3 py-1.5 text-xs font-semibold"
                         >
                           <option value="New">New</option>
                           <option value="Reviewed">Reviewed</option>
@@ -1235,9 +1251,9 @@ export function AdminDashboardPage() {
               {canEditContent && (
                 <form
                   onSubmit={handlePublishAnnouncement}
-                  className="lg:col-span-5 p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-4 h-fit"
+                  className="lg:col-span-5 p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-4 h-fit"
                 >
-                  <h2 className="text-base font-bold text-[#252525]">
+                  <h2 className="text-base font-bold text-[#26364B]">
                     Publish Community Announcement
                   </h2>
                   <div>
@@ -1246,7 +1262,7 @@ export function AdminDashboardPage() {
                       required
                       value={annTitleEn}
                       onChange={(e) => setAnnTitleEn(e.target.value)}
-                      className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                   </div>
                   <div>
@@ -1254,7 +1270,7 @@ export function AdminDashboardPage() {
                     <input
                       value={annTitleBn}
                       onChange={(e) => setAnnTitleBn(e.target.value)}
-                      className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                   </div>
                   <div>
@@ -1262,7 +1278,7 @@ export function AdminDashboardPage() {
                     <input
                       value={annCategory}
                       onChange={(e) => setAnnCategory(e.target.value)}
-                      className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                   </div>
                   <div>
@@ -1272,28 +1288,28 @@ export function AdminDashboardPage() {
                       rows={3}
                       value={annBodyEn}
                       onChange={(e) => setAnnBodyEn(e.target.value)}
-                      className="w-full rounded-lg border border-[#E5E3DC] px-3 py-2 text-sm"
+                      className="w-full rounded-lg border border-[#F2DCC1] px-3 py-2 text-sm"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="px-5 py-2 text-xs font-semibold text-white bg-[#176B4D] hover:bg-[#11533B] rounded-lg cursor-pointer"
+                    className="px-5 py-2 text-xs font-semibold jenova-saffron-btn rounded-lg cursor-pointer"
                   >
                     Publish Notice
                   </button>
                 </form>
               )}
 
-              <div className={`${canEditContent ? 'lg:col-span-7' : 'lg:col-span-12'} p-6 rounded-xl bg-white border border-[#E5E3DC] space-y-4`}>
-                <h2 className="text-base font-bold text-[#252525]">Published Announcements</h2>
-                <div className="divide-y divide-[#E5E3DC]">
+              <div className={`${canEditContent ? 'lg:col-span-7' : 'lg:col-span-12'} p-6 rounded-xl bg-white border border-[#F2DCC1] space-y-4`}>
+                <h2 className="text-base font-bold text-[#26364B]">Published Announcements</h2>
+                <div className="divide-y divide-[#F2DCC1]">
                   {data.announcements.map((a) => (
                     <div key={a.id} className="py-3.5">
-                      <p className="text-xs text-[#85847C]">
+                      <p className="text-xs text-[#665B4F]">
                         {a.category} · {a.publishedAt} · By {a.createdBy}
                       </p>
-                      <p className="text-sm font-bold text-[#252525] mt-0.5">{a.title.en}</p>
-                      <p className="text-xs text-[#5C5C58] mt-1">{a.body.en}</p>
+                      <p className="text-sm font-bold text-[#26364B] mt-0.5">{a.title.en}</p>
+                      <p className="text-xs text-[#454545] mt-1">{a.body.en}</p>
                     </div>
                   ))}
                 </div>
@@ -1303,10 +1319,10 @@ export function AdminDashboardPage() {
 
           {/* AUDIT LOGS TAB */}
           {activeTab === 'logs' && (
-            <div className="rounded-xl bg-white border border-[#E5E3DC] overflow-x-auto">
+            <div className="rounded-xl bg-white border border-[#F2DCC1] overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs sm:text-sm">
                 <thead>
-                  <tr className="border-b border-[#E5E3DC] bg-[#FAF9F5] text-xs text-[#5C5C58]">
+                  <tr className="border-b border-[#F2DCC1] bg-[#FFF1DF] text-xs text-[#454545]">
                     <th className="py-3 px-4 font-semibold">Timestamp</th>
                     <th className="py-3 px-4 font-semibold">Entity</th>
                     <th className="py-3 px-4 font-semibold">Transition</th>
@@ -1314,22 +1330,22 @@ export function AdminDashboardPage() {
                     <th className="py-3 px-4 font-semibold">Note</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E5E3DC]">
+                <tbody className="divide-y divide-[#F2DCC1]">
                   {data.verificationLogs.map((log) => (
                     <tr key={log.id}>
-                      <td className="py-3 px-4 font-mono text-xs text-[#5C5C58] whitespace-nowrap">
+                      <td className="py-3 px-4 font-mono text-xs text-[#454545] whitespace-nowrap">
                         {log.timestamp.slice(0, 16).replace('T', ' ')}
                       </td>
-                      <td className="py-3 px-4 font-medium text-[#252525]">
+                      <td className="py-3 px-4 font-medium text-[#26364B]">
                         [{log.entityType}] {log.entityTitle}
                       </td>
                       <td className="py-3 px-4 text-xs">
                         {log.previousStatus} → <strong>{log.newStatus}</strong>
                       </td>
-                      <td className="py-3 px-4 text-xs text-[#5C5C58]">
+                      <td className="py-3 px-4 text-xs text-[#454545]">
                         {log.reviewerName} ({log.reviewerRole})
                       </td>
-                      <td className="py-3 px-4 text-xs text-[#5C5C58]">{log.note}</td>
+                      <td className="py-3 px-4 text-xs text-[#454545]">{log.note}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1339,32 +1355,34 @@ export function AdminDashboardPage() {
 
           {/* SUPER ADMIN ROLES TAB */}
           {activeTab === 'roles' && isSuperAdmin && (
-            <div className="rounded-xl bg-white border border-[#E5E3DC] overflow-x-auto">
+            <div className="rounded-xl bg-white border border-[#F2DCC1] overflow-x-auto">
               <table className="w-full text-left border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-[#E5E3DC] bg-[#FAF9F5] text-xs text-[#5C5C58]">
+                  <tr className="border-b border-[#F2DCC1] bg-[#FFF1DF] text-xs text-[#454545]">
                     <th className="py-3 px-4 font-semibold">User</th>
                     <th className="py-3 px-4 font-semibold">Town</th>
                     <th className="py-3 px-4 font-semibold text-right">Assigned RBAC Role</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E5E3DC]">
+                <tbody className="divide-y divide-[#F2DCC1]">
                   {data.users.map((u) => (
                     <tr key={u.id}>
                       <td className="py-3 px-4">
-                        <p className="font-semibold text-[#252525]">{u.name}</p>
-                        <p className="text-xs text-[#5C5C58]">{u.email}</p>
+                        <p className="font-semibold text-[#26364B]">{u.name}</p>
+                        <p className="text-xs text-[#454545]">{u.email}</p>
                       </td>
-                      <td className="py-3 px-4 text-xs text-[#5C5C58]">{u.town}</td>
+                      <td className="py-3 px-4 text-xs text-[#454545]">{u.town}</td>
                       <td className="py-3 px-4 text-right">
                         <select
                           value={u.role}
                           disabled={u.id === user.id}
                           onChange={(e) => handleRoleChange(u.id, e.target.value as UserRole)}
-                          className="rounded-lg border border-[#E5E3DC] bg-white px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
+                          className="rounded-lg border border-[#F2DCC1] bg-white px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
                         >
                           <option value="user">Community User</option>
+                          <option value="regional_contributor">Regional Contributor</option>
                           <option value="content_reviewer">Content Reviewer</option>
+                          <option value="training_manager">Training Manager (UDAAN)</option>
                           <option value="content_admin">Content Administrator</option>
                           <option value="super_admin">Super Administrator</option>
                         </select>

@@ -157,7 +157,9 @@ export function useVoiceRecognition(
       setError(
         lang === 'bn'
           ? 'ভয়েস ইনপুট এখন উপলব্ধ নয়। অনুগ্রহ করে টাইপ করুন।'
-          : 'Voice input is currently unavailable. Please type your question.'
+          : lang === 'hi'
+            ? 'वॉयस इनपुट अभी उपलब्ध नहीं है। कृपया टाइप करके पूछें।'
+            : 'Voice input is currently unavailable. Please type your question.'
       );
     }
   }, [lang]);
@@ -225,8 +227,8 @@ export function VoiceInputButton({
           listening
             ? 'bg-red-600 text-white hover:bg-red-700 ring-4 ring-red-200'
             : supported
-              ? 'bg-[#176B4D] text-white hover:bg-[#11533B]'
-              : 'bg-[#F5F4EF] text-[#5C5C58] border border-[#E5E3DC]'
+              ? 'jenova-saffron-btn'
+              : 'bg-[#FFF1DF] text-[#454545] border border-[#F2DCC1]'
         }`}
       >
         {listening ? (
@@ -237,7 +239,7 @@ export function VoiceInputButton({
         <span>{label || defaultLabel}</span>
       </button>
       {listening && interimText && (
-        <p className="text-xs text-[#176B4D] bg-[#EBF4F0] px-3 py-1.5 rounded-lg">
+        <p className="text-xs text-[#26364B] bg-[#FFE5C2] dark:bg-[#382616] dark:text-[#FFD19A] border border-[#F2DCC1] dark:border-[#5C4128] px-3 py-1.5 rounded-lg">
           “{interimText}”
         </p>
       )}
@@ -434,7 +436,7 @@ export function ReadAloudButton({
       onClick={toggleSpeak}
       aria-pressed={speaking}
       aria-label={label}
-      className={`inline-flex items-center gap-1.5 rounded-full border font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+      className={`jenova-read-aloud-btn inline-flex items-center gap-1.5 rounded-full border font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
         compact ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-xs min-h-[40px]'
       } ${
         speaking || loadingAudio

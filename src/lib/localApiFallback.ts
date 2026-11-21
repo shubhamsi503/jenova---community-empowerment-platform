@@ -11,6 +11,9 @@ import {
 } from '../data/platformCatalog';
 import { analyzeFraudRisk } from './fraudAnalyzer';
 import type {
+  ActionPassportCategory,
+  ActionPassportGoal,
+  ActionPassportStatus,
   Announcement,
   BookmarkItem,
   BusinessIdea,
@@ -23,10 +26,13 @@ import type {
   Language,
   LocalAssistanceCentre,
   PlatformAnalytics,
+  SavedBusinessPlan,
   SavingsGoal,
   TrainingCentre,
+  UdaanEnrolment,
   UpdateSubscription,
   UserAccount,
+  UserLivelihoodProfile,
   UserRole,
   VerificationLog,
   VerificationStatus,
@@ -51,6 +57,10 @@ interface LocalDbState {
   updateSubscriptions: UpdateSubscription[];
   bookmarks: BookmarkItem[];
   savingsGoals: SavingsGoal[];
+  userProfiles: Record<string, UserLivelihoodProfile>;
+  udaanEnrolments: UdaanEnrolment[];
+  passportGoals: ActionPassportGoal[];
+  businessPlans: SavedBusinessPlan[];
   reports: ContentReport[];
   feedback: FeedbackSubmission[];
   announcements: Announcement[];
@@ -69,18 +79,25 @@ interface LocalDbState {
     fraudChecksCompleted: number;
     localHelpClicks: number;
     voiceAssistantUses: number;
+    udaanEnrolments: number;
+    udaanLessonsCompleted: number;
+    udaanAssessmentsTaken: number;
+    businessPlansCreated: number;
+    passportGoalsCreated: number;
     dailyEngagement: Record<string, { visits: number; referrals: number }>;
   };
 }
 
-const DB_STORAGE_KEY = 'jenova_local_db_v4';
-const DB_VERSION = 4;
+const DB_STORAGE_KEY = 'jenova_local_db_v6';
+const DB_VERSION = 6;
 
 const ROLE_RANK: Record<UserRole, number> = {
   user: 1,
-  content_reviewer: 2,
-  content_admin: 3,
-  super_admin: 4,
+  regional_contributor: 2,
+  training_manager: 3,
+  content_reviewer: 3,
+  content_admin: 4,
+  super_admin: 5,
 };
 
 function todayKey(): string {
@@ -188,6 +205,10 @@ function createInitialDb(): LocalDbState {
         updatedAt: new Date().toISOString(),
       },
     ],
+    userProfiles: {},
+    udaanEnrolments: [],
+    passportGoals: [],
+    businessPlans: [],
     reports: [],
     feedback: [],
     announcements: cloneData(SEED_ANNOUNCEMENTS),
@@ -219,6 +240,11 @@ function createInitialDb(): LocalDbState {
       fraudChecksCompleted: 0,
       localHelpClicks: 0,
       voiceAssistantUses: 0,
+      udaanEnrolments: 0,
+      udaanLessonsCompleted: 0,
+      udaanAssessmentsTaken: 0,
+      businessPlansCreated: 0,
+      passportGoalsCreated: 0,
       dailyEngagement: {
         [today]: { visits: 1, referrals: 0 },
       },
@@ -342,6 +368,11 @@ function getAnalyticsSummary(db: LocalDbState): PlatformAnalytics {
     fraudChecksCompleted: db.analytics.fraudChecksCompleted,
     localHelpClicks: db.analytics.localHelpClicks,
     voiceAssistantUses: db.analytics.voiceAssistantUses,
+    udaanEnrolments: Math.max(db.analytics.udaanEnrolments || 0, (db.udaanEnrolments || []).length),
+    udaanLessonsCompleted: db.analytics.udaanLessonsCompleted || 0,
+    udaanAssessmentsTaken: db.analytics.udaanAssessmentsTaken || 0,
+    businessPlansCreated: Math.max(db.analytics.businessPlansCreated || 0, (db.businessPlans || []).length),
+    passportGoalsCreated: Math.max(db.analytics.passportGoalsCreated || 0, (db.passportGoals || []).length),
     updateSubscribersCount: db.updateSubscriptions.filter((u) => u.active).length,
     feedbackCount: db.feedback.length,
     openReportsCount: db.reports.filter((r) => r.status === 'Open').length,
@@ -361,13 +392,23 @@ function buildGroundedAssistantReply(db: LocalDbState, message: string, language
   const q = message.toLowerCase();
   const actions: { label: string; path: string }[] = [];
 
-  if (/(scam|fraud|otp|upi|pin|fee|money|প্রতারণা|টাকা|ওটিপি|ধोख|धोखाधड़ी|शुल्क)/i.test(q)) {
+  if (/(scam|fraud|otp|upi|pin|fee|money|প্রতারণা|টাকা|ওটিপি|धोख|धोखाधड़ी|शुल्क)/i.test(q)) {
     actions.push({
-      label: language === 'bn' ? 'JENOVA Protect (প্রতারণা যাচাই)' : 'Open JENOVA Protect',
+      label:
+        language === 'bn'
+          ? 'JENOVA Protect (প্রতারণা যাচাই)'
+          : language === 'hi'
+            ? 'JENOVA Protect (धोखाधड़ी जांच)'
+            : 'Open JENOVA Protect',
       path: '/scam-check',
     });
     actions.push({
-      label: language === 'bn' ? 'প্রতারণা সুরক্ষা গাইড' : 'Fraud Safety Guide',
+      label:
+        language === 'bn'
+          ? 'প্রতারণা সুরক্ষা গাইড'
+          : language === 'hi'
+            ? 'धोखाधड़ी सुरक्षा गाइड'
+            : 'Fraud Safety Guide',
       path: '/finance/fraud-awareness',
     });
     return {
@@ -388,11 +429,21 @@ function buildGroundedAssistantReply(db: LocalDbState, message: string, language
       .map((j) => `• ${language === 'bn' ? j.title.bn : language === 'hi' ? j.title.hi : j.title.en} (${j.category})`)
       .join('\n');
     actions.push({
-      label: language === 'bn' ? 'কর্মসংস্থান পোর্টাল দেখুন' : 'Browse Verified Jobs',
+      label:
+        language === 'bn'
+          ? 'কর্মসংস্থান পোর্টাল দেখুন'
+          : language === 'hi'
+            ? 'सत्यापित नौकरियां देखें'
+            : 'Browse Verified Jobs',
       path: '/jobs',
     });
     actions.push({
-      label: language === 'bn' ? '১-মিনিট বায়োডাটা তৈরি করুন' : '1-Minute Biodata Builder',
+      label:
+        language === 'bn'
+          ? '১-মিনিট বায়োডাটা তৈরি করুন'
+          : language === 'hi'
+            ? '1-मिनट बायोडाटा बनाएं'
+            : '1-Minute Biodata Builder',
       path: '/jobs/biodata',
     });
     return {
@@ -413,7 +464,12 @@ function buildGroundedAssistantReply(db: LocalDbState, message: string, language
       .map((c) => `• ${language === 'bn' ? c.name.bn : language === 'hi' ? c.name.hi : c.name.en} (${c.fees})`)
       .join('\n');
     actions.push({
-      label: language === 'bn' ? 'বিনামূল্যে দক্ষতা ও কোর্স দেখুন' : 'Explore Free Courses',
+      label:
+        language === 'bn'
+          ? 'বিনামূল্যে দক্ষতা ও কোর্স দেখুন'
+          : language === 'hi'
+            ? 'निःशुल्क कौशल कोर्स देखें'
+            : 'Explore Free Courses',
       path: '/skills',
     });
     return {
@@ -429,11 +485,21 @@ function buildGroundedAssistantReply(db: LocalDbState, message: string, language
 
   if (/(document|folder|checklist|paper|কাগজ|নথি|ফোল্ডার|दस्तावेज़)/i.test(q)) {
     actions.push({
-      label: language === 'bn' ? 'JENOVA Checklist খুলুন' : 'Open JENOVA Checklist',
+      label:
+        language === 'bn'
+          ? 'JENOVA Checklist খুলুন'
+          : language === 'hi'
+            ? 'JENOVA Checklist खोलें'
+            : 'Open JENOVA Checklist',
       path: '/checklist',
     });
     actions.push({
-      label: language === 'bn' ? 'নিকটস্থ সহায়তা কেন্দ্র' : 'Find Local Assistance',
+      label:
+        language === 'bn'
+          ? 'নিকটস্থ সহায়তা কেন্দ্র'
+          : language === 'hi'
+            ? 'नज़दीकी सहायता केंद्र खोजें'
+            : 'Find Local Assistance',
       path: '/local-help',
     });
     return {
@@ -454,15 +520,30 @@ function buildGroundedAssistantReply(db: LocalDbState, message: string, language
     .map((s) => `• ${language === 'bn' ? s.officialName.bn : language === 'hi' ? s.officialName.hi : s.officialName.en} (${s.officialWebsite})`)
     .join('\n');
   actions.push({
-    label: language === 'bn' ? 'সরকারি প্রকল্প দেখুন' : 'Explore Government Schemes',
+    label:
+      language === 'bn'
+        ? 'সরকারি প্রকল্প দেখুন'
+        : language === 'hi'
+          ? 'सरकारी योजनाएं देखें'
+          : 'Explore Government Schemes',
     path: '/schemes',
   });
   actions.push({
-    label: language === 'bn' ? 'JENOVA Checklist' : 'Open JENOVA Checklist',
+    label:
+      language === 'bn'
+        ? 'JENOVA Checklist'
+        : language === 'hi'
+          ? 'JENOVA Checklist खोलें'
+          : 'Open JENOVA Checklist',
     path: '/checklist',
   });
   actions.push({
-    label: language === 'bn' ? 'স্থানীয় সহায়তা কেন্দ্র' : 'Local Assistance',
+    label:
+      language === 'bn'
+        ? 'স্থানীয় সহায়তা কেন্দ্র'
+        : language === 'hi'
+          ? 'स्थानीय सहायता केंद्र'
+          : 'Local Assistance',
     path: '/local-help',
   });
 
@@ -630,6 +711,16 @@ export async function handleLocalApiRequest<T>(
       if (item) item.referralsCount += 1;
     } else if (eventType === 'voice_assistant_use') {
       db.analytics.voiceAssistantUses += 1;
+    } else if (eventType === 'udaan_enrol') {
+      db.analytics.udaanEnrolments = (db.analytics.udaanEnrolments || 0) + 1;
+    } else if (eventType === 'udaan_lesson_complete') {
+      db.analytics.udaanLessonsCompleted = (db.analytics.udaanLessonsCompleted || 0) + 1;
+    } else if (eventType === 'udaan_quiz_submit') {
+      db.analytics.udaanAssessmentsTaken = (db.analytics.udaanAssessmentsTaken || 0) + 1;
+    } else if (eventType === 'business_plan_created') {
+      db.analytics.businessPlansCreated = (db.analytics.businessPlansCreated || 0) + 1;
+    } else if (eventType === 'passport_goal_created') {
+      db.analytics.passportGoalsCreated = (db.analytics.passportGoalsCreated || 0) + 1;
     }
     saveDb(db);
     return { ok: true } as T;
@@ -647,6 +738,11 @@ export async function handleLocalApiRequest<T>(
       fraudChecksCompleted: s.fraudChecksCompleted,
       localHelpClicks: s.localHelpClicks,
       voiceAssistantUses: s.voiceAssistantUses,
+      udaanEnrolments: s.udaanEnrolments ?? 0,
+      udaanLessonsCompleted: s.udaanLessonsCompleted ?? 0,
+      udaanAssessmentsTaken: s.udaanAssessmentsTaken ?? 0,
+      businessPlansCreated: s.businessPlansCreated ?? 0,
+      passportGoalsCreated: s.passportGoalsCreated ?? 0,
       updateSubscribersCount: s.updateSubscribersCount,
       feedbackCount: s.feedbackCount,
     } as T;
@@ -1401,6 +1497,217 @@ export async function handleLocalApiRequest<T>(
       verificationLogs: db.verificationLogs,
       analytics: getAnalyticsSummary(db),
     } as T;
+  }
+
+  // ── PROFILE, UDAAN, ACTION PASSPORT, BUSINESS PLANS (LOCAL FALLBACK) ─────
+  if (pathname === '/api/profile' && method === 'GET') {
+    const u = requireAuth();
+    return { profile: (db.userProfiles || {})[u.id] || null } as T;
+  }
+
+  if (pathname === '/api/profile' && method === 'PUT') {
+    const u = requireAuth();
+    if (!db.userProfiles) db.userProfiles = {};
+    const profile: UserLivelihoodProfile = {
+      education: String(body.education || ''),
+      skills: Array.isArray(body.skills) ? body.skills.map(String) : [],
+      interests: Array.isArray(body.interests) ? body.interests.map(String) : [],
+      careerGoals: Array.isArray(body.careerGoals) ? body.careerGoals.map(String) : [],
+      employmentStatus: String(body.employmentStatus || ''),
+      businessInterests: Array.isArray(body.businessInterests) ? body.businessInterests.map(String) : [],
+      preferredOpportunityTypes: Array.isArray(body.preferredOpportunityTypes)
+        ? body.preferredOpportunityTypes.map(String)
+        : [],
+      learningPreference:
+        body.learningPreference === 'guided_practice' || body.learningPreference === 'voice_assisted'
+          ? body.learningPreference
+          : 'self_paced',
+      location: {
+        country: String((body.location as Record<string, unknown>)?.country || 'India'),
+        state: String((body.location as Record<string, unknown>)?.state || 'West Bengal'),
+        district: String((body.location as Record<string, unknown>)?.district || 'Purba Medinipur'),
+        city: String((body.location as Record<string, unknown>)?.city || ''),
+        locality: String((body.location as Record<string, unknown>)?.locality || ''),
+        isGpsDerived: Boolean((body.location as Record<string, unknown>)?.isGpsDerived),
+      },
+      updatedAt: new Date().toISOString(),
+    };
+    db.userProfiles[u.id] = profile;
+    saveDb(db);
+    return { profile } as T;
+  }
+
+  if (pathname === '/api/udaan/enrolments' && method === 'GET') {
+    const u = requireAuth();
+    return { enrolments: (db.udaanEnrolments || []).filter((e) => e.userId === u.id) } as T;
+  }
+
+  if (pathname === '/api/udaan/enrol' && method === 'POST') {
+    const u = requireAuth();
+    const programmeId = String(body.programmeId || '');
+    if (!db.udaanEnrolments) db.udaanEnrolments = [];
+    const existing = db.udaanEnrolments.find((e) => e.userId === u.id && e.programmeId === programmeId);
+    if (existing) return { enrolment: existing, alreadyEnrolled: true } as T;
+    const now = new Date().toISOString();
+    const enrolment: UdaanEnrolment = {
+      id: makeId('udn'),
+      userId: u.id,
+      programmeId,
+      enrolledAt: now,
+      updatedAt: now,
+      completedLessonIds: [],
+    };
+    db.udaanEnrolments.unshift(enrolment);
+    db.analytics.udaanEnrolments = (db.analytics.udaanEnrolments || 0) + 1;
+    saveDb(db);
+    return { enrolment, alreadyEnrolled: false } as T;
+  }
+
+  if (pathname === '/api/udaan/progress' && method === 'PATCH') {
+    const u = requireAuth();
+    const programmeId = String(body.programmeId || '');
+    if (!db.udaanEnrolments) db.udaanEnrolments = [];
+    let enrolment = db.udaanEnrolments.find((e) => e.userId === u.id && e.programmeId === programmeId);
+    const now = new Date().toISOString();
+    if (!enrolment) {
+      enrolment = {
+        id: makeId('udn'),
+        userId: u.id,
+        programmeId,
+        enrolledAt: now,
+        updatedAt: now,
+        completedLessonIds: [],
+      };
+      db.udaanEnrolments.unshift(enrolment);
+    }
+    if (Array.isArray(body.completedLessonIds)) {
+      enrolment.completedLessonIds = body.completedLessonIds.map(String);
+    }
+    if (typeof body.quizScore === 'number') {
+      enrolment.quizScore = body.quizScore;
+      enrolment.quizTotal = Number(body.quizTotal) || 3;
+      enrolment.quizCompletedAt = now;
+      db.analytics.udaanAssessmentsTaken = (db.analytics.udaanAssessmentsTaken || 0) + 1;
+    }
+    if (typeof body.assignmentResponse === 'string') {
+      enrolment.assignmentResponse = body.assignmentResponse;
+      enrolment.assignmentUpdatedAt = now;
+    }
+    if (typeof body.assignmentFeedback === 'string') {
+      enrolment.assignmentFeedback = body.assignmentFeedback;
+    }
+    enrolment.updatedAt = now;
+    saveDb(db);
+    return { enrolment } as T;
+  }
+
+  if (pathname === '/api/udaan/ai-feedback' && method === 'POST') {
+    throw new Error(
+      'AI Practice Coach requires a live server connection. Your practice draft is saved locally — review it against the rubric checklist.'
+    );
+  }
+
+  if (pathname === '/api/passport' && method === 'GET') {
+    const u = requireAuth();
+    return { goals: (db.passportGoals || []).filter((g) => g.userId === u.id) } as T;
+  }
+
+  if (pathname === '/api/passport' && method === 'POST') {
+    const u = requireAuth();
+    if (!db.passportGoals) db.passportGoals = [];
+    const now = new Date().toISOString();
+    const goal: ActionPassportGoal = {
+      id: makeId('pass'),
+      userId: u.id,
+      title: String(body.title || 'My Action Plan'),
+      category: (String(body.category || 'skill') as ActionPassportCategory),
+      status: (String(body.status || 'Not Started') as ActionPassportStatus),
+      linkedPath: String(body.linkedPath || ''),
+      officialUrl: String(body.officialUrl || ''),
+      steps: Array.isArray(body.steps) ? (body.steps as ActionPassportGoal['steps']) : [],
+      documentsChecklist: Array.isArray(body.documentsChecklist)
+        ? (body.documentsChecklist as ActionPassportGoal['documentsChecklist'])
+        : [],
+      notes: String(body.notes || ''),
+      reminderDate: String(body.reminderDate || ''),
+      createdAt: now,
+      updatedAt: now,
+    };
+    db.passportGoals.unshift(goal);
+    db.analytics.passportGoalsCreated = (db.analytics.passportGoalsCreated || 0) + 1;
+    saveDb(db);
+    return { goal } as T;
+  }
+
+  if (pathname.startsWith('/api/passport/') && method === 'PATCH') {
+    const u = requireAuth();
+    const id = pathname.slice('/api/passport/'.length);
+    const goal = (db.passportGoals || []).find((g) => g.id === id && g.userId === u.id);
+    if (!goal) throw new Error('Action Passport goal not found.');
+    if (body.title) goal.title = String(body.title);
+    if (body.status) goal.status = String(body.status) as ActionPassportStatus;
+    if (typeof body.notes === 'string') goal.notes = body.notes;
+    if (typeof body.reminderDate === 'string') goal.reminderDate = body.reminderDate;
+    if (Array.isArray(body.steps)) goal.steps = body.steps as ActionPassportGoal['steps'];
+    if (Array.isArray(body.documentsChecklist)) {
+      goal.documentsChecklist = body.documentsChecklist as ActionPassportGoal['documentsChecklist'];
+    }
+    goal.updatedAt = new Date().toISOString();
+    saveDb(db);
+    return { goal } as T;
+  }
+
+  if (pathname.startsWith('/api/passport/') && method === 'DELETE') {
+    const u = requireAuth();
+    const id = pathname.slice('/api/passport/'.length);
+    db.passportGoals = (db.passportGoals || []).filter((g) => !(g.id === id && g.userId === u.id));
+    saveDb(db);
+    return { deleted: true } as T;
+  }
+
+  if (pathname === '/api/business-plans' && method === 'GET') {
+    const u = requireAuth();
+    return { plans: (db.businessPlans || []).filter((p) => p.userId === u.id) } as T;
+  }
+
+  if (pathname === '/api/business-plans' && method === 'POST') {
+    const u = requireAuth();
+    if (!db.businessPlans) db.businessPlans = [];
+    const plan: SavedBusinessPlan = {
+      id: makeId('bplan'),
+      userId: u.id,
+      businessName: String(body.businessName || 'My Small Business Plan'),
+      category: String(body.category || 'Micro-Enterprise'),
+      location: String(body.location || 'Purba Medinipur, West Bengal'),
+      targetCustomers: String(body.targetCustomers || ''),
+      valueProposition: String(body.valueProposition || ''),
+      startupCosts: Array.isArray(body.startupCosts) ? (body.startupCosts as SavedBusinessPlan['startupCosts']) : [],
+      unitPrice: Number(body.unitPrice) || 0,
+      unitCost: Number(body.unitCost) || 0,
+      expectedMonthlyUnits: Number(body.expectedMonthlyUnits) || 0,
+      fixedMonthlyCost: Number(body.fixedMonthlyCost) || 0,
+      customerResearchChecks: Array.isArray(body.customerResearchChecks)
+        ? (body.customerResearchChecks as SavedBusinessPlan['customerResearchChecks'])
+        : [],
+      marketingSteps: Array.isArray(body.marketingSteps) ? body.marketingSteps.map(String) : [],
+      readinessChecks: Array.isArray(body.readinessChecks)
+        ? (body.readinessChecks as SavedBusinessPlan['readinessChecks'])
+        : [],
+      notes: String(body.notes || ''),
+      updatedAt: new Date().toISOString(),
+    };
+    db.businessPlans.unshift(plan);
+    db.analytics.businessPlansCreated = (db.analytics.businessPlansCreated || 0) + 1;
+    saveDb(db);
+    return { plan } as T;
+  }
+
+  if (pathname.startsWith('/api/business-plans/') && method === 'DELETE') {
+    const u = requireAuth();
+    const id = pathname.slice('/api/business-plans/'.length);
+    db.businessPlans = (db.businessPlans || []).filter((p) => !(p.id === id && p.userId === u.id));
+    saveDb(db);
+    return { deleted: true } as T;
   }
 
   throw new Error(`Endpoint ${pathname} is unavailable.`);

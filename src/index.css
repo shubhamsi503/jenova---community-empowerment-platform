@@ -28,6 +28,49 @@
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* Reusable Global Design Tokens — Light Saffron-Orange & Cream Theme (Non-Homepage Pages) */
+:root {
+  --jenova-bg-main: #FFF9F0;
+  --jenova-bg-secondary: #FFF1DF;
+  --jenova-accent-primary: #F4A340;
+  --jenova-accent-primary-hover: #E58E26;
+  --jenova-accent-secondary: #FFD19A;
+  --jenova-accent-light: #FFE5C2;
+  --jenova-accent-ink: #A85B0A;
+  --jenova-card: #FFFFFF;
+  --jenova-heading: #26364B;
+  --jenova-body: #454545;
+  --jenova-muted: #665B4F;
+  --jenova-border: #F2DCC1;
+  --jenova-border-strong: #E6C195;
+  --jenova-success: #27845B;
+  --jenova-success-soft: #E9F5EF;
+  --jenova-card-shadow: 0 6px 24px -12px rgba(186, 112, 32, 0.16), 0 1px 3px rgba(186, 112, 32, 0.06);
+  --jenova-card-shadow-hover: 0 12px 28px -12px rgba(244, 163, 64, 0.3), 0 2px 6px rgba(186, 112, 32, 0.08);
+  --jenova-btn-gradient: linear-gradient(135deg, #F4A340 0%, #FFB75E 100%);
+  --jenova-btn-gradient-hover: linear-gradient(135deg, #E8932B 0%, #F4A340 100%);
+}
+
+html.dark {
+  --jenova-bg-main: #18120C;
+  --jenova-bg-secondary: #221911;
+  --jenova-accent-primary: #F4A340;
+  --jenova-accent-primary-hover: #FFB75E;
+  --jenova-accent-secondary: #5C3D1F;
+  --jenova-accent-light: #382616;
+  --jenova-accent-ink: #FFD19A;
+  --jenova-card: #241B13;
+  --jenova-heading: #FFF5E8;
+  --jenova-body: #DDD2C5;
+  --jenova-muted: #B6A695;
+  --jenova-border: #3F2E1E;
+  --jenova-border-strong: #59412A;
+  --jenova-success: #45B884;
+  --jenova-success-soft: rgba(39, 132, 91, 0.22);
+  --jenova-card-shadow: 0 8px 26px -12px rgba(0, 0, 0, 0.48);
+  --jenova-card-shadow-hover: 0 14px 32px -12px rgba(244, 163, 64, 0.24);
+}
+
 @layer base {
   html {
     font-family: var(--font-sans);
@@ -59,6 +102,121 @@
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Scoped Subpage Light Saffron-Orange & Cream Theme (Never applied to Homepage) */
+.jenova-saffron-theme {
+  background-color: var(--jenova-bg-main);
+  color: var(--jenova-body);
+}
+
+.jenova-saffron-theme :focus-visible {
+  outline: 2px solid var(--jenova-accent-primary);
+  outline-offset: 2px;
+}
+
+.jenova-saffron-theme main input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.jenova-saffron-theme main select,
+.jenova-saffron-theme main textarea {
+  background-color: var(--jenova-card);
+  border-color: var(--jenova-border);
+  color: var(--jenova-heading);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.jenova-saffron-theme main input:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder,
+.jenova-saffron-theme main textarea::placeholder {
+  color: var(--jenova-muted);
+  opacity: 0.85;
+}
+
+.jenova-saffron-theme main input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+.jenova-saffron-theme main select:focus,
+.jenova-saffron-theme main textarea:focus {
+  border-color: var(--jenova-accent-primary);
+  box-shadow: 0 0 0 3px rgba(244, 163, 64, 0.22);
+  outline: none;
+}
+
+.jenova-saffron-theme main table {
+  border-color: var(--jenova-border);
+}
+
+.jenova-saffron-theme main thead {
+  background-color: var(--jenova-bg-secondary);
+  color: var(--jenova-heading);
+}
+
+.jenova-saffron-theme main tbody tr {
+  border-color: var(--jenova-border);
+}
+
+.jenova-saffron-theme main tbody tr:hover {
+  background-color: var(--jenova-bg-main);
+}
+
+.jenova-saffron-theme main .bg-white.border {
+  box-shadow: var(--jenova-card-shadow);
+}
+
+/* Preserve readable dark mode across all subpages */
+html.dark .jenova-saffron-theme main .bg-white {
+  background-color: var(--jenova-card);
+}
+
+html.dark .jenova-saffron-theme main .bg-\[\#FFF9F0\] {
+  background-color: var(--jenova-bg-main);
+}
+
+html.dark .jenova-saffron-theme main .bg-\[\#FFF1DF\] {
+  background-color: var(--jenova-bg-secondary);
+}
+
+html.dark .jenova-saffron-theme main .bg-\[\#FFE5C2\] {
+  background-color: var(--jenova-accent-light);
+}
+
+html.dark .jenova-saffron-theme main .border-\[\#F2DCC1\] {
+  border-color: var(--jenova-border);
+}
+
+html.dark .jenova-saffron-theme main .text-\[\#26364B\] {
+  color: var(--jenova-heading);
+}
+
+html.dark .jenova-saffron-theme main .text-\[\#454545\] {
+  color: var(--jenova-body);
+}
+
+html.dark .jenova-saffron-theme main .text-\[\#665B4F\] {
+  color: var(--jenova-muted);
+}
+
+/* Keep button dark text legible on saffron gradient buttons even in dark mode */
+html.dark .jenova-saffron-theme .jenova-saffron-btn,
+.jenova-saffron-btn {
+  background-image: var(--jenova-btn-gradient);
+  color: #26364B;
+  border: 1px solid rgba(230, 146, 40, 0.45);
+  box-shadow: 0 6px 16px -8px rgba(244, 163, 64, 0.65);
+  transition: filter 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+
+html.dark .jenova-saffron-theme .jenova-saffron-btn:hover,
+.jenova-saffron-btn:hover {
+  background-image: var(--jenova-btn-gradient-hover);
+  box-shadow: 0 8px 20px -8px rgba(244, 163, 64, 0.78);
+}
+
+.jenova-saffron-theme .jenova-read-aloud-btn:not([aria-pressed="true"]) {
+  background-color: var(--jenova-card);
+  border-color: var(--jenova-border);
+  color: var(--jenova-heading);
+}
+
+.jenova-saffron-theme .jenova-read-aloud-btn:not([aria-pressed="true"]):hover {
+  background-color: var(--jenova-bg-secondary);
+  border-color: var(--jenova-accent-primary);
 }
 
 /* Bengali and Hindi (Devanagari) optical typography & matra-safe line-height adjustments */

@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { apiFetch, readOfflineCache, trackAnalyticsEvent, writeOfflineCache } from '../lib/api';
-import { pickText } from '../i18n/translations';
+import { localizeScamType, pickText, tr } from '../i18n/translations';
 import type { FraudAlert, FraudAnalysisResult } from '../types/platform';
 import { PageHeader, SafetyNotice } from '../components/SharedUI';
 import { ReadAloudButton, VoiceInputButton } from '../components/VoiceAccessibility';
@@ -91,11 +91,12 @@ export function ScamCheckerPage() {
     const catToUse = overrideCat ?? category;
     if (textToAnalyze.length < 4) {
       setError(
-        language === 'bn'
-          ? 'অনুগ্রহ করে সন্দেহজনক মেসেজ, লিঙ্ক বা অফারের অন্তত ১টি লাইন পেস্ট করুন।'
-          : language === 'hi'
-            ? 'कृपया संदिग्ध संदेश, लिंक या ऑफर की कम से कम 1 पंक्ति पेस्ट करें।'
-            : 'Please paste at least one line of the suspicious message, link, or offer.'
+        tr(
+          language,
+          'অনুগ্রহ করে সন্দেহজনক মেসেজ, লিঙ্ক বা অফারের অন্তত ১টি লাইন পেস্ট করুন।',
+          'कृपया संदिग्ध संदेश, लिंक या ऑफर की कम से कम 1 पंक्ति पेस्ट करें।',
+          'Please paste at least one line of the suspicious message, link, or offer.'
+        )
       );
       return;
     }
@@ -115,7 +116,11 @@ export function ScamCheckerPage() {
       setResult(res.result);
       trackAnalyticsEvent('fraud_check_completed', catToUse);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to analyze right now.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : tr(language, 'এই মুহূর্তে যাচাই করা সম্ভব হচ্ছে না।', 'इस समय जांच नहीं की जा सकी।', 'Unable to analyze right now.')
+      );
     } finally {
       setChecking(false);
     }
@@ -127,35 +132,20 @@ export function ScamCheckerPage() {
           box: 'bg-red-50 border-red-300 text-red-950',
           badge: 'bg-red-700 text-white',
           icon: <AlertOctagon className="w-7 h-7 text-red-700 shrink-0" />,
-          label:
-            language === 'bn'
-              ? 'উচ্চ ঝুঁকি (HIGH RISK)'
-              : language === 'hi'
-                ? 'उच्च जोखिम (HIGH RISK)'
-                : 'HIGH RISK',
+          label: tr(language, 'উচ্চ ঝুঁকি', 'उच्च जोखिम', 'HIGH RISK'),
         }
       : result.riskLevel === 'NEEDS VERIFICATION'
         ? {
-            box: 'bg-[#FEF4E6] border-[#F4A340] text-[#6B3F06]',
-            badge: 'bg-[#B56A10] text-white',
-            icon: <AlertTriangle className="w-7 h-7 text-[#B56A10] shrink-0" />,
-            label:
-              language === 'bn'
-                ? 'যাচাই প্রয়োজন (NEEDS VERIFICATION)'
-                : language === 'hi'
-                  ? 'सत्यापन आवश्यक (NEEDS VERIFICATION)'
-                  : 'NEEDS VERIFICATION',
+            box: 'bg-[#FFF1DF] border-[#F4A340] text-[#26364B]',
+            badge: 'bg-[#FFD19A] text-[#26364B] border border-[#F4A340]',
+            icon: <AlertTriangle className="w-7 h-7 text-[#A85B0A] shrink-0" />,
+            label: tr(language, 'যাচাই প্রয়োজন', 'सत्यापन आवश्यक', 'NEEDS VERIFICATION'),
           }
         : {
-            box: 'bg-[#EBF4F0] border-[#176B4D]/40 text-[#0F4D37]',
-            badge: 'bg-[#176B4D] text-white',
-            icon: <ShieldCheck className="w-7 h-7 text-[#176B4D] shrink-0" />,
-            label:
-              language === 'bn'
-                ? 'বড় কোনো বিপদসংকেত মেলেনি (NO MAJOR RED FLAGS FOUND)'
-                : language === 'hi'
-                  ? 'कोई बड़ा खतरा नहीं मिला (NO MAJOR RED FLAGS FOUND)'
-                  : 'NO MAJOR RED FLAGS FOUND',
+            box: 'bg-[#E9F5EF] dark:bg-[#143022] border-[#27845B]/40 text-[#1F6A49] dark:text-[#7DE0B0]',
+            badge: 'bg-[#27845B] text-white',
+            icon: <ShieldCheck className="w-7 h-7 text-[#27845B] dark:text-[#45B884] shrink-0" />,
+            label: tr(language, 'বড় কোনো বিপদসংকেত মেলেনি', 'कोई बड़ा खतरा नहीं मिला', 'NO MAJOR RED FLAGS FOUND'),
           }
     : null;
 
@@ -173,56 +163,48 @@ export function ScamCheckerPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div className="rounded-2xl bg-gradient-to-r from-[#EBF9F2] via-white to-[#EAF6FE] dark:from-[#07263B] dark:via-[#0A2242] dark:to-[#082E3A] border border-[#138A45]/25 dark:border-[#36E7F2]/30 p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl bg-gradient-to-r from-[#FFF1DF] via-white to-[#FFE5C2]/65 dark:from-[#261B12] dark:via-[#241B13] dark:to-[#2D1E12] border border-[#F2DCC1] dark:border-[#4A3522] p-5 sm:p-6 shadow-sm">
         <JenovaProtectLogo
           size="lg"
           theme={theme}
-          subtitle={
-            language === 'bn'
-              ? 'ডিজিটাল সুরক্ষা ও প্রতারণা শনাক্তকরণ কেন্দ্র'
-              : language === 'hi'
-                ? 'डिजिटल सुरक्षा और धोखाधड़ी जांच केंद्र'
-                : 'Digital Safety & Suspicious Offer Shield'
-          }
+          subtitle={tr(
+            language,
+            'ডিজিটাল সুরক্ষা ও প্রতারণা শনাক্তকরণ কেন্দ্র',
+            'डिजिटल सुरक्षा और धोखाधड़ी जांच केंद्र',
+            'Digital Safety & Suspicious Offer Shield'
+          )}
         />
       </div>
 
       <PageHeader
-        title={
-          language === 'bn'
-            ? 'JENOVA Protect — প্রতারণা ও ভুয়া অফার যাচাই'
-            : language === 'hi'
-              ? 'JENOVA Protect — धोखाधड़ी और संदिग्ध ऑफर जांच'
-              : 'JENOVA Protect — Fraud & Suspicious Offer Detection'
-        }
-        subtitle={
-          language === 'bn'
-            ? 'অজানা WhatsApp/SMS মেসেজ, চাকরির অফার, লোনের প্রস্তাব বা লিঙ্ক যাচাই করুন। আমরা কখনোই কোনো লিঙ্ক ওপেন করি না — নিরাপদভাবে ঝুঁকির লক্ষণ পরীক্ষা করি।'
-            : language === 'hi'
-              ? 'संदिग्ध WhatsApp/SMS संदेश, नौकरी के ऑफर, लोन ऑफर या लिंक की जांच करें। हम बाहरी लिंक खोले बिना सुरक्षित रूप से जोखिम के संकेत जांचते हैं।'
-              : 'Paste a suspicious SMS, WhatsApp forward, job offer, loan message, or URL. We analyze warning signs statically without ever opening or running external links.'
-        }
+        title={tr(
+          language,
+          'JENOVA Protect — প্রতারণা ও ভুয়া অফার যাচাই',
+          'JENOVA Protect — धोखाधड़ी और संदिग्ध ऑफर जांच',
+          'JENOVA Protect — Fraud & Suspicious Offer Detection'
+        )}
+        subtitle={tr(
+          language,
+          'অজানা WhatsApp/SMS মেসেজ, চাকরির অফার, লোনের প্রস্তাব বা লিঙ্ক যাচাই করুন। আমরা কখনোই কোনো লিঙ্ক ওপেন করি না — নিরাপদভাবে ঝুঁকির লক্ষণ পরীক্ষা করি।',
+          'संदिग्ध WhatsApp/SMS संदेश, नौकरी के ऑफर, लोन ऑफर या लिंक की जांच करें। हम बाहरी लिंक खोले बिना सुरक्षित रूप से जोखिम के संकेत जांचते हैं।',
+          'Paste a suspicious SMS, WhatsApp forward, job offer, loan message, or URL. We analyze warning signs statically without ever opening or running external links.'
+        )}
       />
 
       <SafetyNotice
-        message={
-          language === 'bn'
-            ? 'কখনোই এখানে আপনার আসল OTP, UPI PIN, ব্যাংক পাসওয়ার্ড বা আধার নম্বর লিখবেন না। শুধু সন্দেহজনক মেসেজ বা লিঙ্কটি পেস্ট করুন।'
-            : language === 'hi'
-              ? 'कभी भी यहाँ अपना असली OTP, UPI PIN, बैंक पासवर्ड या आधार नंबर न लिखें। केवल संदिग्ध संदेश, लिंक या ऑफर टेक्स्ट पेस्ट करें।'
-              : 'Never paste your real OTP, UPI PIN, bank password, or Aadhaar number here. Paste only the suspicious message, link, or offer text.'
-        }
+        message={tr(
+          language,
+          'কখনোই এখানে আপনার আসল OTP, UPI PIN, ব্যাংক পাসওয়ার্ড বা আধার নম্বর লিখবেন না। শুধু সন্দেহজনক মেসেজ বা লিঙ্কটি পেস্ট করুন।',
+          'कभी भी यहाँ अपना असली OTP, UPI PIN, बैंक पासवर्ड या आधार नंबर न लिखें। केवल संदिग्ध संदेश, लिंक या ऑफर टेक्स्ट पेस्ट करें।',
+          'Never paste your real OTP, UPI PIN, bank password, or Aadhaar number here. Paste only the suspicious message, link, or offer text.'
+        )}
       />
 
       {/* Input Panel */}
-      <div className="rounded-2xl bg-white border border-[#E5E3DC] p-5 sm:p-7 space-y-5">
+      <div className="rounded-2xl bg-white border border-[#F2DCC1] p-5 sm:p-7 space-y-5">
         <div>
-          <label className="block text-sm font-semibold text-[#252525] mb-2.5">
-            {language === 'bn'
-              ? '১. আপনি কী পরীক্ষা করতে চান?'
-              : language === 'hi'
-                ? '1. आप क्या जांचना चाहते हैं?'
-                : '1. What would you like to check?'}
+          <label className="block text-sm font-semibold text-[#26364B] mb-2.5">
+            {tr(language, '১. আপনি কী পরীক্ষা করতে চান?', '1. आप क्या जांचना चाहते हैं?', '1. What would you like to check?')}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             {CATEGORIES.map((cat) => (
@@ -232,11 +214,11 @@ export function ScamCheckerPage() {
                 onClick={() => setCategory(cat.id)}
                 className={`px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium border text-left transition-colors cursor-pointer min-h-[44px] ${
                   category === cat.id
-                    ? 'bg-[#176B4D] text-white border-[#176B4D]'
-                    : 'bg-[#FAF9F5] text-[#252525] border-[#E5E3DC] hover:bg-[#EBF4F0]'
+                    ? 'jenova-saffron-btn border-[#E69228]'
+                    : 'bg-[#FFF1DF] text-[#26364B] border-[#F2DCC1] hover:bg-[#FFE5C2]'
                 }`}
               >
-                {language === 'bn' ? cat.bn : language === 'hi' ? cat.hi : cat.en}
+                {tr(language, cat.bn, cat.hi, cat.en)}
               </button>
             ))}
           </div>
@@ -244,17 +226,18 @@ export function ScamCheckerPage() {
 
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <label htmlFor="scam-input" className="text-sm font-semibold text-[#252525]">
-              {language === 'bn'
-                ? '২. সন্দেহজনক মেসেজ, অফার বা লিঙ্ক এখানে পেস্ট করুন বা বলুন'
-                : language === 'hi'
-                  ? '2. संदिग्ध संदेश, ऑफर या लिंक यहाँ पेस्ट करें या बोलें'
-                  : '2. Paste the suspicious message, offer, or link (or speak it)'}
+            <label htmlFor="scam-input" className="text-sm font-semibold text-[#26364B]">
+              {tr(
+                language,
+                '২. সন্দেহজনক মেসেজ, অফার বা লিঙ্ক এখানে পেস্ট করুন বা বলুন',
+                '2. संदिग्ध संदेश, ऑफर या लिंक यहाँ पेस्ट करें या बोलें',
+                '2. Paste the suspicious message, offer, or link (or speak it)'
+              )}
             </label>
             <VoiceInputButton
               lang={language}
               onResult={(spoken) => setContent((prev) => (prev ? `${prev} ${spoken}` : spoken))}
-              label={language === 'bn' ? 'বলুন (ভয়েস)' : language === 'hi' ? 'बोलें' : 'Speak text'}
+              label={tr(language, 'বলুন (ভয়েস)', 'बोलें (वॉइस)', 'Speak text')}
             />
           </div>
           <textarea
@@ -262,26 +245,26 @@ export function ScamCheckerPage() {
             rows={5}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder={
-              language === 'bn'
-                ? 'যেমন: "এয়ারপোর্ট প্যাকিং জব, বেতন ২৫,০০০ টাকা। আজই ১,৫০০ টাকা রেজিস্ট্রেশন ফি পাঠান..." অথবা সন্দেহজনক ওয়েবসাইট লিঙ্ক...'
-                : language === 'hi'
-                  ? 'उदाहरण: "पक्की नौकरी के लिए UPI से ₹1,500 रजिस्ट्रेशन शुल्क भेजें..." या कोई संदिग्ध लिंक/SMS पेस्ट करें...'
-                  : 'Example: "Pay ₹1,500 registration fee via UPI for confirmed job..." or paste a suspicious URL or SMS...'
-            }
-            className="w-full rounded-xl border border-[#D8D5CC] bg-[#FAF9F5] px-4 py-3 text-sm sm:text-base text-[#252525] focus:outline-none focus:ring-2 focus:ring-[#176B4D] focus:bg-white"
+            placeholder={tr(
+              language,
+              'যেমন: "এয়ারপোর্ট প্যাকিং জব, বেতন ২৫,০০০ টাকা। আজই ১,৫০০ টাকা রেজিস্ট্রেশন ফি পাঠান..." অথবা সন্দেহজনক ওয়েবসাইট লিঙ্ক...',
+              'उदाहरण: "पक्की नौकरी के लिए UPI से ₹1,500 रजिस्ट्रेशन शुल्क भेजें..." या कोई संदिग्ध लिंक/SMS पेस्ट करें...',
+              'Example: "Pay ₹1,500 registration fee via UPI for confirmed job..." or paste a suspicious URL or SMS...'
+            )}
+            className="w-full rounded-xl border border-[#F2DCC1] bg-[#FFF1DF] px-4 py-3 text-sm sm:text-base text-[#26364B] focus:outline-none focus:ring-2 focus:ring-[#F4A340] focus:bg-white"
           />
           {error && <p className="mt-2 text-xs font-medium text-red-700">{error}</p>}
         </div>
 
         {/* Safe Test Examples */}
         <div className="space-y-2">
-          <p className="text-xs font-medium text-[#5C5C58]">
-            {language === 'bn'
-              ? 'কীভাবে কাজ করে দেখতে নমুনা উদাহরণ চেষ্টা করুন:'
-              : language === 'hi'
-                ? 'जांच कैसे काम करती है देखने के लिए नमूना उदाहरण आज़माएं:'
-                : 'Try a sample scam pattern to see how analysis works:'}
+          <p className="text-xs font-medium text-[#454545]">
+            {tr(
+              language,
+              'কীভাবে কাজ করে দেখতে নমুনা উদাহরণ চেষ্টা করুন:',
+              'जांच कैसे काम करती है देखने के लिए नमूना उदाहरण आज़माएं:',
+              'Try a sample scam pattern to see how analysis works:'
+            )}
           </p>
           <div className="flex flex-wrap gap-2">
             {SAMPLE_TESTS.map((sample) => (
@@ -293,13 +276,9 @@ export function ScamCheckerPage() {
                   setContent(sample.text);
                   runCheck(sample.text, sample.category);
                 }}
-                className="text-xs px-3 py-2 rounded-lg bg-[#FAF9F5] border border-[#E5E3DC] text-[#252525] hover:border-[#176B4D] hover:bg-[#EBF4F0] transition-colors cursor-pointer text-left"
+                className="text-xs px-3 py-2 rounded-lg bg-[#FFF1DF] border border-[#F2DCC1] text-[#26364B] hover:border-[#F4A340] hover:bg-[#FFE5C2] transition-colors cursor-pointer text-left"
               >
-                {language === 'bn'
-                  ? sample.labelBn
-                  : language === 'hi'
-                    ? sample.labelHi
-                    : sample.labelEn}
+                {tr(language, sample.labelBn, sample.labelHi, sample.labelEn)}
               </button>
             ))}
           </div>
@@ -310,19 +289,13 @@ export function ScamCheckerPage() {
             type="button"
             disabled={checking}
             onClick={() => runCheck()}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#176B4D] hover:bg-[#11533B] text-white font-semibold text-sm sm:text-base transition-colors disabled:opacity-60 cursor-pointer min-h-[48px]"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl jenova-saffron-btn font-semibold text-sm sm:text-base transition-colors disabled:opacity-60 cursor-pointer min-h-[48px]"
           >
             <ShieldAlert className="w-5 h-5" />
             <span>
               {checking
-                ? language === 'bn'
-                  ? 'ঝুঁকি পরীক্ষা চলছে...'
-                  : 'Analyzing risk...'
-                : language === 'bn'
-                  ? 'এখনই ঝুঁকি যাচাই করুন'
-                  : language === 'hi'
-                    ? 'अभी जोखिम जांचें'
-                    : 'Check Risk Now'}
+                ? tr(language, 'ঝুঁকি পরীক্ষা চলছে...', 'जोखिम की जांच हो रही है...', 'Analyzing risk...')
+                : tr(language, 'এখনই ঝুঁকি যাচাই করুন', 'अभी जोखिम जांचें', 'Check Risk Now')}
             </span>
           </button>
           {content && (
@@ -333,9 +306,9 @@ export function ScamCheckerPage() {
                 setResult(null);
                 setError(null);
               }}
-              className="px-4 py-3 rounded-xl border border-[#E5E3DC] text-sm font-medium text-[#5C5C58] hover:bg-[#FAF9F5] cursor-pointer"
+              className="px-4 py-3 rounded-xl border border-[#F2DCC1] text-sm font-medium text-[#454545] hover:bg-[#FFF1DF] cursor-pointer"
             >
-              {language === 'bn' ? 'মুছে ফেলুন' : 'Clear'}
+              {tr(language, 'মুছে ফেলুন', 'साफ़ करें', 'Clear')}
             </button>
           )}
         </div>
@@ -364,18 +337,21 @@ export function ScamCheckerPage() {
             </div>
 
             {result.aiExplanation ? (
-              <div className="rounded-xl bg-white/85 border border-black/10 p-4 text-sm text-[#252525] leading-relaxed">
-                <p className="text-xs font-semibold text-[#176B4D] flex items-center gap-1.5 mb-1">
+              <div className="rounded-xl bg-white/85 border border-black/10 p-4 text-sm text-[#26364B] leading-relaxed">
+                <p className="text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A] flex items-center gap-1.5 mb-1">
                   <Sparkles className="w-3.5 h-3.5" />
-                  {language === 'bn'
-                    ? 'সহজ ভাষায় AI ব্যাখ্যা (Static Engine + AI)'
-                    : 'Plain-Language AI Explanation (Static Engine + AI)'}
+                  {tr(
+                    language,
+                    'সহজ ভাষায় এআই ব্যাখ্যা',
+                    'सरल भाषा में एआई स्पष्टीकरण',
+                    'Plain-Language AI Explanation (Static Engine + AI)'
+                  )}
                 </p>
                 <p className="whitespace-pre-line">{result.aiExplanation}</p>
               </div>
             ) : result.analysisPipeline?.aiLimitationNote ? (
               <div className="rounded-xl bg-white/85 border border-[#F4A340]/50 p-3.5 text-xs text-[#6B3F06] flex items-start gap-2">
-                <Info className="w-4 h-4 text-[#B56A10] shrink-0 mt-0.5" />
+                <Info className="w-4 h-4 text-[#A85B0A] shrink-0 mt-0.5" />
                 <span>{result.analysisPipeline.aiLimitationNote}</span>
               </div>
             ) : null}
@@ -383,22 +359,28 @@ export function ScamCheckerPage() {
             {/* Warning Signs Detected */}
             <div className="space-y-2.5">
               <h3 className="text-sm font-bold uppercase tracking-wider opacity-85">
-                {language === 'bn'
-                  ? `শনাক্তকৃত সতর্কতা লক্ষণ (${result.indicators.length})`
-                  : `Detected Warning Signals (${result.indicators.length})`}
+                {tr(
+                  language,
+                  `শনাক্তকৃত সতর্কতা লক্ষণ (${result.indicators.length})`,
+                  `पहचाने गए चेतावनी संकेत (${result.indicators.length})`,
+                  `Detected Warning Signals (${result.indicators.length})`
+                )}
               </h3>
               {result.indicators.length === 0 ? (
                 <p className="text-sm bg-white/75 rounded-xl p-4 border border-black/10">
-                  {language === 'bn'
-                    ? 'কোনো পরিচিত প্রতারণার শব্দ বা ভুয়া লিঙ্ক পাওয়া যায়নি। তবুও টাকা বা OTP দেওয়ার আগে অফিসিয়াল ওয়েবসাইট যাচাই করুন।'
-                    : 'No common automated scam patterns matched. However, automated screening cannot guarantee 100% safety — always verify independently before paying or sharing personal data.'}
+                  {tr(
+                    language,
+                    'কোনো পরিচিত প্রতারণার শব্দ বা ভুয়া লিঙ্ক পাওয়া যায়নি। তবুও টাকা বা OTP দেওয়ার আগে অফিসিয়াল ওয়েবসাইট যাচাই করুন।',
+                    'कोई सामान्य धोखाधड़ी संकेत नहीं मिला। फिर भी पैसे भेजने या निजी जानकारी साझा करने से पहले आधिकारिक वेबसाइट से स्वतंत्र रूप से पुष्टि जरूर करें।',
+                    'No common automated scam patterns matched. However, automated screening cannot guarantee 100% safety — always verify independently before paying or sharing personal data.'
+                  )}
                 </p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {result.indicators.map((ind, idx) => (
                     <div
                       key={`${ind.code}-${idx}`}
-                      className="rounded-xl bg-white/90 border border-black/10 p-4 space-y-1 text-[#252525]"
+                      className="rounded-xl bg-white/90 border border-black/10 p-4 space-y-1 text-[#26364B]"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-semibold text-sm">{ind.title}</span>
@@ -410,15 +392,11 @@ export function ScamCheckerPage() {
                           }`}
                         >
                           {ind.severity === 'high'
-                            ? language === 'bn'
-                              ? 'গুরুতর'
-                              : 'High'
-                            : language === 'bn'
-                              ? 'সতর্কতা'
-                              : 'Caution'}
+                            ? tr(language, 'গুরুতর', 'गंभीर', 'High')
+                            : tr(language, 'সতর্কতা', 'सावधानी', 'Caution')}
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm text-[#4A4A46] leading-relaxed">
+                      <p className="text-xs sm:text-sm text-[#454545] leading-relaxed">
                         {ind.explanation}
                       </p>
                     </div>
@@ -429,14 +407,14 @@ export function ScamCheckerPage() {
 
             {/* Safe Next Steps & What To Avoid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="rounded-xl bg-white p-5 border border-black/10 text-[#252525] space-y-3">
+              <div className="rounded-xl bg-white p-5 border border-black/10 text-[#26364B] space-y-3">
                 <h3 className="font-bold text-base">
-                  {language === 'bn' ? 'নিরাপদ পরবর্তী পদক্ষেপ' : 'Recommended Next Steps'}
+                  {tr(language, 'নিরাপদ পরবর্তী পদক্ষেপ', 'सुरक्षित अगले कदम', 'Recommended Next Steps')}
                 </h3>
                 <ul className="space-y-2 text-sm">
                   {result.safeNextSteps.map((step, i) => (
                     <li key={i} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-[#176B4D] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#27845B] dark:text-[#45B884] shrink-0 mt-0.5" />
                       <span>{step}</span>
                     </li>
                   ))}
@@ -444,9 +422,9 @@ export function ScamCheckerPage() {
               </div>
 
               {result.whatToAvoid && result.whatToAvoid.length > 0 && (
-                <div className="rounded-xl bg-white p-5 border border-red-200 text-[#252525] space-y-3">
+                <div className="rounded-xl bg-white p-5 border border-red-200 text-[#26364B] space-y-3">
                   <h3 className="font-bold text-base text-red-800">
-                    {language === 'bn' ? 'যা কখনোই করবেন না (এড়িয়ে চলুন)' : 'What You Should Avoid'}
+                    {tr(language, 'যা কখনোই করবেন না (এড়িয়ে চলুন)', 'क्या बिल्कुल न करें (बचें)', 'What You Should Avoid')}
                   </h3>
                   <ul className="space-y-2 text-sm">
                     {result.whatToAvoid.map((item, i) => (
@@ -461,12 +439,15 @@ export function ScamCheckerPage() {
             </div>
 
             {/* Official Reporting Options */}
-            <div className="rounded-xl bg-white p-5 border border-black/10 text-[#252525] space-y-3">
+            <div className="rounded-xl bg-white p-5 border border-black/10 text-[#26364B] space-y-3">
               <h3 className="font-bold text-base flex items-center gap-2">
                 <PhoneCall className="w-4 h-4 text-red-700" />
-                {language === 'bn'
-                  ? 'প্রতারণার শিকার হলে অফিসিয়াল রিপোর্ট করুন'
-                  : 'Official Reporting Channels (India)'}
+                {tr(
+                  language,
+                  'প্রতারণার শিকার হলে অফিসিয়াল রিপোর্ট করুন',
+                  'धोखाधड़ी की आधिकारिक शिकायत के माध्यम (भारत)',
+                  'Official Reporting Channels (India)'
+                )}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {result.officialReporting.map((ch) => {
@@ -478,21 +459,23 @@ export function ScamCheckerPage() {
                       href={href}
                       target={isHttp ? '_blank' : undefined}
                       rel={isHttp ? 'noopener noreferrer' : undefined}
-                      className="rounded-xl border border-[#E5E3DC] bg-[#FAF9F5] p-3.5 hover:border-[#176B4D] transition-colors flex flex-col justify-between gap-2"
+                      className="rounded-xl border border-[#F2DCC1] bg-[#FFF1DF] p-3.5 hover:border-[#F4A340] transition-colors flex flex-col justify-between gap-2"
                     >
                       <div>
-                        <p className="font-bold text-sm text-[#176B4D]">{ch.name}</p>
-                        <p className="text-xs text-[#5C5C58] mt-1">{ch.detail}</p>
+                        <p className="font-bold text-sm text-[#A85B0A] dark:text-[#FFD19A]">{ch.name}</p>
+                        <p className="text-xs text-[#454545] mt-1">{ch.detail}</p>
                       </div>
-                      <span className="text-xs font-semibold text-[#176B4D] inline-flex items-center gap-1">
-                        {isHttp ? 'Open Official Portal' : 'Call 1930'}
+                      <span className="text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A] inline-flex items-center gap-1">
+                        {isHttp
+                          ? tr(language, 'অফিসিয়াল পোর্টাল খুলুন', 'आधिकारिक पोर्टल खोलें', 'Open Official Portal')
+                          : tr(language, '১৯৩০-এ কল করুন', '1930 पर कॉल करें', 'Call 1930')}
                         <ExternalLink className="w-3.5 h-3.5" />
                       </span>
                     </a>
                   );
                 })}
               </div>
-              <p className="text-xs text-[#5C5C58] pt-1 border-t border-[#E5E3DC]">
+              <p className="text-xs text-[#454545] pt-1 border-t border-[#F2DCC1]">
                 {result.disclaimer}
               </p>
             </div>
@@ -505,33 +488,33 @@ export function ScamCheckerPage() {
                   openReportModal({
                     targetType: 'general',
                     targetId: 'scam-alert-tip',
-                    targetTitle:
-                      language === 'bn'
-                        ? 'সন্দেহজনক প্রতারণার সতর্কতা রিপোর্ট'
-                        : 'Suspicious Scam Pattern Report',
+                    targetTitle: tr(
+                      language,
+                      'সন্দেহজনক প্রতারণার সতর্কতা রিপোর্ট',
+                      'संदिग्ध धोखाधड़ी पैटर्न रिपोर्ट',
+                      'Suspicious Scam Pattern Report'
+                    ),
                   })
                 }
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-black/15 text-xs font-semibold text-[#252525] hover:bg-[#FAF9F5] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-black/15 text-xs font-semibold text-[#26364B] hover:bg-[#FFF1DF] cursor-pointer"
               >
                 <Flag className="w-3.5 h-3.5 text-red-700" />
-                {language === 'bn'
-                  ? 'কমিউনিটিকে সতর্ক করতে রিপোর্ট করুন'
-                  : 'Alert JENOVA Safety Team'}
+                {tr(language, 'কমিউনিটিকে সতর্ক করতে রিপোর্ট করুন', 'JENOVA सुरक्षा टीम को सूचित करें', 'Alert JENOVA Safety Team')}
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/local-help')}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-black/15 text-xs font-semibold text-[#176B4D] hover:bg-[#EBF4F0] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-black/15 text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A] hover:bg-[#FFE5C2] cursor-pointer"
               >
-                {language === 'bn' ? 'স্থানীয় সহায়তা খুঁজুন' : 'Find Local Help'}
+                {tr(language, 'স্থানীয় সহায়তা খুঁজুন', 'स्थानीय सहायता खोजें', 'Find Local Help')}
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/finance/fraud-awareness')}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-black/15 text-xs font-semibold text-[#176B4D] hover:bg-[#EBF4F0] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-black/15 text-xs font-semibold text-[#A85B0A] dark:text-[#FFD19A] hover:bg-[#FFE5C2] cursor-pointer"
               >
-                {language === 'bn' ? 'প্রতারণা সুরক্ষা গাইড পড়ুন' : 'Read Fraud Safety Guide'}
+                {tr(language, 'প্রতারণা সুরক্ষা গাইড পড়ুন', 'धोखाधड़ी सुरक्षा गाइड पढ़ें', 'Read Fraud Safety Guide')}
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -540,21 +523,23 @@ export function ScamCheckerPage() {
       )}
 
       {/* Community Fraud Alerts Feed */}
-      <section className="space-y-4 pt-4 border-t border-[#E5E3DC]">
+      <section className="space-y-4 pt-4 border-t border-[#F2DCC1]">
         <div>
-          <h2 className="text-xl font-bold text-[#252525]">
-            {language === 'bn'
-              ? 'সক্রিয় কমিউনিটি প্রতারণা সতর্কতা'
-              : language === 'hi'
-                ? 'सक्रिय सामुदायिक धोखाधड़ी अलर्ट'
-                : 'Active Community Fraud Alerts'}
+          <h2 className="text-xl font-bold text-[#26364B]">
+            {tr(
+              language,
+              'সক্রিয় কমিউনিটি প্রতারণা সতর্কতা',
+              'सक्रिय सामुदायिक धोखाधड़ी अलर्ट',
+              'Active Community Fraud Alerts'
+            )}
           </h2>
-          <p className="text-sm text-[#5C5C58]">
-            {language === 'bn'
-              ? 'সারা দেশে প্রচলিত ডিজিটাল, চাকরি ও সরকারি প্রকল্প-সংক্রান্ত প্রতারণার ধরনগুলি জেনে সচেতন থাকুন।'
-              : language === 'hi'
-                ? 'देश भर में सक्रिय डिजिटल, नौकरी और कल्याणकारी योजनाओं से जुड़ी धोखाधड़ी के तरीकों से सतर्क रहें।'
-                : 'Stay ahead of common digital, employment, and welfare scam patterns flagged across India.'}
+          <p className="text-sm text-[#454545]">
+            {tr(
+              language,
+              'সারা দেশে প্রচলিত ডিজিটাল, চাকরি ও সরকারি প্রকল্প-সংক্রান্ত প্রতারণার ধরনগুলি জেনে সচেতন থাকুন।',
+              'देश भर में सक्रिय डिजिटल, नौकरी और कल्याणकारी योजनाओं से जुड़ी धोखाधड़ी के तरीकों से सतर्क रहें।',
+              'Stay ahead of common digital, employment, and welfare scam patterns flagged across India.'
+            )}
           </p>
         </div>
 
@@ -562,29 +547,29 @@ export function ScamCheckerPage() {
           {alerts.map((alert) => (
             <article
               key={alert.id}
-              className="rounded-2xl bg-white border border-[#E5E3DC] p-5 flex flex-col justify-between gap-4"
+              className="rounded-2xl bg-white border border-[#F2DCC1] p-5 flex flex-col justify-between gap-4"
             >
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-red-100 text-red-800">
-                    {alert.scamType}
+                    {localizeScamType(alert.scamType, language)}
                   </span>
-                  <span className="text-[11px] text-[#5C5C58]">{alert.publishedAt}</span>
+                  <span className="text-[11px] text-[#454545]">{alert.publishedAt}</span>
                 </div>
-                <h3 className="font-bold text-base text-[#252525]">
+                <h3 className="font-bold text-base text-[#26364B]">
                   {pickText(alert.title, language)}
                 </h3>
-                <p className="text-sm text-[#5C5C58] leading-relaxed">
+                <p className="text-sm text-[#454545] leading-relaxed">
                   {pickText(alert.summary, language)}
                 </p>
-                <div className="rounded-lg bg-[#FAF9F5] p-3 text-xs text-[#252525] border border-[#E5E3DC]">
-                  <span className="font-semibold text-[#176B4D]">
-                    {language === 'bn' ? 'সুরক্ষা পরামর্শ: ' : 'Protection Tip: '}
+                <div className="rounded-lg bg-[#FFF1DF] p-3 text-xs text-[#26364B] border border-[#F2DCC1]">
+                  <span className="font-semibold text-[#A85B0A] dark:text-[#FFD19A]">
+                    {tr(language, 'সুরক্ষা পরামর্শ: ', 'सुरक्षा सुझाव: ', 'Protection Tip: ')}
                   </span>
                   {pickText(alert.safetyTip, language)}
                 </div>
               </div>
-              <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#E5E3DC] text-xs text-[#5C5C58]">
+              <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#F2DCC1] text-xs text-[#454545]">
                 <span>{alert.createdBy}</span>
                 <ReadAloudButton
                   compact

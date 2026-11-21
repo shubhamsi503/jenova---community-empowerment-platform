@@ -55,13 +55,25 @@ const UpdatesRemindersPage = lazy(() =>
 const BiodataBuilderPage = lazy(() =>
   import('./pages/BiodataBuilderPage').then((m) => ({ default: m.BiodataBuilderPage }))
 );
+const UdaanHubPage = lazy(() =>
+  import('./pages/UdaanPage').then((m) => ({ default: m.UdaanHubPage }))
+);
+const UdaanProgrammeDetailPage = lazy(() =>
+  import('./pages/UdaanPage').then((m) => ({ default: m.UdaanProgrammeDetailPage }))
+);
+const ActionPassportPage = lazy(() =>
+  import('./pages/ActionPassportPage').then((m) => ({ default: m.ActionPassportPage }))
+);
+const BusinessPlannerPage = lazy(() =>
+  import('./pages/BusinessPlannerPage').then((m) => ({ default: m.BusinessPlannerPage }))
+);
 
 function RouteFallback() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col items-center justify-center gap-3 text-sm text-[#5C5C58]">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col items-center justify-center gap-3 text-sm text-[#454545] dark:text-[#DDD2C5]">
       <JenovaMark size={40} className="animate-pulse" />
-      <span className="font-medium tracking-wide text-[#176B4D]">JENOVA</span>
-      <span className="text-xs text-[#5C5C58]">Loading section...</span>
+      <span className="font-semibold tracking-wide text-[#26364B] dark:text-[#FFF5E8]">JENOVA</span>
+      <span className="text-xs text-[#665B4F] dark:text-[#B6A695]">Loading section...</span>
     </div>
   );
 }
@@ -110,8 +122,16 @@ function PlatformRouter() {
     return <SchemeDetailsPage schemeId={cleanRoute.slice('/schemes/'.length)} />;
   }
 
-  // 12, 13, 14. MSME Support, Business Ideas, Local Business Directory
+  // JENOVA UDAAN Training & Action Passport
+  if (cleanRoute === '/udaan') return <UdaanHubPage />;
+  if (cleanRoute.startsWith('/udaan/')) {
+    return <UdaanProgrammeDetailPage programmeId={cleanRoute.slice('/udaan/'.length)} />;
+  }
+  if (cleanRoute === '/passport') return <ActionPassportPage />;
+
+  // 12, 13, 14. MSME Support, Business Plan Builder, Business Ideas, Local Business Directory
   if (cleanRoute === '/msme') return <MsmeSupportHubPage />;
+  if (cleanRoute === '/msme/planner') return <BusinessPlannerPage />;
   if (cleanRoute === '/msme/ideas') return <BusinessIdeasPage />;
   if (cleanRoute === '/msme/directory') return <LocalBusinessDirectoryPage />;
 

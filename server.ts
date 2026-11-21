@@ -6,17 +6,24 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import type {
+  ActionPassportCategory,
+  ActionPassportGoal,
+  ActionPassportStatus,
   Announcement,
   BusinessProfile,
   CourseListing,
   FraudAlert,
   JobListing,
   LocalAssistanceCentre,
+  SavedBusinessPlan,
+  UdaanEnrolment,
   UpdateSubscription,
+  UserLivelihoodProfile,
   UserRole,
   VerificationStatus,
   WelfareScheme,
 } from './src/types/platform.ts';
+import { UDAAN_PROGRAMMES } from './src/data/udaanCatalog.ts';
 import { isPubliclyVerifiedStatus, store } from './server/storage.ts';
 import { hashPassword, verifyPassword } from './server/seed.ts';
 import {
@@ -31,6 +38,7 @@ import {
 } from './server/auth.ts';
 import {
   askCommunityAssistant,
+  evaluateUdaanPracticeWithAI,
   explainFraudWithAI,
   explainSchemeWithAI,
   synthesizeSpeechWithAI,
@@ -71,7 +79,7 @@ async function startServer() {
   app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('Permissions-Policy', 'camera=(), geolocation=()');
+    res.setHeader('Permissions-Policy', 'camera=(), geolocation=(self)');
     if (req.path.startsWith('/api/')) {
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     }
@@ -163,6 +171,10 @@ async function startServer() {
     state.users = state.users.filter((u) => u.id !== uid);
     state.bookmarks = state.bookmarks.filter((b) => b.userId !== uid);
     state.savingsGoals = state.savingsGoals.filter((g) => g.userId !== uid);
+    delete state.userProfiles[uid];
+    state.udaanEnrolments = state.udaanEnrolments.filter((e) => e.userId !== uid);
+    state.passportGoals = state.passportGoals.filter((p) => p.userId !== uid);
+    state.businessPlans = state.businessPlans.filter((bp) => bp.userId !== uid);
     store.save();
     res.json({ deleted: true });
   });
@@ -189,6 +201,11 @@ async function startServer() {
       'fraud_check_completed',
       'local_help_click',
       'voice_assistant_use',
+      'udaan_enrol',
+      'udaan_lesson_complete',
+      'udaan_quiz_submit',
+      'business_plan_created',
+      'passport_goal_created',
     ];
     if (!allowed.includes(eventType)) {
       return res.status(400).json({ error: 'Invalid analytics event type.' });
@@ -209,6 +226,11 @@ async function startServer() {
       fraudChecksCompleted: summary.fraudChecksCompleted,
       localHelpClicks: summary.localHelpClicks,
       voiceAssistantUses: summary.voiceAssistantUses,
+      udaanEnrolments: summary.udaanEnrolments ?? 0,
+      udaanLessonsCompleted: summary.udaanLessonsCompleted ?? 0,
+      udaanAssessmentsTaken: summary.udaanAssessmentsTaken ?? 0,
+      businessPlansCreated: summary.businessPlansCreated ?? 0,
+      passportGoalsCreated: summary.passportGoalsCreated ?? 0,
       updateSubscribersCount: summary.updateSubscribersCount,
       feedbackCount: summary.feedbackCount,
     });
@@ -519,6 +541,383 @@ async function startServer() {
     res.json({ deleted: true });
   });
 
+  // ── PERSONALISATION PROFILE & LOCATION (OPTIONAL, NON-SENSITIVE) ───────────
+  app.get('/api/profile', requireAuth, (req: AuthedRequest, res) => {
+    const profile = store.getState().userProfiles[req.authUser!.id] || null;
+    res.json({ profile });
+  });
+
+  app.put('/api/profile', requireAuth, (req: AuthedRequest, res) => {
+    const cleanList = (arr: unknown, maxItems = 12): string[] =>
+      Array.isArray(arr)
+        ? arr.map((x) => cleanText(x, 60)).filter(Boolean).slice(0, maxItems)
+        : [];
+
+    const loc = req.body?.location || {};
+    const profile: UserLivelihoodProfile = {
+      education: cleanText(req.body?.education, 80),
+      skills: cleanList(req.body?.skills, 15),
+      interests: cleanList(req.body?.interests, 12),
+      careerGoals: cleanList(req.body?.careerGoals, 8),
+      employmentStatus: cleanText(req.body?.employmentStatus, 60),
+      businessInterests: cleanList(req.body?.businessInterests, 12),
+      preferredOpportunityTypes: cleanList(req.body?.preferredOpportunityTypes, 8),
+      learningPreference:
+        req.body?.learningPreference === 'guided_practice' ||
+        req.body?.learningPreference === 'voice_assisted'
+          ? req.body.learningPreference
+          : 'self_paced',
+      location: {
+        country: cleanText(loc.country, 60) || 'India',
+        state: cleanText(loc.state, 80) || 'West Bengal',
+        district: cleanText(loc.district, 80) || 'Purba Medinipur',
+        city: cleanText(loc.city, 80),
+        locality: cleanText(loc.locality, 80),
+        isGpsDerived: Boolean(loc.isGpsDerived),
+      },
+      updatedAt: new Date().toISOString(),
+    };
+
+    store.getState().userProfiles[req.authUser!.id] = profile;
+    store.save();
+    res.json({ profile });
+  });
+
+  // ── JENOVA UDAAN — TRAINING ENROLMENTS, PROGRESS & AI PRACTICE COACH ───────
+  app.get('/api/udaan/enrolments', requireAuth, (req: AuthedRequest, res) => {
+    const enrolments = store
+      .getState()
+      .udaanEnrolments.filter((e) => e.userId === req.authUser!.id);
+    res.json({ enrolments });
+  });
+
+  app.post('/api/udaan/enrol', requireAuth, (req: AuthedRequest, res) => {
+    const programmeId = cleanText(req.body?.programmeId, 80);
+    const validProgramme = UDAAN_PROGRAMMES.find((p) => p.id === programmeId);
+    if (!validProgramme) {
+      return res.status(400).json({ error: 'Invalid UDAAN training module.' });
+    }
+    const state = store.getState();
+    const existing = state.udaanEnrolments.find(
+      (e) => e.userId === req.authUser!.id && e.programmeId === programmeId
+    );
+    if (existing) {
+      return res.json({ enrolment: existing, alreadyEnrolled: true });
+    }
+    const now = new Date().toISOString();
+    const enrolment: UdaanEnrolment = {
+      id: `udn-${crypto.randomUUID().slice(0, 8)}`,
+      userId: req.authUser!.id,
+      programmeId,
+      enrolledAt: now,
+      updatedAt: now,
+      completedLessonIds: [],
+    };
+    state.udaanEnrolments.unshift(enrolment);
+    store.recordEvent('udaan_enrol', programmeId);
+    res.status(201).json({ enrolment, alreadyEnrolled: false });
+  });
+
+  app.patch('/api/udaan/progress', requireAuth, (req: AuthedRequest, res) => {
+    const programmeId = cleanText(req.body?.programmeId, 80);
+    const validProgramme = UDAAN_PROGRAMMES.find((p) => p.id === programmeId);
+    if (!validProgramme) {
+      return res.status(400).json({ error: 'Invalid UDAAN training module.' });
+    }
+    const state = store.getState();
+    let enrolment = state.udaanEnrolments.find(
+      (e) => e.userId === req.authUser!.id && e.programmeId === programmeId
+    );
+    const now = new Date().toISOString();
+    if (!enrolment) {
+      enrolment = {
+        id: `udn-${crypto.randomUUID().slice(0, 8)}`,
+        userId: req.authUser!.id,
+        programmeId,
+        enrolledAt: now,
+        updatedAt: now,
+        completedLessonIds: [],
+      };
+      state.udaanEnrolments.unshift(enrolment);
+      store.recordEvent('udaan_enrol', programmeId);
+    }
+
+    const validLessonIds = new Set(validProgramme.lessons.map((l) => l.id));
+    if (Array.isArray(req.body?.completedLessonIds)) {
+      const prevCount = enrolment.completedLessonIds.length;
+      enrolment.completedLessonIds = Array.from(
+        new Set(
+          req.body.completedLessonIds
+            .map((id: unknown) => cleanText(id, 40))
+            .filter((id: string) => validLessonIds.has(id))
+        )
+      );
+      if (enrolment.completedLessonIds.length > prevCount) {
+        store.recordEvent('udaan_lesson_complete', programmeId);
+      }
+    }
+
+    if (typeof req.body?.quizScore === 'number' && typeof req.body?.quizTotal === 'number') {
+      enrolment.quizScore = Math.max(0, Math.min(validProgramme.quiz.length, Math.round(req.body.quizScore)));
+      enrolment.quizTotal = validProgramme.quiz.length;
+      enrolment.quizCompletedAt = now;
+      store.recordEvent('udaan_quiz_submit', programmeId);
+    }
+
+    if (typeof req.body?.assignmentResponse === 'string') {
+      enrolment.assignmentResponse = cleanText(req.body.assignmentResponse, 1500);
+      enrolment.assignmentUpdatedAt = now;
+    }
+
+    if (typeof req.body?.assignmentFeedback === 'string') {
+      enrolment.assignmentFeedback = cleanText(req.body.assignmentFeedback, 1500);
+    }
+
+    enrolment.updatedAt = now;
+    store.save();
+    res.json({ enrolment });
+  });
+
+  app.post('/api/udaan/ai-feedback', rateLimit(15, 60_000), async (req, res) => {
+    const programmeId = cleanText(req.body?.programmeId, 80);
+    const userAnswer = cleanText(req.body?.userAnswer, 1200);
+    const language =
+      req.body?.language === 'en' || req.body?.language === 'hi' ? req.body.language : 'bn';
+    const programme = UDAAN_PROGRAMMES.find((p) => p.id === programmeId);
+
+    if (!programme) {
+      return res.status(400).json({ error: 'Valid UDAAN module ID is required.' });
+    }
+    if (userAnswer.length < 15) {
+      return res.status(400).json({
+        error: 'Please write at least 15 characters in your practice response before requesting AI feedback.',
+      });
+    }
+
+    const sensitivePattern = /\b(upi\s*pin|atm\s*pin|cvv|otp\s*is|password\s*is|\d{4}\s?\d{4}\s?\d{4})\b/i;
+    if (sensitivePattern.test(userAnswer)) {
+      return res.status(400).json({
+        error: 'Safety Warning: Please remove Aadhaar numbers, OTPs, PINs, or passwords from your practice answer.',
+      });
+    }
+
+    try {
+      const result = await evaluateUdaanPracticeWithAI({
+        programmeTitle: programme.title.en,
+        assignmentPrompt: programme.assignment.prompt.en,
+        userAnswer,
+        language,
+      });
+      res.json(result);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'AI Practice Coach is temporarily unavailable.';
+      res.status(503).json({ error: msg });
+    }
+  });
+
+  // ── JENOVA ACTION PASSPORT (STEP-BY-STEP GOAL EXECUTION) ───────────────────
+  const VALID_PASSPORT_STATUSES: ActionPassportStatus[] = [
+    'Not Started',
+    'In Progress',
+    'Ready for Next Step',
+    'Action Taken',
+    'User Reported Completed',
+  ];
+  const VALID_PASSPORT_CATEGORIES: ActionPassportCategory[] = [
+    'skill',
+    'training',
+    'business',
+    'scheme',
+    'job',
+    'documents',
+  ];
+
+  app.get('/api/passport', requireAuth, (req: AuthedRequest, res) => {
+    const goals = store
+      .getState()
+      .passportGoals.filter((g) => g.userId === req.authUser!.id);
+    res.json({ goals });
+  });
+
+  app.post('/api/passport', requireAuth, (req: AuthedRequest, res) => {
+    const title = cleanText(req.body?.title, 140);
+    const category = VALID_PASSPORT_CATEGORIES.includes(req.body?.category)
+      ? (req.body.category as ActionPassportCategory)
+      : 'skill';
+    const officialUrl = cleanText(req.body?.officialUrl, 240);
+    if (!title) {
+      return res.status(400).json({ error: 'Goal title is required.' });
+    }
+    if (!isValidHttpUrl(officialUrl)) {
+      return res.status(400).json({ error: 'Official URL must start with http:// or https://.' });
+    }
+
+    const steps = Array.isArray(req.body?.steps)
+      ? req.body.steps.slice(0, 15).map((s: { id?: string; title?: string; done?: boolean; officialUrl?: string }, idx: number) => ({
+          id: cleanText(s?.id, 40) || `st-${idx + 1}`,
+          title: cleanText(s?.title, 180) || `Step ${idx + 1}`,
+          done: Boolean(s?.done),
+          officialUrl: isValidHttpUrl(cleanText(s?.officialUrl, 240)) ? cleanText(s?.officialUrl, 240) : '',
+        }))
+      : [];
+
+    const documentsChecklist = Array.isArray(req.body?.documentsChecklist)
+      ? req.body.documentsChecklist.slice(0, 15).map((d: { id?: string; label?: string; ready?: boolean }, idx: number) => ({
+          id: cleanText(d?.id, 40) || `doc-${idx + 1}`,
+          label: cleanText(d?.label, 140) || `Document ${idx + 1}`,
+          ready: Boolean(d?.ready),
+        }))
+      : [];
+
+    const now = new Date().toISOString();
+    const goal: ActionPassportGoal = {
+      id: `pass-${crypto.randomUUID().slice(0, 8)}`,
+      userId: req.authUser!.id,
+      title,
+      category,
+      status: VALID_PASSPORT_STATUSES.includes(req.body?.status)
+        ? (req.body.status as ActionPassportStatus)
+        : 'Not Started',
+      linkedPath: cleanText(req.body?.linkedPath, 120),
+      officialUrl,
+      steps,
+      documentsChecklist,
+      notes: cleanText(req.body?.notes, 1000),
+      reminderDate: cleanText(req.body?.reminderDate, 20),
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    store.getState().passportGoals.unshift(goal);
+    store.recordEvent('passport_goal_created', goal.id);
+    res.status(201).json({ goal });
+  });
+
+  app.patch('/api/passport/:id', requireAuth, (req: AuthedRequest, res) => {
+    const goal = store
+      .getState()
+      .passportGoals.find((g) => g.id === req.params.id && g.userId === req.authUser!.id);
+    if (!goal) return res.status(404).json({ error: 'Action Passport goal not found.' });
+
+    if (req.body?.title) goal.title = cleanText(req.body.title, 140);
+    if (VALID_PASSPORT_STATUSES.includes(req.body?.status)) {
+      goal.status = req.body.status;
+    }
+    if (typeof req.body?.notes === 'string') {
+      goal.notes = cleanText(req.body.notes, 1000);
+    }
+    if (typeof req.body?.reminderDate === 'string') {
+      goal.reminderDate = cleanText(req.body.reminderDate, 20);
+    }
+    if (Array.isArray(req.body?.steps)) {
+      goal.steps = req.body.steps.slice(0, 15).map((s: { id?: string; title?: string; done?: boolean; officialUrl?: string }, idx: number) => ({
+        id: cleanText(s?.id, 40) || `st-${idx + 1}`,
+        title: cleanText(s?.title, 180) || `Step ${idx + 1}`,
+        done: Boolean(s?.done),
+        officialUrl: isValidHttpUrl(cleanText(s?.officialUrl, 240)) ? cleanText(s?.officialUrl, 240) : '',
+      }));
+    }
+    if (Array.isArray(req.body?.documentsChecklist)) {
+      goal.documentsChecklist = req.body.documentsChecklist
+        .slice(0, 15)
+        .map((d: { id?: string; label?: string; ready?: boolean }, idx: number) => ({
+          id: cleanText(d?.id, 40) || `doc-${idx + 1}`,
+          label: cleanText(d?.label, 140) || `Document ${idx + 1}`,
+          ready: Boolean(d?.ready),
+        }));
+    }
+    goal.updatedAt = new Date().toISOString();
+    store.save();
+    res.json({ goal });
+  });
+
+  app.delete('/api/passport/:id', requireAuth, (req: AuthedRequest, res) => {
+    const state = store.getState();
+    const before = state.passportGoals.length;
+    state.passportGoals = state.passportGoals.filter(
+      (g) => !(g.id === req.params.id && g.userId === req.authUser!.id)
+    );
+    if (state.passportGoals.length === before) {
+      return res.status(404).json({ error: 'Action Passport goal not found.' });
+    }
+    store.save();
+    res.json({ deleted: true });
+  });
+
+  // ── SELF-EMPLOYMENT BUSINESS PLAN BUILDER (PERSISTENT) ─────────────────────
+  app.get('/api/business-plans', requireAuth, (req: AuthedRequest, res) => {
+    const plans = store
+      .getState()
+      .businessPlans.filter((p) => p.userId === req.authUser!.id);
+    res.json({ plans });
+  });
+
+  app.post('/api/business-plans', requireAuth, (req: AuthedRequest, res) => {
+    const businessName = cleanText(req.body?.businessName, 140);
+    if (!businessName) {
+      return res.status(400).json({ error: 'Business name or title is required.' });
+    }
+
+    const startupCosts = Array.isArray(req.body?.startupCosts)
+      ? req.body.startupCosts.slice(0, 20).map((c: { id?: string; item?: string; amount?: number }, idx: number) => ({
+          id: cleanText(c?.id, 30) || `sc-${idx + 1}`,
+          item: cleanText(c?.item, 100) || `Item ${idx + 1}`,
+          amount: Math.max(0, Number(c?.amount) || 0),
+        }))
+      : [];
+
+    const plan: SavedBusinessPlan = {
+      id: `bplan-${crypto.randomUUID().slice(0, 8)}`,
+      userId: req.authUser!.id,
+      businessName,
+      category: cleanText(req.body?.category, 80) || 'Micro-Enterprise',
+      location: cleanText(req.body?.location, 120) || 'Purba Medinipur, West Bengal',
+      targetCustomers: cleanText(req.body?.targetCustomers, 300),
+      valueProposition: cleanText(req.body?.valueProposition, 500),
+      startupCosts,
+      unitPrice: Math.max(0, Number(req.body?.unitPrice) || 0),
+      unitCost: Math.max(0, Number(req.body?.unitCost) || 0),
+      expectedMonthlyUnits: Math.max(0, Number(req.body?.expectedMonthlyUnits) || 0),
+      fixedMonthlyCost: Math.max(0, Number(req.body?.fixedMonthlyCost) || 0),
+      customerResearchChecks: Array.isArray(req.body?.customerResearchChecks)
+        ? req.body.customerResearchChecks.slice(0, 12).map((c: { id?: string; label?: string; done?: boolean }, idx: number) => ({
+            id: cleanText(c?.id, 30) || `cr-${idx + 1}`,
+            label: cleanText(c?.label, 180),
+            done: Boolean(c?.done),
+          }))
+        : [],
+      marketingSteps: Array.isArray(req.body?.marketingSteps)
+        ? req.body.marketingSteps.map((m: unknown) => cleanText(m, 180)).filter(Boolean).slice(0, 10)
+        : [],
+      readinessChecks: Array.isArray(req.body?.readinessChecks)
+        ? req.body.readinessChecks.slice(0, 12).map((r: { id?: string; label?: string; done?: boolean }, idx: number) => ({
+            id: cleanText(r?.id, 30) || `rc-${idx + 1}`,
+            label: cleanText(r?.label, 180),
+            done: Boolean(r?.done),
+          }))
+        : [],
+      notes: cleanText(req.body?.notes, 1000),
+      updatedAt: new Date().toISOString(),
+    };
+
+    store.getState().businessPlans.unshift(plan);
+    store.recordEvent('business_plan_created', plan.id);
+    res.status(201).json({ plan });
+  });
+
+  app.delete('/api/business-plans/:id', requireAuth, (req: AuthedRequest, res) => {
+    const state = store.getState();
+    const before = state.businessPlans.length;
+    state.businessPlans = state.businessPlans.filter(
+      (p) => !(p.id === req.params.id && p.userId === req.authUser!.id)
+    );
+    if (state.businessPlans.length === before) {
+      return res.status(404).json({ error: 'Business plan not found.' });
+    }
+    store.save();
+    res.json({ deleted: true });
+  });
+
   // ── COMMUNITY SUPPORT: REPORTS, FEEDBACK, ANNOUNCEMENTS ────────────────────
   app.get('/api/announcements', (_req, res) => {
     const active = store.getState().announcements.filter((a) => a.isActive);
@@ -753,8 +1152,25 @@ async function startServer() {
       });
     }
 
+    const rawProfile = req.body?.profileContext;
+    const profileContext =
+      rawProfile && typeof rawProfile === 'object'
+        ? {
+            state: cleanText(rawProfile.state, 60),
+            district: cleanText(rawProfile.district, 60),
+            education: cleanText(rawProfile.education, 60),
+            employmentStatus: cleanText(rawProfile.employmentStatus, 60),
+            careerGoals: Array.isArray(rawProfile.careerGoals)
+              ? rawProfile.careerGoals.map((x: unknown) => cleanText(x, 40)).filter(Boolean).slice(0, 6)
+              : [],
+            skills: Array.isArray(rawProfile.skills)
+              ? rawProfile.skills.map((x: unknown) => cleanText(x, 40)).filter(Boolean).slice(0, 6)
+              : [],
+          }
+        : undefined;
+
     try {
-      const result = await askCommunityAssistant(message, language, history);
+      const result = await askCommunityAssistant(message, language, history, profileContext);
       res.json(result);
     } catch (err: unknown) {
       console.error('Gemini assistant error:', err);
@@ -1308,7 +1724,16 @@ async function startServer() {
   // Super Admin ONLY: change user role & download backup snapshot
   app.patch('/api/admin/users/:id/role', requireMinRole('super_admin'), (req: AuthedRequest, res) => {
     const newRole = req.body?.role as UserRole;
-    if (!['user', 'content_reviewer', 'content_admin', 'super_admin'].includes(newRole)) {
+    if (
+      ![
+        'user',
+        'regional_contributor',
+        'training_manager',
+        'content_reviewer',
+        'content_admin',
+        'super_admin',
+      ].includes(newRole)
+    ) {
       return res.status(400).json({ error: 'Invalid role.' });
     }
     const user = store.getState().users.find((u) => u.id === req.params.id);

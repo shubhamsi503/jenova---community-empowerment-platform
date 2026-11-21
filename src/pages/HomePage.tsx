@@ -17,7 +17,17 @@ import {
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useApp } from '../context/AppContext';
-import { pickText } from '../i18n/translations';
+import {
+  localizeAssistanceCategory,
+  localizeJobCategory,
+  localizeMode,
+  localizeScamType,
+  localizeSchemeCategory,
+  localizeScope,
+  localizeSkillCategory,
+  pickText,
+  tr,
+} from '../i18n/translations';
 import { apiFetch } from '../lib/api';
 import type {
   Announcement,
@@ -43,6 +53,7 @@ import { JenovaHeroShowcase } from '../components/JenovaHeroShowcase';
 import { DemoModal } from '../components/DemoModal';
 import { SafetyNotice, VerificationLabel } from '../components/SharedUI';
 import { ReadAloudButton } from '../components/VoiceAccessibility';
+import { PersonalisedForYouSection } from '../components/PersonalisedForYouSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -807,34 +818,123 @@ export function HomePage() {
       </section>
 
       {/* =====================================================================
-          ATTRACTIVE OFFICIAL COMMUNITY NOTICE SPOTLIGHT (Replaces Old Top Strip)
+          BELOW-THE-FOLD HOMEPAGE SECTIONS (LIGHT SAFFRON-ORANGE & CREAM THEME)
+          Locked untouched above: Navbar, Hero, Howrah Bridge, 3D India Map,
+          JENOVA Globe, 5 Glass Service Cards, and How JENOVA Works.
+          ===================================================================== */}
+      <div className="jenova-saffron-theme bg-[#FFF9F0] dark:bg-[#18120C] text-[#454545] dark:text-[#DDD2C5] border-t border-[#F2DCC1]/80 dark:border-[#3F2E1E] mt-4 pt-8 pb-14 sm:pb-16">
+      {/* =====================================================================
+          PERSONALISED LIVELIHOOD ENGINE + JENOVA UDAAN & ACTION PASSPORT DISCOVERY
+          ===================================================================== */}
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6 space-y-5">
+        <PersonalisedForYouSection compact forceSaffron />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <button
+            type="button"
+            onClick={() => navigate('/udaan')}
+            className="text-left p-5 sm:p-6 rounded-[24px] bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] hover:border-[#F4A340] shadow-[0_12px_30px_-14px_rgba(244,163,64,0.2)] transition-all flex items-center justify-between gap-4 group cursor-pointer"
+          >
+            <div className="space-y-1.5">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#A85B0A] dark:text-[#FFD19A]">
+                {tr(
+                  language,
+                  'প্রশিক্ষণ • অনুশীলন • পেশাদার বিকাশ',
+                  'प्रशिक्षण • अभ्यास • पेशेवर विकास',
+                  'TRAINING • PRACTICE • PROFESSIONAL GROWTH'
+                )}
+              </p>
+              <h3 className="text-lg font-black text-[#26364B] dark:text-[#FFF5E8] group-hover:text-[#A85B0A] dark:group-hover:text-[#FFD19A] transition-colors">
+                JENOVA UDAAN —{' '}
+                {tr(
+                  language,
+                  'শেখা থেকে বাস্তব আত্মবিশ্বাস',
+                  'सीखने से वास्तविक आत्मविश्वास तक',
+                  'From Learning to Real-World Confidence'
+                )}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
+                {tr(
+                  language,
+                  'ইন্টারভিউ প্রস্তুতি, বিজনেস প্ল্যান, ডিজিটাল দক্ষতা, সফট স্কিল ও MSME অনুশীলন — ৬টি স্ব-গতিশীল মডিউল, কুইজ ও AI প্র্যাকটিস কোচসহ।',
+                  'इंटरव्यू तैयारी, बिजनेस प्लान, डिजिटल कौशल, सॉफ्ट स्किल्स और MSME अभ्यास — 6 स्व-गति मॉड्यूल, क्विज़ और AI प्रैक्टिस कोच के साथ।',
+                  '6 self-paced practical modules covering Interview Prep, Business Planning, Soft Skills, Digital Productivity, MSME Entrepreneurship & Workplace Execution.'
+                )}
+              </p>
+            </div>
+            <span className="w-10 h-10 rounded-full bg-[#FFE5C2] dark:bg-[#382616] text-[#A85B0A] dark:text-[#FFD19A] group-hover:bg-[#F4A340] group-hover:text-[#26364B] flex items-center justify-center shrink-0 transition-colors">
+              <ArrowRight className="w-5 h-5" />
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate('/passport')}
+            className="text-left p-5 sm:p-6 rounded-[24px] bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] hover:border-[#F4A340] shadow-[0_12px_30px_-14px_rgba(244,163,64,0.2)] transition-all flex items-center justify-between gap-4 group cursor-pointer"
+          >
+            <div className="space-y-1.5">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#A85B0A] dark:text-[#FFD19A]">
+                {tr(
+                  language,
+                  'পরিকল্পনা থেকে বাস্তব পদক্ষেপ',
+                  'योजना से वास्तविक कदम तक',
+                  'GUIDED ACTION TRACKER'
+                )}
+              </p>
+              <h3 className="text-lg font-black text-[#26364B] dark:text-[#FFF5E8] group-hover:text-[#A85B0A] dark:group-hover:text-[#FFD19A] transition-colors">
+                JENOVA Action Passport —{' '}
+                {tr(
+                  language,
+                  'ধাপে ধাপে লক্ষ্য ও কাগজপত্র ট্র্যাক করুন',
+                  'चरणबद्ध लक्ष्य और दस्तावेज़ ट्रैक करें',
+                  'Track Goals, Documents & Next Steps'
+                )}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
+                {tr(
+                  language,
+                  'দক্ষতা শেখা, ছোট ব্যবসা শুরু, চাকরি বা সরকারি প্রকল্পের প্রস্তুতিকে সহজ চেকলিস্ট, নোট ও অফিসিয়াল লিঙ্কে সাজিয়ে রাখুন।',
+                  'कौशल, छोटे व्यवसाय, नौकरी या सरकारी योजना की तैयारी को सरल चेकलिस्ट, नोट्स और आधिकारिक लिंक के साथ व्यवस्थित रखें।',
+                  'Convert any skill, UDAAN module, small business plan, job goal, or government scheme into step-by-step checklists with official links and notes.'
+                )}
+              </p>
+            </div>
+            <span className="w-10 h-10 rounded-full bg-[#FFE5C2] dark:bg-[#382616] text-[#A85B0A] dark:text-[#FFD19A] group-hover:bg-[#F4A340] group-hover:text-[#26364B] flex items-center justify-center shrink-0 transition-colors">
+              <ArrowRight className="w-5 h-5" />
+            </span>
+          </button>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          ATTRACTIVE OFFICIAL COMMUNITY NOTICE SPOTLIGHT
           ===================================================================== */}
       <section className="reveal-section max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6">
-        <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-white via-[#F5FAFF] to-[#EBF9F3] dark:from-[#0A2242] dark:via-[#0C2B52] dark:to-[#072F38] border border-[#36E7F2]/45 dark:border-[#36E7F2]/35 shadow-[0_16px_40px_-14px_rgba(9,43,85,0.22)]">
-          {/* Indian Tricolour Luminous Accent Strip */}
+        <div className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-white via-[#FFF9F0] to-[#FFF1DF] dark:from-[#241B13] dark:via-[#221911] dark:to-[#2B1F15] border border-[#F2DCC1] dark:border-[#4A3522] shadow-[0_14px_34px_-14px_rgba(244,163,64,0.22)]">
+          {/* Warm Saffron-to-Green Portal Accent Strip */}
           <div
-            className="h-1.5 w-full bg-gradient-to-r from-[#FF8A18] via-[#FFC45C] via-45% to-[#138A45]"
+            className="h-1.5 w-full bg-gradient-to-r from-[#F4A340] via-[#FFD19A] via-55% to-[#27845B]"
             aria-hidden="true"
           />
 
           <div className="p-5 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="flex items-start gap-4 flex-1 min-w-0">
-              {/* Glowing Notice Emblem */}
-              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FF8A18] via-[#F97316] to-[#092B55] text-white flex items-center justify-center shadow-[0_10px_24px_-6px_rgba(255,138,24,0.55)] border border-white/40">
+              {/* Warm Saffron Notice Emblem */}
+              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#F4A340] to-[#FFB75E] text-[#26364B] flex items-center justify-center shadow-[0_10px_22px_-8px_rgba(244,163,64,0.45)] border border-[#FFD19A]">
                 <Megaphone className="w-6 h-6 sm:w-7 sm:h-7" />
               </div>
 
               <div className="space-y-2 min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55]">
-                    <span className="w-2 h-2 rounded-full bg-[#36E7F2] dark:bg-[#138A45] animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#FFE5C2] dark:bg-[#382616] text-[#26364B] dark:text-[#FFD19A] border border-[#F2DCC1] dark:border-[#5C4128]">
+                    <span className="w-2 h-2 rounded-full bg-[#F4A340] animate-pulse" />
                     {language === 'bn'
                       ? 'গুরুত্বপূর্ণ কমিউনিটি নোটিশ'
                       : language === 'hi'
                         ? 'महत्वपूर्ण सामुदायिक सूचना'
                         : 'Official Community Notice'}
                   </span>
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#138A45] dark:text-[#8FF6FF]">
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#27845B] dark:text-[#45B884]">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     {language === 'bn'
                       ? 'যাচাইকৃত সরকারি লিঙ্ক · কোনো ফি নেই'
@@ -844,7 +944,7 @@ export function HomePage() {
                   </span>
                 </div>
 
-                <h2 className="text-lg sm:text-xl font-black text-[#092B55] dark:text-white leading-snug">
+                <h2 className="text-lg sm:text-xl font-black text-[#26364B] dark:text-[#FFF5E8] leading-snug">
                   {activeAnnouncement
                     ? pickText(activeAnnouncement.title, language)
                     : language === 'bn'
@@ -854,7 +954,7 @@ export function HomePage() {
                         : 'JENOVA Community Growth Hub — Verified Opportunities for Every Citizen'}
                 </h2>
 
-                <p className="text-xs sm:text-sm text-[#355373] dark:text-[#CBE6FF] leading-relaxed max-w-4xl">
+                <p className="text-xs sm:text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed max-w-4xl">
                   {activeAnnouncement
                     ? pickText(activeAnnouncement.body, language)
                     : language === 'bn'
@@ -873,8 +973,8 @@ export function HomePage() {
                         onClick={() => setNoticeIdx(i)}
                         className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors cursor-pointer ${
                           i === noticeIdx
-                            ? 'bg-[#138A45] text-white'
-                            : 'bg-[#E2EFFB] dark:bg-white/10 text-[#092B55] dark:text-[#B9D8F7] hover:bg-[#D0E6FA]'
+                            ? 'jenova-saffron-btn'
+                            : 'bg-[#FFF1DF] dark:bg-[#2E2116] text-[#26364B] dark:text-[#DDD2C5] border border-[#F2DCC1] dark:border-[#4A3522] hover:bg-[#FFE5C2]'
                         }`}
                       >
                         {language === 'bn'
@@ -894,9 +994,9 @@ export function HomePage() {
               <button
                 type="button"
                 onClick={() => navigate('/scam-check')}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#092B55] via-[#0B4D46] to-[#138A45] hover:brightness-110 text-white text-xs font-bold shadow-md cursor-pointer whitespace-nowrap"
+                className="jenova-saffron-btn inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer whitespace-nowrap"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#FFC45C]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#26364B]" />
                 <span>
                   {language === 'bn'
                     ? 'JENOVA Protect ব্যবহার করুন'
@@ -910,7 +1010,7 @@ export function HomePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/schemes')}
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#081F3D] border border-[#FF8A18]/50 text-[#C2570A] dark:text-[#FFC45C] hover:bg-[#FFF5EB] dark:hover:bg-white/10 text-xs font-bold cursor-pointer whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#241B13] border border-[#F4A340]/60 text-[#26364B] dark:text-[#FFD19A] hover:bg-[#FFE5C2] dark:hover:bg-[#382616] text-xs font-bold cursor-pointer whitespace-nowrap transition-colors"
                 >
                   <span>
                     {language === 'bn'
@@ -923,7 +1023,7 @@ export function HomePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/contact')}
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#081F3D] border border-[#092B55]/25 dark:border-[#36E7F2]/35 text-[#092B55] dark:text-[#DCEEFF] hover:bg-[#EAF5FF] dark:hover:bg-white/10 text-xs font-bold cursor-pointer whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] text-[#26364B] dark:text-[#FFF5E8] hover:bg-[#FFF1DF] dark:hover:bg-[#382616] text-xs font-bold cursor-pointer whitespace-nowrap transition-colors"
                 >
                   <MessageSquarePlus className="w-3.5 h-3.5" />
                   <span>
@@ -948,10 +1048,10 @@ export function HomePage() {
       <section className="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div className="max-w-2xl">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#26364B] dark:text-[#FFF5E8]">
               {t.home.localTitle}
             </h2>
-            <p className="mt-1.5 text-sm sm:text-base text-[#46607E] dark:text-[#B9D8F7]">
+            <p className="mt-1.5 text-sm sm:text-base text-[#454545] dark:text-[#DDD2C5]">
               {t.home.localSubtitle}
             </p>
           </div>
@@ -959,14 +1059,14 @@ export function HomePage() {
             <button
               type="button"
               onClick={() => navigate('/jobs')}
-              className="text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
+              className="text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap cursor-pointer"
             >
               {t.nav.jobs} →
             </button>
             <button
               type="button"
               onClick={() => navigate('/skills')}
-              className="text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
+              className="text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap cursor-pointer"
             >
               {t.nav.skills} →
             </button>
@@ -975,37 +1075,37 @@ export function HomePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Approved Job & Portal Listings */}
-          <div className="rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 overflow-hidden">
-            <div className="px-5 py-3.5 bg-[#EAF4FD] dark:bg-[#081A33] border-b border-[#D6E6F5] dark:border-white/10 flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#092B55] dark:text-white">{t.nav.jobs}</h3>
+          <div className="rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] overflow-hidden">
+            <div className="px-5 py-3.5 bg-[#FFF1DF] dark:bg-[#2B1F15] border-b border-[#F2DCC1] dark:border-[#3F2E1E] flex items-center justify-between">
+              <h3 className="text-sm font-bold text-[#26364B] dark:text-[#FFF5E8]">{t.nav.jobs}</h3>
               <button
                 type="button"
                 onClick={() => navigate('/jobs/biodata')}
-                className="text-xs font-bold text-[#FF8A18] hover:underline cursor-pointer"
+                className="text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
               >
-                1-Min Biodata Builder →
+                {tr(language, '১-মিনিটে বায়োডাটা →', '1-मिनट बायोडाटा →', '1-Min Biodata Builder →')}
               </button>
             </div>
-            <div className="divide-y divide-[#E4EFFA] dark:divide-white/10">
+            <div className="divide-y divide-[#F2DCC1] dark:divide-[#3F2E1E]">
               {jobs.map((job) => (
                 <button
                   key={job.id}
                   type="button"
                   onClick={() => navigate(`/jobs/${job.id}`)}
-                  className="w-full text-left p-5 hover:bg-[#F5FAFF] dark:hover:bg-white/5 transition-colors block cursor-pointer"
+                  className="w-full text-left p-5 hover:bg-[#FFF9F0] dark:hover:bg-[#2E2116] transition-colors block cursor-pointer"
                 >
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#46607E] dark:text-[#A8CBEB] mb-1.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#665B4F] dark:text-[#B6A695] mb-1.5">
                     <span>
-                      {job.category} · {job.location}
+                      {localizeJobCategory(job.category, language)} · {job.location}
                     </span>
                     <VerificationLabel status={job.verificationStatus} isDemo={job.isDemo} />
                   </div>
-                  <p className="text-base font-bold text-[#092B55] dark:text-white">
+                  <p className="text-base font-bold text-[#26364B] dark:text-[#FFF5E8]">
                     {pickText(job.title, language)}
                   </p>
-                  <p className="mt-1 text-xs text-[#46607E] dark:text-[#B9D8F7]">
+                  <p className="mt-1 text-xs text-[#454545] dark:text-[#DDD2C5]">
                     {job.employerName} ·{' '}
-                    <span className="font-bold text-[#138A45] dark:text-[#36E7F2]">
+                    <span className="font-bold text-[#27845B] dark:text-[#45B884]">
                       {pickText(job.salaryDisplay, language)}
                     </span>
                   </p>
@@ -1015,36 +1115,37 @@ export function HomePage() {
           </div>
 
           {/* Verified Free Skill Development */}
-          <div className="rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 overflow-hidden">
-            <div className="px-5 py-3.5 bg-[#EAF4FD] dark:bg-[#081A33] border-b border-[#D6E6F5] dark:border-white/10 flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#092B55] dark:text-white">{t.nav.skills}</h3>
+          <div className="rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] overflow-hidden">
+            <div className="px-5 py-3.5 bg-[#FFF1DF] dark:bg-[#2B1F15] border-b border-[#F2DCC1] dark:border-[#3F2E1E] flex items-center justify-between">
+              <h3 className="text-sm font-bold text-[#26364B] dark:text-[#FFF5E8]">{t.nav.skills}</h3>
               <button
                 type="button"
                 onClick={() => navigate('/updates')}
-                className="inline-flex items-center gap-1 text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
               >
                 <Bell className="w-3.5 h-3.5" />
-                <span>Updates &amp; Reminders</span>
+                <span>{t.nav.updates}</span>
               </button>
             </div>
-            <div className="divide-y divide-[#E4EFFA] dark:divide-white/10">
+            <div className="divide-y divide-[#F2DCC1] dark:divide-[#3F2E1E]">
               {courses.map((course) => (
                 <button
                   key={course.id}
                   type="button"
                   onClick={() => navigate(`/skills/${course.id}`)}
-                  className="w-full text-left p-5 hover:bg-[#F5FAFF] dark:hover:bg-white/5 transition-colors block cursor-pointer"
+                  className="w-full text-left p-5 hover:bg-[#FFF9F0] dark:hover:bg-[#2E2116] transition-colors block cursor-pointer"
                 >
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#46607E] dark:text-[#A8CBEB] mb-1.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#665B4F] dark:text-[#B6A695] mb-1.5">
                     <span>
-                      {course.category} · {course.mode} · {course.fees}
+                      {localizeSkillCategory(course.category, language)} ·{' '}
+                      {localizeMode(course.mode, language)} · {course.fees}
                     </span>
                     <VerificationLabel status={course.verificationStatus} isDemo={course.isDemo} />
                   </div>
-                  <p className="text-base font-bold text-[#092B55] dark:text-white">
+                  <p className="text-base font-bold text-[#26364B] dark:text-[#FFF5E8]">
                     {pickText(course.name, language)}
                   </p>
-                  <p className="mt-1 text-xs text-[#46607E] dark:text-[#B9D8F7]">
+                  <p className="mt-1 text-xs text-[#454545] dark:text-[#DDD2C5]">
                     {course.provider} · {course.duration}
                   </p>
                 </button>
@@ -1058,17 +1159,17 @@ export function HomePage() {
       <section className="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#26364B] dark:text-[#FFF5E8]">
               {t.home.financeTitle}
             </h2>
-            <p className="mt-1.5 text-sm sm:text-base text-[#46607E] dark:text-[#B9D8F7] max-w-2xl">
+            <p className="mt-1.5 text-sm sm:text-base text-[#454545] dark:text-[#DDD2C5] max-w-2xl">
               {t.home.financeSubtitle}
             </p>
           </div>
           <button
             type="button"
             onClick={() => navigate('/finance')}
-            className="text-sm font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
+            className="text-sm font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap cursor-pointer"
           >
             {t.home.viewAll} →
           </button>
@@ -1124,18 +1225,18 @@ export function HomePage() {
           ].map((tool) => (
             <div
               key={tool.path}
-              className="p-6 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 flex flex-col justify-between"
+              className="p-6 rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] hover:border-[#F4A340] transition-colors flex flex-col justify-between"
             >
               <div>
-                <h3 className="text-lg font-bold text-[#092B55] dark:text-white">{tool.title}</h3>
-                <p className="mt-2 text-sm text-[#46607E] dark:text-[#B9D8F7] leading-relaxed">
+                <h3 className="text-lg font-bold text-[#26364B] dark:text-[#FFF5E8]">{tool.title}</h3>
+                <p className="mt-2 text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
                   {tool.desc}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => navigate(tool.path)}
-                className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline cursor-pointer"
+                className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
               >
                 <span>{t.home.openTool}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1153,10 +1254,10 @@ export function HomePage() {
           <div className="max-w-2xl space-y-2.5">
             <JenovaSchemesLogo size="sm" theme={theme} />
             <div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#26364B] dark:text-[#FFF5E8]">
                 {t.home.schemesTitle}
               </h2>
-              <p className="mt-1.5 text-sm sm:text-base text-[#46607E] dark:text-[#B9D8F7]">
+              <p className="mt-1.5 text-sm sm:text-base text-[#454545] dark:text-[#DDD2C5]">
                 {t.home.schemesSubtitle}
               </p>
             </div>
@@ -1164,7 +1265,7 @@ export function HomePage() {
           <button
             type="button"
             onClick={() => navigate('/schemes')}
-            className="text-sm font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
+            className="text-sm font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap cursor-pointer"
           >
             {t.home.viewAll} →
           </button>
@@ -1174,31 +1275,31 @@ export function HomePage() {
           {schemes.map((sch) => (
             <div
               key={sch.id}
-              className="p-6 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 flex flex-col justify-between"
+              className="p-6 rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] hover:border-[#F4A340] transition-colors flex flex-col justify-between"
             >
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#46607E] dark:text-[#A8CBEB] mb-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#665B4F] dark:text-[#B6A695] mb-2">
                   <span>
-                    {sch.scope} · {sch.category}
+                    {localizeScope(sch.scope, language)} · {localizeSchemeCategory(sch.category, language)}
                   </span>
                   <VerificationLabel status={sch.verificationStatus} />
                 </div>
-                <h3 className="text-lg font-bold text-[#092B55] dark:text-white">
+                <h3 className="text-lg font-bold text-[#26364B] dark:text-[#FFF5E8]">
                   {pickText(sch.officialName, language)}
                 </h3>
-                <p className="mt-1 text-xs text-[#46607E] dark:text-[#A8CBEB]">
+                <p className="mt-1 text-xs text-[#665B4F] dark:text-[#B6A695]">
                   {pickText(sch.department, language)}
                 </p>
-                <p className="mt-2.5 text-sm text-[#46607E] dark:text-[#CBE6FF] leading-relaxed line-clamp-2">
+                <p className="mt-2.5 text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed line-clamp-2">
                   {pickText(sch.description, language)}
                 </p>
               </div>
 
-              <div className="mt-5 pt-4 border-t border-[#E4EFFA] dark:border-white/10 flex items-center justify-between gap-3">
+              <div className="mt-5 pt-4 border-t border-[#F2DCC1] dark:border-[#3F2E1E] flex items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={() => navigate(`/schemes/${sch.id}`)}
-                  className="text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline cursor-pointer"
+                  className="text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
                 >
                   {language === 'bn'
                     ? 'বিস্তারিত গাইড দেখুন →'
@@ -1210,7 +1311,7 @@ export function HomePage() {
                   href={sch.officialWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs font-medium text-[#46607E] dark:text-[#B9D8F7] hover:underline truncate max-w-[200px]"
+                  className="text-xs font-medium text-[#454545] dark:text-[#DDD2C5] hover:text-[#26364B] hover:underline truncate max-w-[200px]"
                 >
                   {sch.officialWebsite.replace(/^https?:\/\//, '')}
                 </a>
@@ -1228,14 +1329,14 @@ export function HomePage() {
             <div className="space-y-2.5">
               <JenovaProtectLogo size="sm" theme={theme} />
               <div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#26364B] dark:text-[#FFF5E8]">
                   {language === 'bn'
                     ? 'সাম্প্রতিক প্রতারণা সতর্কতা (JENOVA Protect)'
                     : language === 'hi'
                       ? 'हालिया धोखाधड़ी चेतावनियाँ (JENOVA Protect)'
                       : 'Recent Fraud Warnings'}
                 </h2>
-                <p className="mt-1 text-sm text-[#46607E] dark:text-[#B9D8F7]">
+                <p className="mt-1 text-sm text-[#454545] dark:text-[#DDD2C5]">
                   {language === 'bn'
                     ? 'সারা দেশে প্রচলিত ডিজিটাল ও চাকরির প্রতারণার ধরনগুলি জানুন এবং সন্দেহজনক মেসেজ যাচাই করুন।'
                     : language === 'hi'
@@ -1247,7 +1348,7 @@ export function HomePage() {
             <button
               type="button"
               onClick={() => navigate('/scam-check')}
-              className="text-sm font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
+              className="text-sm font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap cursor-pointer"
             >
               {language === 'bn'
                 ? 'JENOVA Protect খুলুন →'
@@ -1261,21 +1362,23 @@ export function HomePage() {
             {fraudAlerts.map((alert) => (
               <div
                 key={alert.id}
-                className="p-5 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 flex flex-col justify-between gap-3"
+                className="p-5 rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] hover:border-[#F4A340] transition-colors flex flex-col justify-between gap-3"
               >
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs text-[#46607E] dark:text-[#A8CBEB]">
-                    <span className="font-bold text-red-600 dark:text-red-400">{alert.scamType}</span>
+                  <div className="flex items-center justify-between text-xs text-[#665B4F] dark:text-[#B6A695]">
+                    <span className="font-bold text-red-600 dark:text-red-400">
+                      {localizeScamType(alert.scamType, language)}
+                    </span>
                     <span>{alert.publishedAt}</span>
                   </div>
-                  <h3 className="text-base font-bold text-[#092B55] dark:text-white">
+                  <h3 className="text-base font-bold text-[#26364B] dark:text-[#FFF5E8]">
                     {pickText(alert.title, language)}
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#46607E] dark:text-[#CBE6FF] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
                     {pickText(alert.summary, language)}
                   </p>
                 </div>
-                <p className="text-xs font-medium text-[#0B512D] dark:text-[#8FF6FF] bg-[#E8F8F0] dark:bg-[#082C3E] rounded-xl px-3 py-2">
+                <p className="text-xs font-medium text-[#1F6A49] dark:text-[#7DE0B0] bg-[#E9F5EF] dark:bg-[#143022] border border-[#27845B]/25 rounded-xl px-3 py-2">
                   {pickText(alert.safetyTip, language)}
                 </p>
               </div>
@@ -1285,26 +1388,28 @@ export function HomePage() {
 
         {/* Checklist Guide + Verified Local Assistance Directory (With Branded JENOVA Local Logo) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-5 p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-[#092B55] via-[#0E3F6B] to-[#0E604C] text-white border border-[#36E7F2]/40 flex flex-col justify-between gap-5">
+          <div className="lg:col-span-5 p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-[#FFF1DF] via-[#FFF9F0] to-[#FFE5C2] dark:from-[#261B12] dark:via-[#221911] dark:to-[#2E2014] text-[#26364B] dark:text-[#FFF5E8] border border-[#F4A340]/55 dark:border-[#5C4128] flex flex-col justify-between gap-5 shadow-[0_12px_28px_-14px_rgba(244,163,64,0.28)]">
             <div className="space-y-3">
-              <FileCheck2 className="w-7 h-7 text-[#FFC45C]" />
-              <h2 className="text-xl sm:text-2xl font-extrabold">
+              <span className="w-11 h-11 rounded-xl bg-white dark:bg-[#382616] border border-[#F2DCC1] dark:border-[#5C4128] inline-flex items-center justify-center">
+                <FileCheck2 className="w-6 h-6 text-[#A85B0A] dark:text-[#FFD19A]" />
+              </span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#26364B] dark:text-[#FFF5E8]">
                 {language === 'bn'
                   ? 'JENOVA Checklist — কাগজপত্র প্রস্তুতি গাইড'
                   : language === 'hi'
                     ? 'JENOVA Checklist — दस्तावेज़ तैयारी गाइड'
                     : 'JENOVA Checklist — Document Preparation Guide'}
               </h2>
-              <p className="text-sm text-[#D6EEFF] leading-relaxed">
+              <p className="text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
                 {language === 'bn'
                   ? 'অসম্পূর্ণ কাগজ বা নামের বানানের অমিলের জন্য বারবার BSK বা BDO অফিস থেকে ফিরে আসতে হয়। যাওয়ার আগেই আপনার ফোল্ডার যাচাই করে নিন।'
                   : language === 'hi'
                     ? 'अधूरे कागज़ात या नाम की वर्तनी में अंतर के कारण बार-बार BSK या BDO कार्यालय से लौटना न पड़े — जाने से पहले अपना फ़ोल्डर जांच लें।'
                     : 'Avoid wasted trips to BSK or BDO offices caused by missing photocopies, spelling mismatches, or inactive Aadhaar DBT seeding.'}
               </p>
-              <ul className="space-y-2 text-xs sm:text-sm text-[#EBF6FF] pt-1">
+              <ul className="space-y-2 text-xs sm:text-sm text-[#454545] dark:text-[#E5D3BE] pt-1">
                 <li>
-                  1.{' '}
+                  <strong className="text-[#26364B] dark:text-[#FFD19A]">1.</strong>{' '}
                   {language === 'bn'
                     ? 'প্রকল্প বেছে নিন ও ৩টি সহজ প্রশ্নে প্রাথমিক ধারণা পান।'
                     : language === 'hi'
@@ -1312,7 +1417,7 @@ export function HomePage() {
                       : 'Select your scheme and answer 3 non-sensitive questions.'}
                 </li>
                 <li>
-                  2.{' '}
+                  <strong className="text-[#26364B] dark:text-[#FFD19A]">2.</strong>{' '}
                   {language === 'bn'
                     ? 'প্রতিটি নথি "প্রস্তুত / নেই / সাহায্য দরকার" চিহ্নিত করুন।'
                     : language === 'hi'
@@ -1320,7 +1425,7 @@ export function HomePage() {
                       : 'Mark each document Ready, Missing, Not Applicable, or Need Help.'}
                 </li>
                 <li>
-                  3.{' '}
+                  <strong className="text-[#26364B] dark:text-[#FFD19A]">3.</strong>{' '}
                   {language === 'bn'
                     ? 'অফলাইনে সেভ করুন, প্রিন্ট নিন বা হোয়াটসঅ্যাপে পাঠান (কোনো আপলোড নেই)।'
                     : language === 'hi'
@@ -1332,7 +1437,7 @@ export function HomePage() {
             <button
               type="button"
               onClick={() => navigate('/checklist')}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#FFC45C] hover:bg-[#FFB338] text-[#092B55] text-sm font-extrabold cursor-pointer min-h-[46px]"
+              className="jenova-saffron-btn inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-extrabold cursor-pointer min-h-[46px]"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>
@@ -1345,19 +1450,19 @@ export function HomePage() {
             </button>
           </div>
 
-          <div className="lg:col-span-7 p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 space-y-4">
+          <div className="lg:col-span-7 p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] space-y-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="space-y-2">
                 <JenovaLocalLogo size="sm" theme={theme} />
                 <div>
-                  <h2 className="text-xl font-extrabold text-[#092B55] dark:text-white">
+                  <h2 className="text-xl font-extrabold text-[#26364B] dark:text-[#FFF5E8]">
                     {language === 'bn'
                       ? 'JENOVA Local — স্থানীয় সহায়তা ডিরেক্টরি'
                       : language === 'hi'
                         ? 'JENOVA Local — सत्यापित स्थानीय सहायता निर्देशिका'
                         : 'JENOVA Local — Verified Assistance Directory'}
                   </h2>
-                  <p className="text-xs text-[#46607E] dark:text-[#A8CBEB] mt-0.5">
+                  <p className="text-xs text-[#665B4F] dark:text-[#B6A695] mt-0.5">
                     {language === 'bn'
                       ? 'ভারত ও রাজ্য স্তরের যাচাইকৃত অফিসিয়াল সহায়তা সূত্র ও শেষ যাচাইয়ের তারিখ।'
                       : language === 'hi'
@@ -1369,36 +1474,41 @@ export function HomePage() {
               <button
                 type="button"
                 onClick={() => navigate('/local-help')}
-                className="text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline cursor-pointer"
+                className="text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline cursor-pointer"
               >
                 {t.home.viewAll} →
               </button>
             </div>
-            <div className="divide-y divide-[#E4EFFA] dark:divide-white/10">
+            <div className="divide-y divide-[#F2DCC1] dark:divide-[#3F2E1E]">
               {centres.map((centre) => (
                 <div
                   key={centre.id}
                   className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                 >
                   <div>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-[#46607E] dark:text-[#A8CBEB]">
-                      <span>{centre.category}</span>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-[#665B4F] dark:text-[#B6A695]">
+                      <span>{localizeAssistanceCategory(centre.category, language)}</span>
                       <span>·</span>
                       <VerificationLabel status={centre.verificationStatus} />
                       <span>·</span>
                       <span>
-                        {language === 'hi' ? `जांच तिथि ${centre.dateVerified}` : `Checked ${centre.dateVerified}`}
+                        {tr(
+                          language,
+                          `যাচাই তারিখ ${centre.dateVerified}`,
+                          `जांच तिथि ${centre.dateVerified}`,
+                          `Checked ${centre.dateVerified}`
+                        )}
                       </span>
                     </div>
-                    <p className="text-sm font-bold text-[#092B55] dark:text-white mt-0.5">
+                    <p className="text-sm font-bold text-[#26364B] dark:text-[#FFF5E8] mt-0.5">
                       {pickText(centre.name, language)}
                     </p>
-                    <p className="text-xs text-[#46607E] dark:text-[#B9D8F7]">{centre.locationArea}</p>
+                    <p className="text-xs text-[#454545] dark:text-[#DDD2C5]">{centre.locationArea}</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => navigate('/local-help')}
-                    className="text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap self-start sm:self-center cursor-pointer"
+                    className="text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap self-start sm:self-center cursor-pointer"
                   >
                     {language === 'bn'
                       ? 'বিস্তারিত →'
@@ -1414,10 +1524,10 @@ export function HomePage() {
 
         {/* Trust & Verification Standards + Interactive FAQ Accordion (#jenova-faqs) */}
         <div id="jenova-faqs" className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2 scroll-mt-24">
-          <div className="lg:col-span-5 p-6 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 space-y-4">
-            <div className="flex items-center gap-2 text-[#138A45] dark:text-[#36E7F2]">
+          <div className="lg:col-span-5 p-6 rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] space-y-4">
+            <div className="flex items-center gap-2 text-[#27845B] dark:text-[#45B884]">
               <ShieldCheck className="w-5 h-5" />
-              <h2 className="text-lg font-extrabold text-[#092B55] dark:text-white">
+              <h2 className="text-lg font-extrabold text-[#26364B] dark:text-[#FFF5E8]">
                 {language === 'bn'
                   ? 'বিশ্বাস ও যাচাইকরণ নীতি'
                   : language === 'hi'
@@ -1425,50 +1535,75 @@ export function HomePage() {
                     : 'Trust & Verification Standards'}
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-[#46607E] dark:text-[#B9D8F7] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
               {language === 'bn'
                 ? 'JENOVA কোনো সরকারি দপ্তর, ব্যাংক বা দালাল সংস্থা নয়। প্রতিটি তথ্যের পাশে তার প্রকৃত যাচাইয়ের অবস্থা ও সরকারি উৎস উল্লেখ থাকে:'
                 : language === 'hi'
                   ? 'JENOVA एक स्वतंत्र सामुदायिक मार्गदर्शन मंच है — यह कोई सरकारी कार्यालय, बैंक या एजेंट नहीं है। प्रत्येक जानकारी के साथ उसकी सत्यापन स्थिति स्पष्ट रूप से दिखाई जाती है:'
                   : 'JENOVA is an independent community guidance platform — not a government office, lender, or placement agency. Every listing discloses its verification status:'}
             </p>
-            <ul className="space-y-2 text-xs text-[#355373] dark:text-[#CBE6FF]">
+            <ul className="space-y-2 text-xs text-[#454545] dark:text-[#DDD2C5]">
               <li>
-                <strong className="text-[#138A45] dark:text-[#36E7F2]">Officially Verified:</strong>{' '}
-                {language === 'hi'
-                  ? 'सीधे आधिकारिक .gov.in / .nic.in पोर्टल से संकलित।'
-                  : 'Directly sourced from official .gov.in / .nic.in portals.'}
+                <strong className="text-[#27845B] dark:text-[#45B884]">
+                  {tr(language, 'সরকারিভাবে যাচাইকৃত:', 'आधिकारिक रूप से सत्यापित:', 'Officially Verified:')}
+                </strong>{' '}
+                {tr(
+                  language,
+                  'সরাসরি অফিসিয়াল .gov.in / .nic.in পোর্টাল থেকে সংগৃহীত।',
+                  'सीधे आधिकारिक .gov.in / .nic.in पोर्टल से संकलित।',
+                  'Directly sourced from official .gov.in / .nic.in portals.'
+                )}
               </li>
               <li>
-                <strong className="text-[#138A45] dark:text-[#36E7F2]">Independently Verified:</strong>{' '}
-                {language === 'hi'
-                  ? 'हमारी सत्यापन टीम द्वारा स्रोत लिंक और जांच तिथि के साथ सत्यापित।'
-                  : 'Checked by our Verification Desk with source link & review date.'}
+                <strong className="text-[#27845B] dark:text-[#45B884]">
+                  {tr(language, 'স্বতন্ত্রভাবে যাচাইকৃত:', 'स्वतंत्र रूप से सत्यापित:', 'Independently Verified:')}
+                </strong>{' '}
+                {tr(
+                  language,
+                  'আমাদের যাচাইকরণ টিম কর্তৃক উৎস লিঙ্ক ও পরীক্ষার তারিখসহ যাচাইকৃত।',
+                  'हमारी सत्यापन टीम द्वारा स्रोत लिंक और जांच तिथि के साथ सत्यापित।',
+                  'Checked by our Verification Desk with source link & review date.'
+                )}
               </li>
               <li>
-                <strong className="text-[#FF8A18]">Community Submitted / Pending:</strong>{' '}
-                {language === 'hi'
-                  ? 'स्थानीय रूप से साझा किया गया और सत्यापन की प्रतीक्षा में।'
-                  : 'Submitted locally and awaiting verification — never shown as confirmed.'}
+                <strong className="text-[#A85B0A] dark:text-[#FFD19A]">
+                  {tr(
+                    language,
+                    'কমিউনিটি জমাকৃত / যাচাই বাকি:',
+                    'समुदाय द्वारा जमा / सत्यापन लंबित:',
+                    'Community Submitted / Pending:'
+                  )}
+                </strong>{' '}
+                {tr(
+                  language,
+                  'স্থানীয়ভাবে জমা দেওয়া হয়েছে এবং যাচাইয়ের অপেক্ষায় আছে — কখনোই নিশ্চিত হিসেবে দেখানো হয় না।',
+                  'स्थानीय रूप से साझा किया गया और सत्यापन की प्रतीक्षा में — कभी भी पुष्टि के रूप में नहीं दिखाया जाता।',
+                  'Submitted locally and awaiting verification — never shown as confirmed.'
+                )}
               </li>
               <li>
-                <strong className="text-red-600 dark:text-red-400">Expired:</strong>{' '}
-                {language === 'hi'
-                  ? 'अंतिम तिथि बीत जाने पर स्पष्ट रूप से चिह्नित किया जाता है।'
-                  : 'Marked outdated past review deadline so users never waste a trip.'}
+                <strong className="text-red-600 dark:text-red-400">
+                  {tr(language, 'মেয়াদোত্তীর্ণ:', 'समाप्त:', 'Expired:')}
+                </strong>{' '}
+                {tr(
+                  language,
+                  'শেষ তারিখ পার হলেই স্পষ্টভাবে চিহ্নিত করা হয় যাতে কারো সময় নষ্ট না হয়।',
+                  'अंतिम तिथि बीत जाने पर स्पष्ट रूप से चिह्नित किया जाता है ताकि किसी का समय व्यर्थ न हो।',
+                  'Marked outdated past review deadline so users never waste a trip.'
+                )}
               </li>
             </ul>
           </div>
 
-          <div className="lg:col-span-7 p-6 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12 space-y-3">
-            <h2 className="text-lg font-extrabold text-[#092B55] dark:text-white">
+          <div className="lg:col-span-7 p-6 rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] space-y-3">
+            <h2 className="text-lg font-extrabold text-[#26364B] dark:text-[#FFF5E8]">
               {language === 'bn'
                 ? 'সাধারণ জিজ্ঞাসা (FAQs)'
                 : language === 'hi'
                   ? 'अक्सर पूछे जाने वाले प्रश्न (FAQs)'
                   : 'Frequently Asked Questions (FAQs)'}
             </h2>
-            <div className="divide-y divide-[#E4EFFA] dark:divide-white/10">
+            <div className="divide-y divide-[#F2DCC1] dark:divide-[#3F2E1E]">
               {[
                 {
                   qBn: 'JENOVA কি কোনো সরকারি ওয়েবসাইট?',
@@ -1510,19 +1645,19 @@ export function HomePage() {
                       type="button"
                       onClick={() => setOpenFaq(isOpen ? null : idx)}
                       aria-expanded={isOpen}
-                      className="w-full flex items-center justify-between gap-3 text-left text-sm font-bold text-[#092B55] dark:text-white hover:text-[#138A45] dark:hover:text-[#36E7F2] cursor-pointer"
+                      className="w-full flex items-center justify-between gap-3 text-left text-sm font-bold text-[#26364B] dark:text-[#FFF5E8] hover:text-[#A85B0A] dark:hover:text-[#FFD19A] cursor-pointer"
                     >
                       <span>
                         {language === 'bn' ? item.qBn : language === 'hi' ? item.qHi : item.qEn}
                       </span>
                       <ChevronDown
-                        className={`w-4 h-4 shrink-0 text-[#46607E] dark:text-[#A8CBEB] transition-transform ${
-                          isOpen ? 'rotate-180 text-[#138A45] dark:text-[#36E7F2]' : ''
+                        className={`w-4 h-4 shrink-0 text-[#665B4F] dark:text-[#B6A695] transition-transform ${
+                          isOpen ? 'rotate-180 text-[#A85B0A] dark:text-[#FFD19A]' : ''
                         }`}
                       />
                     </button>
                     {isOpen && (
-                      <p className="mt-2 text-xs sm:text-sm text-[#46607E] dark:text-[#CBE6FF] leading-relaxed">
+                      <p className="mt-2 text-xs sm:text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
                         {language === 'bn' ? item.aBn : language === 'hi' ? item.aHi : item.aEn}
                       </p>
                     )}
@@ -1537,10 +1672,10 @@ export function HomePage() {
       {/* SECTION 8: REAL VERIFIED PLATFORM STATS & HONEST PILOT TARGETS */}
       <section className="reveal-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="max-w-3xl mb-6">
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#092B55] dark:text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#26364B] dark:text-[#FFF5E8]">
             {t.home.impactTitle}
           </h2>
-          <p className="mt-1.5 text-sm text-[#46607E] dark:text-[#B9D8F7] leading-relaxed">
+          <p className="mt-1.5 text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
             {t.home.impactDisclaimer}
           </p>
         </div>
@@ -1557,7 +1692,7 @@ export function HomePage() {
               value: stats
                 ? String(stats.verifiedCounts.schemes + (stats.verifiedCounts.assistanceCentres || 0))
                 : '—',
-              note: language === 'hi' ? 'लाइव डेटाबेस संख्या' : 'Live database count',
+              note: tr(language, 'লাইভ ডাটাবেস সংখ্যা', 'लाइव डेटाबेस संख्या', 'Live database count'),
             },
             {
               label:
@@ -1567,7 +1702,7 @@ export function HomePage() {
                     ? 'पूर्ण दस्तावेज़ चेकलिस्ट'
                     : 'Document Checklists Completed',
               value: stats ? String(stats.checklistsCompleted ?? 0) : '—',
-              note: language === 'hi' ? 'वास्तविक उपयोग गणना' : 'Real completion counter',
+              note: tr(language, 'প্রকৃত ব্যবহারের সংখ্যা', 'वास्तविक उपयोग गणना', 'Real completion counter'),
             },
             {
               label:
@@ -1577,7 +1712,7 @@ export function HomePage() {
                     ? 'पूर्ण धोखाधड़ी जांच'
                     : 'Fraud Checks Completed',
               value: stats ? String(stats.fraudChecksCompleted ?? 0) : '—',
-              note: language === 'hi' ? 'वास्तविक सुरक्षा जांच गणना' : 'Real safety check counter',
+              note: tr(language, 'প্রকৃত সুরক্ষা যাচাই সংখ্যা', 'वास्तविक सुरक्षा जांच गणना', 'Real safety check counter'),
             },
             {
               label:
@@ -1594,29 +1729,31 @@ export function HomePage() {
                       (stats.localHelpClicks ?? 0)
                   )
                 : '—',
-              note:
-                language === 'hi'
-                  ? `विज़िट्स: ${stats ? stats.totalVisits : '—'}`
-                  : `Visits: ${stats ? stats.totalVisits : '—'}`,
+              note: tr(
+                language,
+                `ভিজিট: ${stats ? stats.totalVisits : '—'}`,
+                `विज़िट्स: ${stats ? stats.totalVisits : '—'}`,
+                `Visits: ${stats ? stats.totalVisits : '—'}`
+              ),
             },
           ].map((stat) => (
             <div
               key={stat.label}
-              className="p-5 rounded-2xl bg-white dark:bg-[#0B2242] border border-[#D6E6F5] dark:border-white/12"
+              className="p-5 rounded-2xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E]"
             >
-              <p className="text-xs font-semibold text-[#46607E] dark:text-[#A8CBEB]">{stat.label}</p>
-              <p className="mt-2 text-3xl font-extrabold font-mono tabular-nums text-[#092B55] dark:text-[#36E7F2]">
+              <p className="text-xs font-semibold text-[#665B4F] dark:text-[#B6A695]">{stat.label}</p>
+              <p className="mt-2 text-3xl font-extrabold font-mono tabular-nums text-[#26364B] dark:text-[#FFD19A]">
                 {stat.value}
               </p>
-              <p className="mt-1 text-xs text-[#6B87A6] dark:text-[#89B3DA]">{stat.note}</p>
+              <p className="mt-1 text-xs text-[#665B4F] dark:text-[#B6A695]">{stat.note}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-5 p-5 rounded-2xl bg-[#EAF4FD] dark:bg-[#0A2242] border border-[#C6DCF0] dark:border-white/12 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mt-5 p-5 rounded-2xl bg-[#FFF1DF] dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#3F2E1E] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <TrendingUp className="w-5 h-5 text-[#138A45] dark:text-[#36E7F2] shrink-0 mt-0.5" />
-            <div className="text-sm text-[#092B55] dark:text-white">
+            <TrendingUp className="w-5 h-5 text-[#27845B] dark:text-[#45B884] shrink-0 mt-0.5" />
+            <div className="text-sm text-[#26364B] dark:text-[#FFF5E8]">
               <p className="font-bold">
                 {language === 'bn'
                   ? 'JENOVA কমিউনিটি ইমপ্যাক্ট ও ডিজিটাল অন্তর্ভুক্তি মিশন'
@@ -1624,7 +1761,7 @@ export function HomePage() {
                     ? 'JENOVA सामुदायिक प्रभाव और डिजिटल समावेशन मिशन'
                     : 'JENOVA Community Impact & Digital Inclusion Mission'}
               </p>
-              <p className="text-xs text-[#46607E] dark:text-[#B9D8F7] mt-1">
+              <p className="text-xs text-[#454545] dark:text-[#DDD2C5] mt-1">
                 {language === 'bn'
                   ? 'প্রতিটি পরিবার যেন যাচাইকৃত সরকারি প্রকল্প, নিরাপদ কর্মসংস্থান, বিনামূল্যে দক্ষতা প্রশিক্ষণ এবং প্রতারণা সুরক্ষা নিজ ভাষায় সহজে পায় — সেই লক্ষ্যেই JENOVA কাজ করে।'
                   : language === 'hi'
@@ -1636,7 +1773,7 @@ export function HomePage() {
           <button
             type="button"
             onClick={() => navigate('/about')}
-            className="text-xs font-bold text-[#138A45] dark:text-[#36E7F2] hover:underline whitespace-nowrap cursor-pointer"
+            className="text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] hover:underline whitespace-nowrap cursor-pointer"
           >
             {language === 'bn'
               ? 'আমাদের মিশন পড়ুন →'
@@ -1646,6 +1783,7 @@ export function HomePage() {
           </button>
         </div>
       </section>
+      </div>
 
       {/* Interactive Watch Demo Walkthrough Modal */}
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
