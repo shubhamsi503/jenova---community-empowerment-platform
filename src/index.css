@@ -10,25 +10,26 @@
   --color-cyan-glow: #36E7F2;
   --color-gold-glow: #FFC45C;
 
-  /* Preserved semantic tokens for sub-pages */
-  --color-primary: #138A45;
-  --color-primary-dark: #0D6B34;
-  --color-primary-soft: #EBF4F0;
-  --color-accent: #FF8A18;
-  --color-accent-dark: #C86100;
-  --color-accent-soft: #FFF4E5;
-  --color-cream: #F3F8FD;
+  /* Website-Wide Light Saffron-Orange & Cream Palette */
+  --color-primary: #F4A340;
+  --color-primary-dark: #E58E26;
+  --color-primary-soft: #FFE5C2;
+  --color-accent: #F4A340;
+  --color-accent-dark: #A85B0A;
+  --color-accent-soft: #FFF1DF;
+  --color-cream: #FFF9F0;
   --color-surface: #FFFFFF;
-  --color-ink: #092B55;
-  --color-muted: #46607E;
-  --color-border: #D6E6F5;
+  --color-ink: #26364B;
+  --color-muted: #454545;
+  --color-border: #F2DCC1;
+  --color-success: #27845B;
 
   --font-display: "Plus Jakarta Sans", "Noto Sans Bengali", "Noto Sans Devanagari", system-ui, sans-serif;
   --font-sans: "Public Sans", "Noto Sans Bengali", "Noto Sans Devanagari", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
-/* Reusable Global Design Tokens — Light Saffron-Orange & Cream Theme (Non-Homepage Pages) */
+/* Reusable Global Design Tokens — Website-Wide Light Saffron-Orange & Cream Theme */
 :root {
   --jenova-bg-main: #FFF9F0;
   --jenova-bg-secondary: #FFF1DF;
@@ -74,15 +75,15 @@ html.dark {
 @layer base {
   html {
     font-family: var(--font-sans);
-    background-color: #F3F8FD;
-    color: #092B55;
+    background-color: var(--jenova-bg-main);
+    color: var(--jenova-body);
     scroll-behavior: smooth;
     overflow-x: hidden;
   }
 
   html.dark {
-    background-color: #06152B;
-    color: #EFF7FF;
+    background-color: var(--jenova-bg-main);
+    color: var(--jenova-body);
   }
 
   body {
@@ -95,7 +96,7 @@ html.dark {
   }
 
   :focus-visible {
-    outline: 2px solid #36E7F2;
+    outline: 2px solid var(--jenova-accent-primary);
     outline-offset: 2px;
   }
 
@@ -115,80 +116,80 @@ html.dark {
   outline-offset: 2px;
 }
 
-.jenova-saffron-theme main input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-.jenova-saffron-theme main select,
-.jenova-saffron-theme main textarea {
+.jenova-saffron-theme input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.jenova-saffron-theme select,
+.jenova-saffron-theme textarea {
   background-color: var(--jenova-card);
   border-color: var(--jenova-border);
   color: var(--jenova-heading);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.jenova-saffron-theme main input:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder,
-.jenova-saffron-theme main textarea::placeholder {
+.jenova-saffron-theme input:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder,
+.jenova-saffron-theme textarea::placeholder {
   color: var(--jenova-muted);
   opacity: 0.85;
 }
 
-.jenova-saffron-theme main input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
-.jenova-saffron-theme main select:focus,
-.jenova-saffron-theme main textarea:focus {
+.jenova-saffron-theme input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+.jenova-saffron-theme select:focus,
+.jenova-saffron-theme textarea:focus {
   border-color: var(--jenova-accent-primary);
   box-shadow: 0 0 0 3px rgba(244, 163, 64, 0.22);
   outline: none;
 }
 
-.jenova-saffron-theme main table {
+.jenova-saffron-theme table {
   border-color: var(--jenova-border);
 }
 
-.jenova-saffron-theme main thead {
+.jenova-saffron-theme thead {
   background-color: var(--jenova-bg-secondary);
   color: var(--jenova-heading);
 }
 
-.jenova-saffron-theme main tbody tr {
+.jenova-saffron-theme tbody tr {
   border-color: var(--jenova-border);
 }
 
-.jenova-saffron-theme main tbody tr:hover {
+.jenova-saffron-theme tbody tr:hover {
   background-color: var(--jenova-bg-main);
 }
 
-.jenova-saffron-theme main .bg-white.border {
+.jenova-saffron-theme .bg-white.border {
   box-shadow: var(--jenova-card-shadow);
 }
 
-/* Preserve readable dark mode across all subpages */
-html.dark .jenova-saffron-theme main .bg-white {
+/* Preserve readable dark mode across all saffron-themed pages & lower homepage sections */
+html.dark .jenova-saffron-theme .bg-white {
   background-color: var(--jenova-card);
 }
 
-html.dark .jenova-saffron-theme main .bg-\[\#FFF9F0\] {
+html.dark .jenova-saffron-theme .bg-\[\#FFF9F0\] {
   background-color: var(--jenova-bg-main);
 }
 
-html.dark .jenova-saffron-theme main .bg-\[\#FFF1DF\] {
+html.dark .jenova-saffron-theme .bg-\[\#FFF1DF\] {
   background-color: var(--jenova-bg-secondary);
 }
 
-html.dark .jenova-saffron-theme main .bg-\[\#FFE5C2\] {
+html.dark .jenova-saffron-theme .bg-\[\#FFE5C2\] {
   background-color: var(--jenova-accent-light);
 }
 
-html.dark .jenova-saffron-theme main .border-\[\#F2DCC1\] {
+html.dark .jenova-saffron-theme .border-\[\#F2DCC1\] {
   border-color: var(--jenova-border);
 }
 
-html.dark .jenova-saffron-theme main .text-\[\#26364B\] {
+html.dark .jenova-saffron-theme .text-\[\#26364B\] {
   color: var(--jenova-heading);
 }
 
-html.dark .jenova-saffron-theme main .text-\[\#454545\] {
+html.dark .jenova-saffron-theme .text-\[\#454545\] {
   color: var(--jenova-body);
 }
 
-html.dark .jenova-saffron-theme main .text-\[\#665B4F\] {
+html.dark .jenova-saffron-theme .text-\[\#665B4F\] {
   color: var(--jenova-muted);
 }
 

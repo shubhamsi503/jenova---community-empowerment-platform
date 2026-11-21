@@ -79,7 +79,7 @@ interface PublicStats {
 }
 
 /**
- * Interactive 3D-perspective glassmorphism card with mouse-responsive tilt and light reflection.
+ * Interactive 3D-perspective service card with mouse-responsive tilt and light saffron-cream polish.
  */
 function ServiceGlassCard({
   title,
@@ -116,28 +116,30 @@ function ServiceGlassCard({
       onMouseLeave={() => setTilt({ rx: 0, ry: 0 })}
       style={{
         transform: `perspective(900px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
-        backdropFilter: 'blur(14px)',
+        backdropFilter: 'blur(12px)',
         boxShadow:
-          '0 14px 32px -8px rgba(4, 24, 52, 0.52), 0 0 22px rgba(72, 238, 250, 0.42), inset 0 1.5px 2px rgba(255,255,255,0.7)',
+          '0 12px 28px -10px rgba(186, 112, 32, 0.2), 0 2px 6px rgba(186, 112, 32, 0.06)',
       }}
-      className="jenova-glass-card service-glass-card text-left w-full rounded-[20px] p-4 sm:p-4.5 bg-gradient-to-br from-[#0E436E]/78 via-[#105A78]/72 to-[#0D536B]/80 dark:from-[#082447]/92 dark:via-[#0B325B]/90 dark:to-[#083B4A]/92 border-[1.5px] border-[#82F7FF]/85 hover:border-[#FFC45C] text-white cursor-pointer group flex flex-col justify-between gap-3 min-h-[152px] sm:min-h-[164px]"
+      className="jenova-glass-card service-glass-card text-left w-full rounded-[20px] p-4 sm:p-4.5 bg-white/96 dark:bg-[#241B13]/95 border-[1.5px] border-[#F2DCC1] dark:border-[#4A3522] hover:border-[#F4A340] text-[#26364B] dark:text-[#FFF5E8] cursor-pointer group flex flex-col justify-between gap-3 min-h-[152px] sm:min-h-[164px] transition-colors"
     >
       <div className="flex items-start gap-3">
         <div className="shrink-0 -mt-0.5 transition-transform duration-200 group-hover:-translate-y-1 group-hover:scale-105">
           {icon}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="text-[15px] font-extrabold tracking-tight text-white group-hover:text-[#FFC45C] transition-colors leading-snug">
+          <h3 className="text-[15px] font-extrabold tracking-tight text-[#26364B] dark:text-[#FFF5E8] group-hover:text-[#A85B0A] dark:group-hover:text-[#FFD19A] transition-colors leading-snug">
             {title}
           </h3>
-          <p className="mt-1 text-[11.5px] sm:text-xs text-[#E3F5FF] leading-relaxed">{description}</p>
+          <p className="mt-1 text-[11.5px] sm:text-xs text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
+            {description}
+          </p>
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-white/20">
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#B6FAFF] group-hover:text-[#FFC45C] transition-colors">
+      <div className="flex items-center justify-between pt-2 border-t border-[#F2DCC1] dark:border-[#3F2E1E]">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#A85B0A] dark:text-[#FFD19A] group-hover:text-[#8E4B06] dark:group-hover:text-[#FFF5E8] transition-colors">
           <span>{ctaLabel}</span>
-          <span className="w-4.5 h-4.5 rounded-full bg-white/90 text-[#092B55] group-hover:bg-[#FFC45C] flex items-center justify-center transition-colors">
+          <span className="w-4.5 h-4.5 rounded-full bg-[#FFE5C2] dark:bg-[#382616] text-[#26364B] dark:text-[#FFD19A] group-hover:bg-[#F4A340] group-hover:text-[#26364B] flex items-center justify-center transition-colors">
             <ArrowRight className="w-3 h-3" />
           </span>
         </span>
@@ -147,30 +149,30 @@ function ServiceGlassCard({
 }
 
 /**
- * Exact sunlit sunrise-left to vivid azure-sky-right atmospheric horizon backdrop matching the reference design
+ * Light saffron-cream sunlit sunrise horizon backdrop preserving the iconic Indian skyline & Howrah Bridge silhouette
  */
 function IndianHorizonBackdrop({ theme }: { theme: 'light' | 'dark' }) {
   const isDark = theme === 'dark';
   return (
     <div className="pointer-events-none select-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      {/* Sunlit left-warm to vivid right-azure sky matching reference palette */}
+      {/* Luminous light cream & soft saffron sunrise sky */}
       <div
         className="absolute inset-0 transition-colors duration-300"
         style={{
           background: isDark
-            ? 'radial-gradient(circle at 72% 28%, rgba(54,231,242,0.18) 0%, rgba(112,184,242,0.08) 32%, transparent 65%), linear-gradient(180deg, #041227 0%, #072246 48%, #0A2E54 78%, #061A36 100%)'
-            : 'radial-gradient(circle at 12% 38%, rgba(255,223,186,0.92) 0%, rgba(255,243,228,0.65) 26%, transparent 56%), radial-gradient(circle at 74% 24%, rgba(30,136,238,0.85) 0%, rgba(72,167,246,0.45) 42%, transparent 72%), linear-gradient(125deg, #FBF4EC 0%, #DFEFFD 32%, #4DA9F4 62%, #197EE0 88%, #0C4F78 100%)',
+            ? 'radial-gradient(circle at 72% 28%, rgba(244,163,64,0.16) 0%, rgba(255,209,154,0.06) 34%, transparent 65%), linear-gradient(180deg, #18120C 0%, #221810 48%, #2A1D12 78%, #18120C 100%)'
+            : 'radial-gradient(circle at 12% 35%, rgba(255,229,194,0.92) 0%, rgba(255,241,223,0.62) 34%, transparent 62%), radial-gradient(circle at 78% 24%, rgba(255,209,154,0.58) 0%, rgba(255,229,194,0.3) 44%, transparent 74%), linear-gradient(135deg, #FFF9F0 0%, #FFF5E6 40%, #FFF1DF 72%, #FFE5C2 100%)',
         }}
       />
 
       {/* Soft sunlit clouds */}
       <div
-        className="absolute -top-10 left-[6%] w-[440px] h-[170px] rounded-full blur-3xl opacity-65"
-        style={{ background: isDark ? 'rgba(54,231,242,0.12)' : 'rgba(255,255,255,0.82)' }}
+        className="absolute -top-10 left-[6%] w-[440px] h-[170px] rounded-full blur-3xl opacity-70"
+        style={{ background: isDark ? 'rgba(244,163,64,0.1)' : 'rgba(255,255,255,0.88)' }}
       />
       <div
-        className="absolute top-[10%] right-[4%] w-[460px] h-[180px] rounded-full blur-3xl opacity-45"
-        style={{ background: isDark ? 'rgba(112,184,242,0.14)' : 'rgba(255,255,255,0.52)' }}
+        className="absolute top-[10%] right-[4%] w-[460px] h-[180px] rounded-full blur-3xl opacity-55"
+        style={{ background: isDark ? 'rgba(255,209,154,0.09)' : 'rgba(255,255,255,0.68)' }}
       />
 
       {/* Atmospheric Indian skyline + iconic cantilever bridge silhouette along lower horizon */}
@@ -181,29 +183,29 @@ function IndianHorizonBackdrop({ theme }: { theme: 'light' | 'dark' }) {
       >
         <defs>
           <linearGradient id="horizonRiver" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={isDark ? '#0B345E' : '#85C4EE'} stopOpacity="0.6" />
-            <stop offset="50%" stopColor={isDark ? '#072243' : '#1E6CA8'} stopOpacity="0.88" />
-            <stop offset="100%" stopColor={isDark ? '#04142B' : '#09345C'} stopOpacity="0.98" />
+            <stop offset="0%" stopColor={isDark ? '#2B1E12' : '#FFE5C2'} stopOpacity="0.48" />
+            <stop offset="50%" stopColor={isDark ? '#21170E' : '#FFF1DF'} stopOpacity="0.82" />
+            <stop offset="100%" stopColor={isDark ? '#18120C' : '#FFF9F0'} stopOpacity="1" />
           </linearGradient>
           <linearGradient id="sunReflect" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#FF8A18" stopOpacity="0.55" />
-            <stop offset="45%" stopColor="#FFC45C" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#36E7F2" stopOpacity="0.38" />
+            <stop offset="0%" stopColor="#F4A340" stopOpacity="0.38" />
+            <stop offset="50%" stopColor="#FFD19A" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#F4A340" stopOpacity="0.28" />
           </linearGradient>
         </defs>
 
         {/* Distant city silhouette on left horizon */}
         <path
           d="M0 168 L60 168 L60 140 L84 140 L84 156 L112 156 L112 126 L138 126 L138 150 L175 150 L175 112 L205 112 L205 148 L240 148 L240 132 L272 132 L272 158 L330 158 L330 138 L368 138 L368 164 L480 164 L480 152 L530 152 L530 168 L1440 168 L1440 320 L0 320 Z"
-          fill={isDark ? '#092244' : '#6A94BD'}
-          fillOpacity={isDark ? '0.68' : '0.42'}
+          fill={isDark ? '#3A2818' : '#E6C195'}
+          fillOpacity={isDark ? '0.62' : '0.38'}
         />
 
         {/* Iconic steel cantilever bridge silhouette (Howrah Bridge inspiration) on right horizon */}
         <g
-          stroke={isDark ? '#4682B4' : '#355A82'}
+          stroke={isDark ? '#8F6030' : '#C48845'}
           strokeWidth="2.5"
-          strokeOpacity={isDark ? '0.55' : '0.48'}
+          strokeOpacity={isDark ? '0.52' : '0.45'}
           fill="none"
         >
           {/* Bridge deck */}
@@ -218,11 +220,11 @@ function IndianHorizonBackdrop({ theme }: { theme: 'light' | 'dark' }) {
           ))}
         </g>
 
-        {/* River water surface & warm sunset/cyan reflections */}
+        {/* Soft sunlit river surface blending seamlessly into #FFF9F0 */}
         <rect x="0" y="168" width="1440" height="152" fill="url(#horizonRiver)" />
-        <rect x="0" y="168" width="1440" height="10" fill="url(#sunReflect)" />
-        <ellipse cx="320" cy="215" rx="260" ry="14" fill="#FFC45C" fillOpacity={isDark ? '0.12' : '0.26'} />
-        <ellipse cx="1050" cy="220" rx="340" ry="16" fill="#36E7F2" fillOpacity={isDark ? '0.16' : '0.24'} />
+        <rect x="0" y="168" width="1440" height="8" fill="url(#sunReflect)" />
+        <ellipse cx="320" cy="215" rx="260" ry="14" fill="#F4A340" fillOpacity={isDark ? '0.1' : '0.16'} />
+        <ellipse cx="1050" cy="220" rx="340" ry="16" fill="#FFD19A" fillOpacity={isDark ? '0.09' : '0.22'} />
       </svg>
     </div>
   );
@@ -532,19 +534,19 @@ export function HomePage() {
   return (
     <div ref={pageRef} className="overflow-x-hidden">
       {/* =====================================================================
-          SECTION 1 & 2: EXACT REFERENCE HERO + FIVE GLOWING GLASS SERVICE CARDS
+          SECTION 1 & 2: HERO + FIVE SERVICE CARDS (LIGHT SAFFRON-ORANGE & CREAM)
           ===================================================================== */}
       <section className="relative pt-3 pb-10 sm:pt-5 sm:pb-12">
         <IndianHorizonBackdrop theme={theme} />
 
         <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Fluid 2-Column Hero Grid matching exact reference proportions */}
+          {/* Fluid 2-Column Hero Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-4 xl:gap-5 items-center lg:min-h-[430px] xl:min-h-[470px]">
             {/* Left Side: Editorial Hero Content */}
             <div className="lg:col-span-5 flex flex-col justify-center space-y-4 sm:space-y-4.5 pt-2 lg:pt-0">
-              {/* Trust Badge */}
-              <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-[#0A2548]/88 border border-[#138A45]/55 dark:border-[#36E7F2]/50 shadow-sm text-[11px] sm:text-xs font-bold text-[#072247] dark:text-[#DCEEFF]">
-                <ShieldCheck className="w-4 h-4 text-[#138A45] dark:text-[#36E7F2] shrink-0" />
+              {/* Verified Trust Badge (Green strictly for verified/trust indicator) */}
+              <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-white/95 dark:bg-[#241B13]/92 border border-[#27845B]/45 dark:border-[#27845B]/60 shadow-sm text-[11px] sm:text-xs font-bold text-[#26364B] dark:text-[#FFF5E8]">
+                <ShieldCheck className="w-4 h-4 text-[#27845B] dark:text-[#45B884] shrink-0" />
                 <span>
                   {language === 'bn'
                     ? 'বিশ্বস্ত • যাচাইকৃত • মানুষই প্রথম'
@@ -556,7 +558,7 @@ export function HomePage() {
 
               {/* Exact 3-Line Display Heading (Matra-safe line-height for Hindi & Bengali) */}
               <h1
-                className={`font-black text-[#072247] dark:text-white ${
+                className={`font-black text-[#26364B] dark:text-[#FFF5E8] ${
                   language === 'hi'
                     ? 'text-[32px] min-[400px]:text-[38px] sm:text-[44px] lg:text-[40px] xl:text-[50px] leading-[1.24] tracking-normal'
                     : language === 'bn'
@@ -578,7 +580,7 @@ export function HomePage() {
                       ? 'आपके अवसर।'
                       : 'Your Opportunities.'}
                 </span>
-                <span className="block mt-0.5 bg-gradient-to-r from-[#FF8A18] via-[#FF7300] to-[#E66000] bg-clip-text text-transparent">
+                <span className="block mt-0.5 bg-gradient-to-r from-[#E5841A] via-[#F4A340] to-[#D97706] bg-clip-text text-transparent">
                   {language === 'bn'
                     ? 'আপনার ভবিষ্যৎ।'
                     : language === 'hi'
@@ -588,7 +590,7 @@ export function HomePage() {
               </h1>
 
               {/* Supporting Description */}
-              <p className="text-sm sm:text-[15px] text-[#112A48] dark:text-[#CBE6FF] leading-relaxed max-w-[440px] font-semibold">
+              <p className="text-sm sm:text-[15px] text-[#454545] dark:text-[#DDD2C5] leading-relaxed max-w-[440px] font-semibold">
                 {language === 'bn'
                   ? 'আপনার প্রয়োজনীয় তথ্য, সরকারি পরিষেবা, ডিজিটাল নিরাপত্তা এবং নতুন সুযোগ — সবকিছু এবার একটি বুদ্ধিমান কমিউনিটি প্ল্যাটফর্মে।'
                   : language === 'hi'
@@ -603,7 +605,7 @@ export function HomePage() {
                   onClick={() =>
                     document.getElementById('jenova-services')?.scrollIntoView({ behavior: 'smooth' })
                   }
-                  className="inline-flex items-center gap-2 px-6 py-2.5 sm:py-3 rounded-full text-sm font-bold text-white bg-gradient-to-r from-[#07443B] via-[#0D6249] to-[#138A45] hover:brightness-110 border border-[#6CF4FC]/75 shadow-[0_10px_26px_-6px_rgba(9,43,85,0.45),0_0_18px_rgba(54,231,242,0.45)] transition-all whitespace-nowrap cursor-pointer min-h-[44px]"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 sm:py-3 rounded-full text-sm font-bold jenova-saffron-btn transition-all whitespace-nowrap cursor-pointer min-h-[44px]"
                 >
                   <span>
                     {language === 'bn'
@@ -618,9 +620,9 @@ export function HomePage() {
                 <button
                   type="button"
                   onClick={() => setDemoOpen(true)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 sm:py-3 rounded-full text-sm font-bold text-[#072247] dark:text-white bg-white/75 dark:bg-[#0C2B52]/85 hover:bg-white dark:hover:bg-[#10386B] border border-[#072247]/30 dark:border-[#36E7F2]/45 shadow-md transition-all whitespace-nowrap cursor-pointer min-h-[44px]"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 sm:py-3 rounded-full text-sm font-bold text-[#26364B] dark:text-[#FFF5E8] bg-white dark:bg-[#241B13] hover:bg-[#FFF1DF] dark:hover:bg-[#382616] border border-[#F2DCC1] dark:border-[#4A3522] shadow-sm transition-all whitespace-nowrap cursor-pointer min-h-[44px]"
                 >
-                  <span className="w-5.5 h-5.5 rounded-full bg-[#072247] dark:bg-[#36E7F2] text-white dark:text-[#072247] flex items-center justify-center">
+                  <span className="w-5.5 h-5.5 rounded-full bg-[#FFE5C2] dark:bg-[#382616] text-[#26364B] dark:text-[#FFD19A] flex items-center justify-center">
                     <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
                   </span>
                   <span>
@@ -647,15 +649,15 @@ export function HomePage() {
 
               {/* Multilingual Signature Tagline below buttons */}
               <div className="flex items-center gap-2.5 pt-1 max-w-md">
-                <Leaf className="w-4 h-4 text-[#16A34A] dark:text-[#36E7F2] shrink-0" />
-                <span className="text-sm sm:text-[15px] font-bold text-[#072247] dark:text-[#E6F4FF] whitespace-nowrap drop-shadow-[0_1px_4px_rgba(255,255,255,0.65)]">
+                <Leaf className="w-4 h-4 text-[#27845B] dark:text-[#45B884] shrink-0" />
+                <span className="text-sm sm:text-[15px] font-bold text-[#26364B] dark:text-[#FFF5E8] whitespace-nowrap">
                   {language === 'hi' ? 'नई संभावनाएं, सभी के लिए।' : 'নতুন সম্ভাবনা, সবার জন্য।'}
                 </span>
-                <span className="h-[1.5px] flex-1 bg-gradient-to-r from-[#072247]/50 dark:from-[#36E7F2]/55 to-transparent" />
+                <span className="h-[1.5px] flex-1 bg-gradient-to-r from-[#F4A340]/65 to-transparent" />
               </div>
             </div>
 
-            {/* Right Side: Exact High-Fidelity Interactive 3D India Map + Crystal JENOVA Globe Showcase */}
+            {/* Right Side: Interactive 3D India Map + Crystal JENOVA Globe Showcase */}
             <div className="lg:col-span-7 relative">
               <JenovaHeroShowcase language={language} onNavigate={navigate} />
 
@@ -666,10 +668,10 @@ export function HomePage() {
                     key={panel.id}
                     type="button"
                     onClick={() => navigate(panel.path)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/88 dark:bg-[#0B2A4F]/92 border border-[#36E7F2]/60 hover:border-[#FFC45C] shadow-md text-left transition-all cursor-pointer"
+                    className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/95 dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] hover:border-[#F4A340] shadow-sm text-left transition-all cursor-pointer"
                   >
                     <div className="shrink-0">{panel.icon}</div>
-                    <span className="text-xs font-extrabold text-[#092B55] dark:text-white leading-tight">
+                    <span className="text-xs font-extrabold text-[#26364B] dark:text-[#FFF5E8] leading-tight">
                       {panel.label}
                     </span>
                   </button>
@@ -679,7 +681,7 @@ export function HomePage() {
           </div>
 
           {/* =================================================================
-              FIVE FLOATING 3D GLASSMORPHISM SERVICE CARDS (ANCHORED BELOW HERO)
+              FIVE SERVICE CARDS (ANCHORED BELOW HERO)
               ================================================================= */}
           <div id="jenova-services" className="mt-5 lg:mt-4 scroll-mt-24">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4">
@@ -705,26 +707,26 @@ export function HomePage() {
       </section>
 
       {/* =====================================================================
-          SECTION 3: "HOW JENOVA WORKS?" — EXACT PEARLESCENT RIBBON + EMERALD CAPSULE
+          SECTION 3: "HOW JENOVA WORKS?" — WARM CREAM RIBBON + SAFFRON CAPSULE
           ===================================================================== */}
       <section
         id="how-jenova-works"
-        className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-6 scroll-mt-24"
+        className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-6 scroll-mt-24"
       >
         <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-4 xl:gap-5">
-          {/* Frosted Pearlescent-White Ribbon Container */}
-          <div className="flex-1 rounded-[32px] bg-gradient-to-r from-[#FDF9F5]/95 via-white/95 to-[#EEF8FE]/95 dark:from-[#0A2242] dark:via-[#0C2B52] dark:to-[#092445] border border-white/90 dark:border-[#36E7F2]/40 shadow-[0_18px_45px_-14px_rgba(9,43,85,0.2)] px-5 py-6 sm:px-8 sm:py-7">
+          {/* Warm Cream-White Ribbon Container */}
+          <div className="flex-1 rounded-[32px] bg-gradient-to-r from-white via-[#FFFDF9] to-[#FFF1DF]/85 dark:from-[#241B13] dark:via-[#261C14] dark:to-[#2C1F15] border border-[#F2DCC1] dark:border-[#4A3522] shadow-[0_14px_34px_-14px_rgba(186,112,32,0.2)] px-5 py-6 sm:px-8 sm:py-7">
             <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
               {/* Left Heading Block */}
               <div className="lg:w-[195px] shrink-0 space-y-1">
-                <h2 className="text-2xl sm:text-[25px] font-black text-[#072247] dark:text-white leading-snug">
+                <h2 className="text-2xl sm:text-[25px] font-black text-[#26364B] dark:text-[#FFF5E8] leading-snug">
                   {language === 'bn'
                     ? 'কীভাবে JENOVA কাজ করে?'
                     : language === 'hi'
                       ? 'JENOVA कैसे काम करता है?'
                       : 'How JENOVA Works?'}
                 </h2>
-                <p className="text-sm font-semibold text-[#2E4C6B] dark:text-[#B9D8F7]">
+                <p className="text-sm font-semibold text-[#454545] dark:text-[#DDD2C5]">
                   {language === 'bn'
                     ? 'সহজ ধাপ। বাস্তব সহায়তা।'
                     : language === 'hi'
@@ -736,7 +738,7 @@ export function HomePage() {
                   height="28"
                   viewBox="0 0 64 28"
                   fill="none"
-                  className="hidden lg:block text-[#072247] dark:text-[#36E7F2] mt-1.5"
+                  className="hidden lg:block text-[#F4A340] dark:text-[#FFD19A] mt-1.5"
                   aria-hidden="true"
                 >
                   <path
@@ -749,24 +751,24 @@ export function HomePage() {
                 </svg>
               </div>
 
-              {/* Center 5 Interconnected 3D Orbs + Glowing Arrows */}
+              {/* Center 5 Interconnected 3D Orbs + Warm Pathway Arrows */}
               <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:flex lg:items-center lg:justify-between gap-3 sm:gap-4 lg:gap-1.5">
                 {journeySteps.map((step, idx) => (
                   <React.Fragment key={step.key}>
                     <button
                       type="button"
                       onClick={() => navigate(step.path)}
-                      className={`journey-step-node group flex flex-col items-center text-center p-2 rounded-2xl hover:bg-sky-50/80 dark:hover:bg-white/10 transition-colors cursor-pointer ${
+                      className={`journey-step-node group flex flex-col items-center text-center p-2 rounded-2xl hover:bg-[#FFF1DF]/85 dark:hover:bg-[#382616]/70 transition-colors cursor-pointer ${
                         idx === journeySteps.length - 1 ? 'col-span-2 sm:col-span-1' : ''
                       }`}
                     >
                       <div className="transition-transform duration-200 group-hover:-translate-y-1.5 group-hover:scale-105">
                         <JourneyOrbIcon step={step.key} size={70} />
                       </div>
-                      <h3 className="mt-2.5 text-xs sm:text-sm font-black text-[#072247] dark:text-white group-hover:text-[#138A45] dark:group-hover:text-[#36E7F2] transition-colors">
+                      <h3 className="mt-2.5 text-xs sm:text-sm font-black text-[#26364B] dark:text-[#FFF5E8] group-hover:text-[#A85B0A] dark:group-hover:text-[#FFD19A] transition-colors">
                         {step.title}
                       </h3>
-                      <p className="mt-0.5 text-[11px] sm:text-xs font-medium text-[#3B5978] dark:text-[#B9D8F7] max-w-[132px]">
+                      <p className="mt-0.5 text-[11px] sm:text-xs font-medium text-[#454545] dark:text-[#DDD2C5] max-w-[132px]">
                         {step.subtitle}
                       </p>
                     </button>
@@ -776,8 +778,8 @@ export function HomePage() {
                         aria-hidden="true"
                         className="journey-arrow hidden lg:flex items-center justify-center shrink-0"
                       >
-                        <div className="animate-jenova-arrow flex items-center text-[#0F6E42] dark:text-[#36E7F2]">
-                          <span className="w-5 xl:w-7 h-[2.5px] rounded-full bg-gradient-to-r from-[#138A45] to-[#0E5B3A] dark:from-[#36E7F2] dark:to-[#138A45]" />
+                        <div className="animate-jenova-arrow flex items-center text-[#F4A340] dark:text-[#FFD19A]">
+                          <span className="w-5 xl:w-7 h-[2.5px] rounded-full bg-gradient-to-r from-[#F4A340] to-[#27845B] dark:from-[#FFD19A] dark:to-[#45B884]" />
                           <ArrowRight className="w-4 h-4 -ml-1.5" />
                         </div>
                       </div>
@@ -788,21 +790,21 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* Far Right Dark-Emerald Glossy Capsule Callout (Matches Reference Image) */}
+          {/* Far Right Light Saffron-Cream Capsule Callout */}
           <button
             type="button"
             onClick={() => navigate('/assistant')}
-            className="journey-closing-panel xl:w-[285px] shrink-0 rounded-[40px] px-6 py-5 bg-gradient-to-br from-[#05212E] via-[#093A3F] to-[#0E5947] border-[1.5px] border-[#64F3FB]/80 shadow-[0_14px_34px_-6px_rgba(4,24,42,0.58),0_0_24px_rgba(54,231,242,0.38)] hover:border-[#FFC45C] text-left text-white flex items-center justify-between gap-4 group cursor-pointer transition-all"
+            className="journey-closing-panel xl:w-[285px] shrink-0 rounded-[36px] px-6 py-5 bg-gradient-to-br from-[#FFF1DF] via-[#FFE5C2] to-[#FFD19A] dark:from-[#2D1F13] dark:via-[#382616] dark:to-[#472F19] border-[1.5px] border-[#F4A340]/75 hover:border-[#E58E26] shadow-[0_14px_30px_-12px_rgba(244,163,64,0.38)] text-left text-[#26364B] dark:text-[#FFF5E8] flex items-center justify-between gap-4 group cursor-pointer transition-all"
           >
             <div>
-              <p className="text-[16px] sm:text-[17px] font-extrabold leading-snug text-white">
+              <p className="text-[16px] sm:text-[17px] font-extrabold leading-snug text-[#26364B] dark:text-[#FFF5E8]">
                 {language === 'bn'
                   ? 'মানুষের ক্ষমতায়ন। আরও সুন্দর আগামী।'
                   : language === 'hi'
                     ? 'सशक्त समाज। उज्ज्वल भविष्य की ओर।'
                     : 'Empowering People. Building a Better Tomorrow.'}
               </p>
-              <span className="mt-1.5 inline-block text-[11px] font-semibold text-[#9AF7FF]">
+              <span className="mt-1.5 inline-block text-[11px] font-bold text-[#A85B0A] dark:text-[#FFD19A]">
                 {language === 'bn'
                   ? 'JENOVA Voice শুরু করুন'
                   : language === 'hi'
@@ -810,7 +812,7 @@ export function HomePage() {
                     : 'Start with JENOVA Voice'}
               </span>
             </div>
-            <span className="w-11 h-11 rounded-full bg-white/10 group-hover:bg-[#FFC45C] group-hover:text-[#092B55] border border-white/70 flex items-center justify-center shrink-0 transition-colors">
+            <span className="w-11 h-11 rounded-full bg-white/90 dark:bg-[#241B13] text-[#26364B] dark:text-[#FFD19A] group-hover:bg-[#F4A340] group-hover:text-[#26364B] border border-[#F4A340]/50 flex items-center justify-center shrink-0 transition-colors">
               <ArrowRight className="w-5 h-5" />
             </span>
           </button>
@@ -819,10 +821,8 @@ export function HomePage() {
 
       {/* =====================================================================
           BELOW-THE-FOLD HOMEPAGE SECTIONS (LIGHT SAFFRON-ORANGE & CREAM THEME)
-          Locked untouched above: Navbar, Hero, Howrah Bridge, 3D India Map,
-          JENOVA Globe, 5 Glass Service Cards, and How JENOVA Works.
           ===================================================================== */}
-      <div className="jenova-saffron-theme bg-[#FFF9F0] dark:bg-[#18120C] text-[#454545] dark:text-[#DDD2C5] border-t border-[#F2DCC1]/80 dark:border-[#3F2E1E] mt-4 pt-8 pb-14 sm:pb-16">
+      <div className="jenova-saffron-theme bg-[#FFF9F0] dark:bg-[#18120C] text-[#454545] dark:text-[#DDD2C5] pt-4 pb-14 sm:pb-16">
       {/* =====================================================================
           PERSONALISED LIVELIHOOD ENGINE + JENOVA UDAAN & ACTION PASSPORT DISCOVERY
           ===================================================================== */}

@@ -259,8 +259,8 @@ export function JenovaLogo({
         <span
           className={`inline-flex items-baseline font-black uppercase ${textSize} ${
             isDark
-              ? 'text-white'
-              : 'bg-gradient-to-b from-[#083B2E] via-[#072638] to-[#051B2C] dark:from-white dark:via-[#E2F4FF] dark:to-[#BAE6FD] bg-clip-text text-transparent'
+              ? 'text-[#FFF5E8]'
+              : 'text-[#26364B] dark:text-[#FFF5E8]'
           }`}
           style={{ fontFamily: '"Plus Jakarta Sans", "Public Sans", sans-serif' }}
         >
@@ -273,7 +273,7 @@ export function JenovaLogo({
         {showTagline && tagline && (
           <span
             className={`jenova-tagline hidden min-[380px]:block text-[9.5px] sm:text-[10.5px] font-bold tracking-tight mt-0.5 truncate max-w-[165px] sm:max-w-none ${
-              isDark ? 'text-[#CBE6FF]' : 'text-[#0B3930] dark:text-[#CBE6FF]'
+              isDark ? 'text-[#DDD2C5]' : 'text-[#454545] dark:text-[#DDD2C5]'
             }`}
           >
             {tagline}

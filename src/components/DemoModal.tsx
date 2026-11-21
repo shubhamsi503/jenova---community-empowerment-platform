@@ -243,20 +243,22 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#041227]/75 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-[#26364B]/60 flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="jenova-demo-title"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-3xl rounded-3xl bg-white dark:bg-[#0B2242] border border-[#36E7F2]/40 shadow-2xl overflow-hidden text-[#092B55] dark:text-white"
+        className="w-full max-w-3xl rounded-3xl bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] shadow-2xl overflow-hidden text-[#26364B] dark:text-[#FFF5E8]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top bar */}
-        <div className="px-6 py-4 bg-gradient-to-r from-[#092B55] via-[#0D3B6E] to-[#138A45] text-white flex items-center justify-between gap-4">
+        <div className="px-6 py-4 bg-gradient-to-r from-[#FFF1DF] via-[#FFE5C2] to-[#FFF1DF] dark:from-[#2C1F14] dark:via-[#382616] dark:to-[#2C1F14] border-b border-[#F2DCC1] dark:border-[#4A3522] text-[#26364B] dark:text-[#FFF5E8] flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <Play className="w-4 h-4 text-[#FFC45C]" />
+            <span className="w-8 h-8 rounded-full bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] flex items-center justify-center shrink-0">
+              <Play className="w-3.5 h-3.5 text-[#A85B0A] dark:text-[#FFD19A] fill-current ml-0.5" />
+            </span>
             <div>
               <h2 id="jenova-demo-title" className="text-base font-bold leading-tight">
                 {tr(
@@ -266,7 +268,7 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
                   'Interactive Platform Walkthrough — JENOVA'
                 )}
               </h2>
-              <p className="text-[11px] text-[#CBE6FF]">
+              <p className="text-[11px] text-[#665B4F] dark:text-[#C9B8A5]">
                 {tr(
                   language,
                   '৫টি কার্যকর কমিউনিটি টুল দেখুন ও লাইভ ভয়েস অডিও পরীক্ষা করুন',
@@ -280,14 +282,14 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
             type="button"
             onClick={onClose}
             aria-label={tr(language, 'ডেমো বন্ধ করুন', 'डेमो बंद करें', 'Close demo')}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+            className="p-2 rounded-full bg-white/80 dark:bg-[#241B13] hover:bg-white dark:hover:bg-[#382616] border border-[#F2DCC1] dark:border-[#4A3522] text-[#26364B] dark:text-[#FFF5E8] cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Step tabs */}
-        <div className="px-6 pt-4 pb-2 flex flex-wrap gap-2 border-b border-[#D6E6F5] dark:border-white/10 bg-[#F3F8FD] dark:bg-[#071A34]">
+        <div className="px-6 pt-4 pb-3 flex flex-wrap gap-2 border-b border-[#F2DCC1] dark:border-[#3F2E1E] bg-[#FFF9F0] dark:bg-[#1E160F]">
           {DEMO_SLIDES.map((item, idx) => (
             <button
               key={item.id}
@@ -295,8 +297,8 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
               onClick={() => setActiveIdx(idx)}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
                 idx === activeIdx
-                  ? 'bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55]'
-                  : 'bg-white dark:bg-[#0E2A4F] text-[#355373] dark:text-[#B9D8F7] border border-[#D6E6F5] dark:border-white/15 hover:border-[#36E7F2]'
+                  ? 'jenova-saffron-btn font-bold'
+                  : 'bg-white dark:bg-[#241B13] text-[#454545] dark:text-[#DDD2C5] border border-[#F2DCC1] dark:border-[#4A3522] hover:border-[#F4A340]'
               }`}
             >
               {idx + 1}. {item.title}
@@ -306,20 +308,20 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
 
         {/* Body */}
         <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <div className="md:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-[#E6F4FF] via-[#F7FBFF] to-[#E6F7EE] dark:from-[#0E2E57] dark:to-[#0A3D32] border border-[#36E7F2]/30">
+          <div className="md:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-[#FFF9F0] via-[#FFF1DF] to-[#FFE5C2]/70 dark:from-[#2A1F15] dark:to-[#352414] border border-[#F2DCC1] dark:border-[#4A3522]">
             <IconComp size={88} />
-            <span className="mt-3 text-sm font-extrabold text-[#092B55] dark:text-white">
+            <span className="mt-3 text-sm font-extrabold text-[#26364B] dark:text-[#FFF5E8]">
               {slide.title}
             </span>
-            <span className="text-[11px] text-[#138A45] dark:text-[#36E7F2] font-semibold mt-0.5">
+            <span className="text-[11px] text-[#27845B] dark:text-[#45B884] font-semibold mt-0.5">
               {tr(language, 'লাইভ কার্যকর মডিউল', 'लाइव कार्यशील मॉड्यूल', 'Live Working Module')}
             </span>
           </div>
 
           <div className="md:col-span-8 space-y-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#FF8A18] inline-flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
+              <p className="text-xs font-bold uppercase tracking-wider text-[#A85B0A] dark:text-[#FFD19A] inline-flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#F4A340]" />
                 <span>
                   {tr(
                     language,
@@ -329,27 +331,27 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
                   )}
                 </span>
               </p>
-              <h3 className="text-xl sm:text-2xl font-extrabold mt-1 text-[#092B55] dark:text-white">
+              <h3 className="text-xl sm:text-2xl font-extrabold mt-1 text-[#26364B] dark:text-[#FFF5E8]">
                 {pickText(slide.subtitle, language)}
               </h3>
-              <p className="mt-2 text-sm text-[#46607E] dark:text-[#C5DCF3] leading-relaxed">
+              <p className="mt-2 text-sm text-[#454545] dark:text-[#DDD2C5] leading-relaxed">
                 {pickText(slide.description, language)}
               </p>
             </div>
 
-            <ul className="space-y-2 text-xs sm:text-sm text-[#1E3B5A] dark:text-[#E2F0FF]">
+            <ul className="space-y-2 text-xs sm:text-sm text-[#454545] dark:text-[#DDD2C5]">
               {slide.highlights.map((pt, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#138A45] dark:text-[#36E7F2] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-4 h-4 text-[#27845B] dark:text-[#45B884] shrink-0 mt-0.5" />
                   <span>{pickText(pt, language)}</span>
                 </li>
               ))}
             </ul>
 
             {slide.sampleVoice && (
-              <div className="p-3.5 rounded-xl bg-[#F3F8FD] dark:bg-[#081F3D] border border-[#36E7F2]/30 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#092B55] dark:text-[#CBE6FF]">
-                  <Volume2 className="w-4 h-4 text-[#FF8A18]" />
+              <div className="p-3.5 rounded-xl bg-[#FFF9F0] dark:bg-[#1E160F] border border-[#F2DCC1] dark:border-[#4A3522] flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#26364B] dark:text-[#FFF5E8]">
+                  <Volume2 className="w-4 h-4 text-[#A85B0A] dark:text-[#FFD19A]" />
                   <span>
                     {tr(
                       language,
@@ -367,7 +369,7 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
               <button
                 type="button"
                 onClick={() => handleLaunch(slide.route)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#138A45] to-[#0E6D4E] hover:from-[#0E7439] hover:to-[#09553C] text-white text-xs sm:text-sm font-semibold shadow-md cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full jenova-saffron-btn text-xs sm:text-sm font-bold cursor-pointer"
               >
                 <span>{pickText(slide.cta, language)}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -379,14 +381,14 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
                   onClick={() =>
                     setActiveIdx((prev) => (prev - 1 + DEMO_SLIDES.length) % DEMO_SLIDES.length)
                   }
-                  className="px-3.5 py-2 rounded-full border border-[#C6DCF0] dark:border-white/20 text-xs font-semibold text-[#092B55] dark:text-white hover:bg-[#EAF4FD] dark:hover:bg-white/10 cursor-pointer"
+                  className="px-3.5 py-2 rounded-full border border-[#F2DCC1] dark:border-[#4A3522] text-xs font-semibold text-[#26364B] dark:text-[#FFF5E8] hover:bg-[#FFF1DF] dark:hover:bg-[#382616] cursor-pointer"
                 >
                   {tr(language, 'পূর্ববর্তী', 'पिछला', 'Previous')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveIdx((prev) => (prev + 1) % DEMO_SLIDES.length)}
-                  className="px-3.5 py-2 rounded-full bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55] text-xs font-semibold hover:opacity-90 cursor-pointer"
+                  className="px-3.5 py-2 rounded-full bg-[#26364B] dark:bg-[#F4A340] text-white dark:text-[#26364B] text-xs font-semibold hover:opacity-90 cursor-pointer"
                 >
                   {tr(language, 'পরবর্তী →', 'अगला →', 'Next →')}
                 </button>

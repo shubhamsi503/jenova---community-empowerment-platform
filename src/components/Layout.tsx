@@ -34,8 +34,7 @@ import {
 } from './JenovaIcons3D';
 
 function ReportModal() {
-  const { reportTarget, closeReportModal, showToast, t, language, route } = useApp();
-  const isHome = route === '/' || route === '';
+  const { reportTarget, closeReportModal, showToast, t, language } = useApp();
   const [reportType, setReportType] = useState<'suspicious' | 'incorrect' | 'expired' | 'other'>(
     'incorrect'
   );
@@ -97,47 +96,25 @@ function ReportModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#041227]/65 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-[#26364B]/55 flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="report-modal-title"
     >
-      <div
-        className={`rounded-2xl border w-full max-w-lg p-6 shadow-2xl ${
-          isHome
-            ? 'bg-white dark:bg-[#0B2242] border-[#D6E6F5] dark:border-white/15 text-[#092B55] dark:text-white'
-            : 'bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#3F2E1E] text-[#26364B] dark:text-[#FFF5E8]'
-        }`}
-      >
-        <div
-          className={`flex items-start justify-between gap-4 pb-4 border-b ${
-            isHome
-              ? 'border-[#D6E6F5] dark:border-white/15'
-              : 'border-[#F2DCC1] dark:border-[#3F2E1E]'
-          }`}
-        >
+      <div className="rounded-2xl border w-full max-w-lg p-6 shadow-2xl bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#3F2E1E] text-[#26364B] dark:text-[#FFF5E8]">
+        <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#F2DCC1] dark:border-[#3F2E1E]">
           <div>
             <h2 id="report-modal-title" className="text-lg font-bold">
               {t.common.reportIssue}
             </h2>
-            <p
-              className={`text-xs mt-1 ${
-                isHome
-                  ? 'text-[#46607E] dark:text-[#B9D8F7]'
-                  : 'text-[#665B4F] dark:text-[#B6A695]'
-              }`}
-            >
+            <p className="text-xs mt-1 text-[#665B4F] dark:text-[#B6A695]">
               {reportTarget.targetTitle}
             </p>
           </div>
           <button
             type="button"
             onClick={closeReportModal}
-            className={`p-1.5 rounded-lg cursor-pointer ${
-              isHome
-                ? 'text-[#46607E] dark:text-[#B9D8F7] hover:text-[#092B55] dark:hover:text-white'
-                : 'text-[#665B4F] dark:text-[#B6A695] hover:text-[#26364B] dark:hover:text-white'
-            }`}
+            className="p-1.5 rounded-lg cursor-pointer text-[#665B4F] dark:text-[#B6A695] hover:text-[#26364B] dark:hover:text-white"
             aria-label={tr(language, 'বন্ধ করুন', 'बंद करें', 'Close modal')}
           >
             <X className="w-5 h-5" />
@@ -152,7 +129,7 @@ function ReportModal() {
             <select
               value={reportType}
               onChange={(e) => setReportType(e.target.value as typeof reportType)}
-              className="w-full rounded-lg border border-[#D6E6F5] dark:border-white/15 bg-white dark:bg-[#071A34] px-3 py-2.5 text-sm"
+              className="w-full rounded-lg border border-[#F2DCC1] dark:border-[#4A3522] bg-[#FFF9F0] dark:bg-[#1E160F] px-3 py-2.5 text-sm text-[#26364B] dark:text-[#FFF5E8]"
             >
               <option value="suspicious">
                 {tr(
@@ -199,7 +176,7 @@ function ReportModal() {
                 'बताएं कि क्या गलत, पुराना या संदिग्ध लगा...',
                 'Explain what looks incorrect, expired, or suspicious...'
               )}
-              className="w-full rounded-lg border border-[#D6E6F5] dark:border-white/15 bg-white dark:bg-[#071A34] px-3 py-2.5 text-sm"
+              className="w-full rounded-lg border border-[#F2DCC1] dark:border-[#4A3522] bg-[#FFF9F0] dark:bg-[#1E160F] px-3 py-2.5 text-sm text-[#26364B] dark:text-[#FFF5E8]"
             />
           </div>
 
@@ -217,7 +194,7 @@ function ReportModal() {
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               placeholder={tr(language, 'ঐচ্ছিক', 'वैकल्पिक', 'Optional')}
-              className="w-full rounded-lg border border-[#D6E6F5] dark:border-white/15 bg-white dark:bg-[#071A34] px-3 py-2.5 text-sm"
+              className="w-full rounded-lg border border-[#F2DCC1] dark:border-[#4A3522] bg-[#FFF9F0] dark:bg-[#1E160F] px-3 py-2.5 text-sm text-[#26364B] dark:text-[#FFF5E8]"
             />
           </div>
 
@@ -227,22 +204,14 @@ function ReportModal() {
             <button
               type="button"
               onClick={closeReportModal}
-              className={`px-4 py-2 text-xs font-medium cursor-pointer ${
-                isHome
-                  ? 'text-[#46607E] dark:text-[#B9D8F7] hover:text-[#092B55] dark:hover:text-white'
-                  : 'text-[#665B4F] dark:text-[#B6A695] hover:text-[#26364B] dark:hover:text-white'
-              }`}
+              className="px-4 py-2 text-xs font-medium cursor-pointer text-[#665B4F] dark:text-[#B6A695] hover:text-[#26364B] dark:hover:text-white"
             >
               {t.common.cancel}
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className={`px-5 py-2 text-xs font-semibold rounded-lg disabled:opacity-60 cursor-pointer ${
-                isHome
-                  ? 'text-white bg-[#138A45] hover:bg-[#0D6B34]'
-                  : 'jenova-saffron-btn'
-              }`}
+              className="px-5 py-2 text-xs font-semibold rounded-lg disabled:opacity-60 cursor-pointer jenova-saffron-btn"
             >
               {submitting ? t.common.loading : t.common.submit}
             </button>
@@ -434,21 +403,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      data-jenova-theme={isHome ? 'home' : 'saffron'}
-      className={`min-h-screen flex flex-col transition-colors duration-200 ${
-        isHome
-          ? 'bg-[#F3F8FD] dark:bg-[#06152B] text-[#092B55] dark:text-[#EFF7FF]'
-          : 'jenova-saffron-theme bg-[#FFF9F0] dark:bg-[#18120C] text-[#454545] dark:text-[#DDD2C5]'
-      }`}
+      data-jenova-theme="saffron"
+      className="min-h-screen flex flex-col transition-colors duration-200 jenova-saffron-theme bg-[#FFF9F0] dark:bg-[#18120C] text-[#454545] dark:text-[#DDD2C5]"
     >
-      {/* Floating Glassmorphism Top Navigation Bar (Homepage locked; Light Saffron-Cream on subpages) */}
-      <header
-        className={`sticky top-0 z-40 transition-colors duration-200 ${
-          isHome
-            ? 'bg-gradient-to-r from-[#EFF6FF]/82 via-[#52A9F2]/75 to-[#1E82E0]/82 dark:from-[#041227]/95 dark:via-[#071D3C]/90 dark:to-[#041227]/95 backdrop-blur-md'
-            : 'bg-[#FFF9F0]/95 dark:bg-[#1E160F]/95 border-b border-[#F2DCC1] dark:border-[#3F2E1E] backdrop-blur-md shadow-[0_2px_14px_-8px_rgba(186,112,32,0.18)]'
-        }`}
-      >
+      {/* Floating Top Navigation Bar — Consistent Light Saffron-Orange & Cream Theme */}
+      <header className="sticky top-0 z-40 transition-colors duration-200 bg-[#FFF9F0]/95 dark:bg-[#1E160F]/95 border-b border-[#F2DCC1] dark:border-[#3F2E1E] backdrop-blur-md shadow-[0_2px_14px_-8px_rgba(186,112,32,0.18)]">
         <div className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
           {/* Left: JENOVA Logo + Tagline */}
           <button
@@ -471,14 +430,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
             />
           </button>
 
-          {/* Center: Floating Rounded Glass Navigation Pill (Homepage locked; Warm Saffron-Cream on subpages) */}
+          {/* Center: Floating Rounded Navigation Pill */}
           <nav
             aria-label="Primary Navigation"
-            className={`hidden lg:flex items-center gap-0.5 xl:gap-1 px-1.5 xl:px-2 py-1.5 rounded-full shrink-0 ${
-              isHome
-                ? 'bg-white/50 dark:bg-[#0B2242]/80 border border-white/80 dark:border-[#36E7F2]/40 shadow-[0_8px_28px_-8px_rgba(9,43,85,0.25),0_0_18px_rgba(120,240,255,0.35)]'
-                : 'bg-white/92 dark:bg-[#241B13]/92 border border-[#F2DCC1] dark:border-[#4A3522] shadow-[0_8px_24px_-10px_rgba(244,163,64,0.26)]'
-            }`}
+            className="hidden lg:flex items-center gap-0.5 xl:gap-1 px-1.5 xl:px-2 py-1.5 rounded-full shrink-0 bg-white/95 dark:bg-[#241B13]/92 border border-[#F2DCC1] dark:border-[#4A3522] shadow-[0_8px_24px_-10px_rgba(244,163,64,0.26)]"
             style={{ backdropFilter: 'blur(16px)' }}
           >
             {/* Home */}
@@ -487,7 +442,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               onClick={() => handleNav('/')}
               className={`inline-flex items-center gap-1.5 px-3 xl:px-4 py-1.5 rounded-full text-[11.5px] xl:text-xs font-bold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                 isHome
-                  ? 'bg-gradient-to-r from-[#073B35] via-[#0B5443] to-[#117148] text-white shadow-[0_0_16px_rgba(54,231,242,0.55)] border border-[#5EF2FC]/70'
+                  ? 'jenova-saffron-btn'
                   : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
               }`}
             >
@@ -506,12 +461,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 aria-expanded={servicesMenuOpen}
                 className={`inline-flex items-center gap-1 xl:gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-full text-[11.5px] xl:text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                   isServiceRoute
-                    ? isHome
-                      ? 'bg-gradient-to-r from-[#09403A] to-[#138A45] text-white shadow-[0_0_12px_rgba(54,231,242,0.4)]'
-                      : 'jenova-saffron-btn font-bold'
-                    : isHome
-                      ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-white/60 dark:hover:bg-white/10'
-                      : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
+                    ? 'jenova-saffron-btn font-bold'
+                    : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
@@ -528,60 +479,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onClick={() => setServicesMenuOpen(false)}
                     aria-hidden="true"
                   />
-                  <div
-                    className={`absolute left-0 mt-3 w-[330px] sm:w-[365px] rounded-2xl border shadow-2xl p-2.5 z-40 grid grid-cols-1 gap-0.5 max-h-[75vh] overflow-y-auto ${
-                      isHome
-                        ? 'bg-white/97 dark:bg-[#0A2040]/98 border-[#36E7F2]/45'
-                        : 'bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#4A3522]'
-                    }`}
-                  >
+                  <div className="absolute left-0 mt-3 w-[330px] sm:w-[365px] rounded-2xl border shadow-2xl p-2.5 z-40 grid grid-cols-1 gap-0.5 max-h-[75vh] overflow-y-auto bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#4A3522]">
                     {serviceLinks.map((svc) => (
                       <button
                         key={svc.path}
                         type="button"
                         onClick={() => handleNav(svc.path)}
-                        className={`w-full px-3 py-2 rounded-xl text-left transition-colors cursor-pointer flex items-center justify-between gap-2.5 ${
-                          isHome
-                            ? 'hover:bg-[#EAF5FF] dark:hover:bg-white/10'
-                            : 'hover:bg-[#FFF1DF] dark:hover:bg-[#382616]'
-                        }`}
+                        className="w-full px-3 py-2 rounded-xl text-left transition-colors cursor-pointer flex items-center justify-between gap-2.5 hover:bg-[#FFF1DF] dark:hover:bg-[#382616]"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           {svc.icon && (
-                            <span
-                              className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
-                                isHome
-                                  ? 'bg-[#EAF5FF] dark:bg-white/10'
-                                  : 'bg-[#FFF1DF] dark:bg-[#382616]'
-                              }`}
-                            >
+                            <span className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center bg-[#FFF1DF] dark:bg-[#382616]">
                               {svc.icon}
                             </span>
                           )}
                           <div className="min-w-0">
-                            <p
-                              className={`text-xs font-bold truncate ${
-                                isHome ? 'text-[#092B55] dark:text-white' : 'text-[#26364B] dark:text-[#FFF5E8]'
-                              }`}
-                            >
+                            <p className="text-xs font-bold truncate text-[#26364B] dark:text-[#FFF5E8]">
                               {svc.label}
                             </p>
-                            <p
-                              className={`text-[11px] truncate ${
-                                isHome
-                                  ? 'text-[#46607E] dark:text-[#A8CBEB]'
-                                  : 'text-[#665B4F] dark:text-[#B6A695]'
-                              }`}
-                            >
+                            <p className="text-[11px] truncate text-[#665B4F] dark:text-[#B6A695]">
                               {svc.sub}
                             </p>
                           </div>
                         </div>
-                        <span
-                          className={`text-xs shrink-0 ${
-                            isHome ? 'text-[#138A45] dark:text-[#36E7F2]' : 'text-[#A85B0A] dark:text-[#FFD19A]'
-                          }`}
-                        >
+                        <span className="text-xs shrink-0 text-[#A85B0A] dark:text-[#FFD19A]">
                           →
                         </span>
                       </button>
@@ -597,12 +518,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               onClick={() => handleNav('/assistant')}
               className={`inline-flex items-center gap-1 xl:gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-full text-[11.5px] xl:text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                 route === '/assistant'
-                  ? isHome
-                    ? 'bg-gradient-to-r from-[#09403A] to-[#138A45] text-white shadow-[0_0_12px_rgba(54,231,242,0.4)]'
-                    : 'jenova-saffron-btn font-bold'
-                  : isHome
-                    ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-white/60 dark:hover:bg-white/10'
-                    : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
+                  ? 'jenova-saffron-btn font-bold'
+                  : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
               }`}
             >
               <Bot className="w-3.5 h-3.5" />
@@ -617,12 +534,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               onClick={() => handleNav('/local-help')}
               className={`inline-flex items-center gap-1 xl:gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-full text-[11.5px] xl:text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                 route === '/local-help'
-                  ? isHome
-                    ? 'bg-gradient-to-r from-[#09403A] to-[#138A45] text-white shadow-[0_0_12px_rgba(54,231,242,0.4)]'
-                    : 'jenova-saffron-btn font-bold'
-                  : isHome
-                    ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-white/60 dark:hover:bg-white/10'
-                    : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
+                  ? 'jenova-saffron-btn font-bold'
+                  : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
               }`}
             >
               <MapPin className="w-3.5 h-3.5" />
@@ -641,12 +554,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               onClick={() => handleNav('/about')}
               className={`inline-flex items-center gap-1 xl:gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-full text-[11.5px] xl:text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                 route === '/about'
-                  ? isHome
-                    ? 'bg-gradient-to-r from-[#09403A] to-[#138A45] text-white shadow-[0_0_12px_rgba(54,231,242,0.4)]'
-                    : 'jenova-saffron-btn font-bold'
-                  : isHome
-                    ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-white/60 dark:hover:bg-white/10'
-                    : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
+                  ? 'jenova-saffron-btn font-bold'
+                  : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
               }`}
             >
               <Info className="w-3.5 h-3.5" />
@@ -657,11 +566,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={handleFaqsNav}
-              className={`hidden xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-                isHome
-                  ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-white/60 dark:hover:bg-white/10'
-                  : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
-              }`}
+              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]"
             >
               <HelpCircle className="w-3.5 h-3.5" />
               <span>{language === 'bn' ? 'প্রশ্নোত্তর' : language === 'hi' ? 'सामान्य प्रश्न' : 'FAQs'}</span>
@@ -673,12 +578,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               onClick={() => handleNav('/contact')}
               className={`inline-flex items-center gap-1 xl:gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-full text-[11.5px] xl:text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                 route === '/contact'
-                  ? isHome
-                    ? 'bg-gradient-to-r from-[#09403A] to-[#138A45] text-white shadow-[0_0_12px_rgba(54,231,242,0.4)]'
-                    : 'jenova-saffron-btn font-bold'
-                  : isHome
-                    ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-white/60 dark:hover:bg-white/10'
-                    : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
+                  ? 'jenova-saffron-btn font-bold'
+                  : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
               }`}
             >
               <Mail className="w-3.5 h-3.5" />
@@ -690,11 +591,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 shrink-0">
             {/* Compact Multilingual Switcher (Preserves Bengali/English/Hindi support) */}
             <div
-              className={`hidden sm:flex items-center rounded-full border p-0.5 text-[11px] font-semibold ${
-                isHome
-                  ? 'border-[#36E7F2]/50 bg-white/70 dark:bg-[#0B2242]/80'
-                  : 'border-[#F2DCC1] dark:border-[#4A3522] bg-[#FFF1DF] dark:bg-[#241B13]'
-              }`}
+              className="hidden sm:flex items-center rounded-full border p-0.5 text-[11px] font-semibold border-[#F2DCC1] dark:border-[#4A3522] bg-[#FFF1DF] dark:bg-[#241B13]"
               role="group"
               aria-label="Language switcher"
             >
@@ -711,12 +608,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onClick={() => setLanguage(opt.code)}
                   className={`px-2 py-1 rounded-full transition-colors whitespace-nowrap cursor-pointer ${
                     language === opt.code
-                      ? isHome
-                        ? 'bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55]'
-                        : 'bg-[#26364B] dark:bg-[#F4A340] text-white dark:text-[#26364B]'
-                      : isHome
-                        ? 'text-[#092B55] dark:text-[#B9D8F7] hover:bg-white/60 dark:hover:bg-white/10'
-                        : 'text-[#26364B] dark:text-[#DDD2C5] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
+                      ? 'bg-[#26364B] dark:bg-[#F4A340] text-white dark:text-[#26364B]'
+                      : 'text-[#26364B] dark:text-[#DDD2C5] hover:bg-[#FFE5C2]/70 dark:hover:bg-[#382616]'
                   }`}
                 >
                   {opt.label}
@@ -730,11 +623,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               onClick={toggleTheme}
               aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-              className={`w-9 h-9 rounded-full flex items-center justify-center hover:scale-105 transition-transform cursor-pointer ${
-                isHome
-                  ? 'bg-[#092B55]/80 dark:bg-[#10386B] text-[#FFC45C] border border-[#36E7F2]/70 shadow-[0_0_12px_rgba(54,231,242,0.35)]'
-                  : 'bg-[#FFF1DF] dark:bg-[#2A1E14] text-[#A85B0A] dark:text-[#FFD19A] border border-[#F2DCC1] dark:border-[#4A3522] hover:bg-[#FFE5C2] dark:hover:bg-[#382616]'
-              }`}
+              className="w-9 h-9 rounded-full flex items-center justify-center hover:scale-105 transition-transform cursor-pointer bg-[#FFF1DF] dark:bg-[#2A1E14] text-[#A85B0A] dark:text-[#FFD19A] border border-[#F2DCC1] dark:border-[#4A3522] hover:bg-[#FFE5C2] dark:hover:bg-[#382616]"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
@@ -748,13 +637,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     setAccountMenuOpen((v) => !v);
                     setServicesMenuOpen(false);
                   }}
-                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                    isHome
-                      ? 'text-white bg-gradient-to-r from-[#092B55] via-[#0B4650] to-[#138A45] border border-[#36E7F2]/65 shadow-[0_0_16px_rgba(54,231,242,0.35)] hover:brightness-110'
-                      : 'jenova-saffron-btn font-bold'
-                  }`}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer jenova-saffron-btn"
                 >
-                  <User className={`w-3.5 h-3.5 ${isHome ? 'text-[#36E7F2]' : 'text-[#26364B]'}`} />
+                  <User className="w-3.5 h-3.5 text-[#26364B]" />
                   <span className="max-w-[96px] truncate">{user.name.split(' ')[0]}</span>
                   <ChevronDown className="w-3.5 h-3.5" />
                 </button>
@@ -766,46 +651,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       onClick={() => setAccountMenuOpen(false)}
                       aria-hidden="true"
                     />
-                    <div
-                      className={`absolute right-0 mt-2.5 w-52 rounded-2xl border shadow-2xl py-2 z-40 text-sm ${
-                        isHome
-                          ? 'bg-white dark:bg-[#0A2040] border-[#36E7F2]/40'
-                          : 'bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#4A3522]'
-                      }`}
-                    >
+                    <div className="absolute right-0 mt-2.5 w-52 rounded-2xl border shadow-2xl py-2 z-40 text-sm bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#4A3522]">
                       <button
                         type="button"
                         onClick={() => handleNav('/dashboard')}
-                        className={`w-full px-4 py-2 text-left flex items-center gap-2.5 cursor-pointer ${
-                          isHome
-                            ? 'text-[#092B55] dark:text-white hover:bg-[#EAF5FF] dark:hover:bg-white/10'
-                            : 'text-[#26364B] dark:text-[#FFF5E8] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]'
-                        }`}
+                        className="w-full px-4 py-2 text-left flex items-center gap-2.5 cursor-pointer text-[#26364B] dark:text-[#FFF5E8] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]"
                       >
-                        <LayoutDashboard
-                          className={`w-4 h-4 ${isHome ? 'text-[#138A45] dark:text-[#36E7F2]' : 'text-[#A85B0A] dark:text-[#FFD19A]'}`}
-                        />
+                        <LayoutDashboard className="w-4 h-4 text-[#A85B0A] dark:text-[#FFD19A]" />
                         <span>{t.nav.dashboard}</span>
                       </button>
                       {isAdmin && (
                         <button
                           type="button"
                           onClick={() => handleNav('/admin')}
-                          className={`w-full px-4 py-2 text-left flex items-center gap-2.5 font-semibold cursor-pointer ${
-                            isHome
-                              ? 'text-[#FF8A18] hover:bg-[#EAF5FF] dark:hover:bg-white/10'
-                              : 'text-[#A85B0A] dark:text-[#FFD19A] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]'
-                          }`}
+                          className="w-full px-4 py-2 text-left flex items-center gap-2.5 font-semibold cursor-pointer text-[#A85B0A] dark:text-[#FFD19A] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]"
                         >
                           <ShieldCheck className="w-4 h-4" />
                           <span>{t.nav.admin}</span>
                         </button>
                       )}
-                      <div
-                        className={`my-1.5 border-t ${
-                          isHome ? 'border-[#D6E6F5] dark:border-white/15' : 'border-[#F2DCC1] dark:border-[#3F2E1E]'
-                        }`}
-                      />
+                      <div className="my-1.5 border-t border-[#F2DCC1] dark:border-[#3F2E1E]" />
                       <button
                         type="button"
                         onClick={() => {
@@ -825,13 +690,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={() => handleNav('/auth')}
-                className={`hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                  isHome
-                    ? 'text-white bg-gradient-to-r from-[#092B55] via-[#0B4650] to-[#0D6A4E] border border-[#36E7F2]/70 shadow-[0_0_18px_rgba(54,231,242,0.4)] hover:brightness-115'
-                    : 'jenova-saffron-btn'
-                }`}
+                className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer jenova-saffron-btn"
               >
-                <User className={`w-3.5 h-3.5 ${isHome ? 'text-[#36E7F2]' : 'text-[#26364B]'}`} />
+                <User className="w-3.5 h-3.5 text-[#26364B]" />
                 <span>{t.nav.login}</span>
               </button>
             )}
@@ -840,11 +701,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((v) => !v)}
-              className={`lg:hidden p-2 rounded-full border cursor-pointer ${
-                isHome
-                  ? 'bg-white/85 dark:bg-[#0B2242] border-[#36E7F2]/55 text-[#092B55] dark:text-white'
-                  : 'bg-[#FFF1DF] dark:bg-[#2A1E14] border-[#F2DCC1] dark:border-[#4A3522] text-[#26364B] dark:text-[#FFF5E8]'
-              }`}
+              className="lg:hidden p-2 rounded-full border cursor-pointer bg-[#FFF1DF] dark:bg-[#2A1E14] border-[#F2DCC1] dark:border-[#4A3522] text-[#26364B] dark:text-[#FFF5E8]"
               aria-label="Open navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -854,23 +711,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile / Tablet Responsive Drawer */}
         {mobileMenuOpen && (
-          <div
-            className={`lg:hidden border-t px-4 py-4 space-y-1.5 max-h-[78vh] overflow-y-auto shadow-2xl ${
-              isHome
-                ? 'border-[#36E7F2]/30 bg-white/98 dark:bg-[#071A34]/98'
-                : 'border-[#F2DCC1] dark:border-[#3F2E1E] bg-[#FFF9F0]/98 dark:bg-[#1E160F]/98'
-            }`}
-          >
-            <div
-              className={`flex items-center justify-between pb-3 mb-2 border-b sm:hidden ${
-                isHome ? 'border-[#D6E6F5] dark:border-white/10' : 'border-[#F2DCC1] dark:border-[#3F2E1E]'
-              }`}
-            >
-              <span
-                className={`text-xs font-semibold ${
-                  isHome ? 'text-[#46607E] dark:text-[#B9D8F7]' : 'text-[#665B4F] dark:text-[#B6A695]'
-                }`}
-              >
+          <div className="lg:hidden border-t px-4 py-4 space-y-1.5 max-h-[78vh] overflow-y-auto shadow-2xl border-[#F2DCC1] dark:border-[#3F2E1E] bg-[#FFF9F0]/98 dark:bg-[#1E160F]/98">
+            <div className="flex items-center justify-between pb-3 mb-2 border-b sm:hidden border-[#F2DCC1] dark:border-[#3F2E1E]">
+              <span className="text-xs font-semibold text-[#665B4F] dark:text-[#B6A695]">
                 {tr(language, 'ভাষা', 'भाषा', 'Language')}
               </span>
               <div className="flex items-center gap-1">
@@ -887,12 +730,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onClick={() => setLanguage(opt.code)}
                     className={`px-2.5 py-1 rounded-full text-xs font-semibold cursor-pointer ${
                       language === opt.code
-                        ? isHome
-                          ? 'bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55]'
-                          : 'bg-[#26364B] dark:bg-[#F4A340] text-white dark:text-[#26364B]'
-                        : isHome
-                          ? 'bg-[#EAF4FD] dark:bg-white/10 text-[#092B55] dark:text-white'
-                          : 'bg-[#FFF1DF] dark:bg-[#2A1E14] text-[#26364B] dark:text-[#FFF5E8]'
+                        ? 'bg-[#26364B] dark:bg-[#F4A340] text-white dark:text-[#26364B]'
+                        : 'bg-[#FFF1DF] dark:bg-[#2A1E14] text-[#26364B] dark:text-[#FFF5E8]'
                     }`}
                   >
                     {opt.label}
@@ -953,12 +792,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onClick={() => handleNav(item.path)}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold cursor-pointer ${
                     active
-                      ? isHome
-                        ? 'bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55]'
-                        : 'jenova-saffron-btn font-bold'
-                      : isHome
-                        ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-[#EAF4FD] dark:hover:bg-white/10'
-                        : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]'
+                      ? 'jenova-saffron-btn font-bold'
+                      : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]'
                   }`}
                 >
                   {item.label}
@@ -969,20 +804,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={handleFaqsNav}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold cursor-pointer ${
-                isHome
-                  ? 'text-[#092B55] dark:text-[#DCEEFF] hover:bg-[#EAF4FD] dark:hover:bg-white/10'
-                  : 'text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]'
-              }`}
+              className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold cursor-pointer text-[#26364B] dark:text-[#F5EFE6] hover:bg-[#FFF1DF] dark:hover:bg-[#382616]"
             >
               {tr(language, 'প্রশ্নোত্তর (FAQs)', 'सवाल-जवाब (FAQs)', 'FAQs')}
             </button>
 
-            <div
-              className={`pt-3 border-t space-y-2 ${
-                isHome ? 'border-[#D6E6F5] dark:border-white/10' : 'border-[#F2DCC1] dark:border-[#3F2E1E]'
-              }`}
-            >
+            <div className="pt-3 border-t space-y-2 border-[#F2DCC1] dark:border-[#3F2E1E]">
               <div className="px-1">
                 <PWAInstallButton />
               </div>
@@ -1001,9 +828,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <button
                   type="button"
                   onClick={() => handleNav('/auth')}
-                  className={`w-full text-center px-4 py-2.5 rounded-full text-sm font-bold cursor-pointer ${
-                    isHome ? 'text-white bg-gradient-to-r from-[#092B55] to-[#138A45]' : 'jenova-saffron-btn'
-                  }`}
+                  className="w-full text-center px-4 py-2.5 rounded-full text-sm font-bold cursor-pointer jenova-saffron-btn"
                 >
                   {t.nav.login}
                 </button>
@@ -1173,11 +998,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Mobile Thumb-Friendly Quick-Access Dock (< md) */}
       <nav
         aria-label="Mobile Quick Navigation"
-        className={`md:hidden fixed bottom-0 inset-x-0 z-40 border-t px-2 py-1.5 ${
-          isHome
-            ? 'bg-white/95 dark:bg-[#071D3C]/95 border-[#36E7F2]/35 shadow-[0_-8px_24px_rgba(4,18,39,0.18)]'
-            : 'bg-[#FFF9F0]/96 dark:bg-[#1E160F]/96 border-[#F2DCC1] dark:border-[#3F2E1E] shadow-[0_-8px_24px_rgba(186,112,32,0.14)]'
-        }`}
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t px-2 py-1.5 bg-[#FFF9F0]/96 dark:bg-[#1E160F]/96 border-[#F2DCC1] dark:border-[#3F2E1E] shadow-[0_-8px_24px_rgba(186,112,32,0.14)]"
         style={{ backdropFilter: 'blur(12px)' }}
       >
         <div className="grid grid-cols-5 gap-1 max-w-md mx-auto">
@@ -1216,12 +1037,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 onClick={() => handleNav(path)}
                 className={`flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-xl text-[10px] font-bold transition-colors cursor-pointer ${
                   active
-                    ? isHome
-                      ? 'bg-[#092B55] dark:bg-[#36E7F2] text-white dark:text-[#092B55]'
-                      : 'jenova-saffron-btn'
-                    : isHome
-                      ? 'text-[#355576] dark:text-[#B9D8F7]'
-                      : 'text-[#454545] dark:text-[#DDD2C5]'
+                    ? 'jenova-saffron-btn'
+                    : 'text-[#454545] dark:text-[#DDD2C5]'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -1239,11 +1056,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div
           role="status"
           aria-live="polite"
-          className={`fixed bottom-20 md:bottom-5 right-4 sm:right-5 z-50 max-w-sm rounded-xl border px-4 py-3 text-xs font-medium shadow-2xl ${
-            isHome
-              ? 'bg-[#092B55] border-[#36E7F2]/50 text-white'
-              : 'bg-[#26364B] border-[#F4A340]/60 text-[#FFF9F0]'
-          }`}
+          className="fixed bottom-20 md:bottom-5 right-4 sm:right-5 z-50 max-w-sm rounded-xl border px-4 py-3 text-xs font-medium shadow-2xl bg-[#26364B] border-[#F4A340]/60 text-[#FFF9F0]"
         >
           {toastMessage}
         </div>

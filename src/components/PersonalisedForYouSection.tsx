@@ -44,7 +44,7 @@ const INTEREST_OPTIONS = [
 
 export function PersonalisedForYouSection({
   compact = false,
-  forceSaffron = false,
+  forceSaffron = true,
 }: {
   compact?: boolean;
   forceSaffron?: boolean;

@@ -253,7 +253,7 @@ export function JenovaProtectLogo({
   const isDark = theme === 'dark';
   return (
     <div className={`inline-flex items-center gap-3 select-none ${className}`}>
-      <div className="shrink-0 p-1.5 rounded-2xl bg-gradient-to-br from-[#063A29] via-[#0B5A42] to-[#092B55] border border-[#36E7F2]/60 shadow-[0_8px_22px_-6px_rgba(19,138,69,0.5)]">
+      <div className="shrink-0 p-1.5 rounded-2xl bg-[#E9F5EF] dark:bg-[#143022] border border-[#27845B]/35 shadow-sm">
         <Shield3DIcon size={iconSize} />
       </div>
       <div className="flex flex-col leading-tight">
@@ -261,12 +261,12 @@ export function JenovaProtectLogo({
           <span
             className={`font-black uppercase tracking-[0.08em] ${
               size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-xl sm:text-2xl' : 'text-lg'
-            } ${isDark ? 'text-white' : 'text-[#092B55] dark:text-white'}`}
+            } ${isDark ? 'text-[#FFF5E8]' : 'text-[#26364B] dark:text-[#FFF5E8]'}`}
           >
             JENOVA
           </span>
           <span
-            className={`px-2 py-0.5 rounded-md font-extrabold uppercase tracking-wider text-white bg-gradient-to-r from-[#138A45] to-[#0E7490] ${
+            className={`px-2 py-0.5 rounded-md font-extrabold uppercase tracking-wider text-white bg-[#27845B] ${
               size === 'sm' ? 'text-[10px]' : 'text-xs'
             }`}
           >
@@ -274,7 +274,7 @@ export function JenovaProtectLogo({
           </span>
         </div>
         {subtitle && (
-          <span className="text-xs font-semibold text-[#46607E] dark:text-[#B9D8F7] mt-0.5">
+          <span className="text-xs font-semibold text-[#454545] dark:text-[#DDD2C5] mt-0.5">
             {subtitle}
           </span>
         )}
@@ -293,7 +293,7 @@ export function JenovaSchemesLogo({
   const isDark = theme === 'dark';
   return (
     <div className={`inline-flex items-center gap-3 select-none ${className}`}>
-      <div className="shrink-0 p-1.5 rounded-2xl bg-gradient-to-br from-[#7C2D12] via-[#C2570A] to-[#092B55] border border-[#FFC45C]/70 shadow-[0_8px_22px_-6px_rgba(255,138,24,0.45)]">
+      <div className="shrink-0 p-1.5 rounded-2xl bg-[#FFE5C2] dark:bg-[#382616] border border-[#F4A340]/55 shadow-sm">
         <Schemes3DIcon size={iconSize} />
       </div>
       <div className="flex flex-col leading-tight">
@@ -301,12 +301,12 @@ export function JenovaSchemesLogo({
           <span
             className={`font-black uppercase tracking-[0.08em] ${
               size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-xl sm:text-2xl' : 'text-lg'
-            } ${isDark ? 'text-white' : 'text-[#092B55] dark:text-white'}`}
+            } ${isDark ? 'text-[#FFF5E8]' : 'text-[#26364B] dark:text-[#FFF5E8]'}`}
           >
             JENOVA
           </span>
           <span
-            className={`px-2 py-0.5 rounded-md font-extrabold uppercase tracking-wider text-white bg-gradient-to-r from-[#FF8A18] to-[#D95B00] ${
+            className={`px-2 py-0.5 rounded-md font-extrabold uppercase tracking-wider text-[#26364B] bg-gradient-to-r from-[#F4A340] to-[#FFD19A] border border-[#F4A340]/50 ${
               size === 'sm' ? 'text-[10px]' : 'text-xs'
             }`}
           >
@@ -314,7 +314,7 @@ export function JenovaSchemesLogo({
           </span>
         </div>
         {subtitle && (
-          <span className="text-xs font-semibold text-[#46607E] dark:text-[#B9D8F7] mt-0.5">
+          <span className="text-xs font-semibold text-[#454545] dark:text-[#DDD2C5] mt-0.5">
             {subtitle}
           </span>
         )}
@@ -333,7 +333,7 @@ export function JenovaLocalLogo({
   const isDark = theme === 'dark';
   return (
     <div className={`inline-flex items-center gap-3 select-none ${className}`}>
-      <div className="shrink-0 p-1.5 rounded-2xl bg-gradient-to-br from-[#092B55] via-[#0F5347] to-[#138A45] border border-[#36E7F2]/65 shadow-[0_8px_22px_-6px_rgba(14,116,144,0.45)]">
+      <div className="shrink-0 p-1.5 rounded-2xl bg-[#FFF1DF] dark:bg-[#2E2116] border border-[#F2DCC1] dark:border-[#5C4128] shadow-sm">
         <LocalPin3DIcon size={iconSize} />
       </div>
       <div className="flex flex-col leading-tight">
@@ -341,12 +341,12 @@ export function JenovaLocalLogo({
           <span
             className={`font-black uppercase tracking-[0.08em] ${
               size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-xl sm:text-2xl' : 'text-lg'
-            } ${isDark ? 'text-white' : 'text-[#092B55] dark:text-white'}`}
+            } ${isDark ? 'text-[#FFF5E8]' : 'text-[#26364B] dark:text-[#FFF5E8]'}`}
           >
             JENOVA
           </span>
           <span
-            className={`px-2 py-0.5 rounded-md font-extrabold uppercase tracking-wider text-white bg-gradient-to-r from-[#0E7490] via-[#138A45] to-[#FF8A18] ${
+            className={`px-2 py-0.5 rounded-md font-extrabold uppercase tracking-wider text-[#26364B] bg-[#FFE5C2] border border-[#F4A340]/50 ${
               size === 'sm' ? 'text-[10px]' : 'text-xs'
             }`}
           >
@@ -354,7 +354,7 @@ export function JenovaLocalLogo({
           </span>
         </div>
         {subtitle && (
-          <span className="text-xs font-semibold text-[#46607E] dark:text-[#B9D8F7] mt-0.5">
+          <span className="text-xs font-semibold text-[#454545] dark:text-[#DDD2C5] mt-0.5">
             {subtitle}
           </span>
         )}

@@ -440,8 +440,8 @@ export function ReadAloudButton({
         compact ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-xs min-h-[40px]'
       } ${
         speaking || loadingAudio
-          ? 'bg-[#FEF4E6] dark:bg-amber-950/60 border-[#FF8A18] text-[#8A4E08] dark:text-[#FFC45C]'
-          : 'bg-white/90 dark:bg-slate-900/80 border-sky-200 dark:border-cyan-400/35 text-[#092B55] dark:text-cyan-200 hover:bg-sky-50 dark:hover:bg-slate-800'
+          ? 'bg-[#FFE5C2] dark:bg-[#382616] border-[#F4A340] text-[#8E4B06] dark:text-[#FFD19A]'
+          : 'bg-white/95 dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#4A3522] text-[#26364B] dark:text-[#FFD19A] hover:bg-[#FFF1DF] dark:hover:bg-[#382616] hover:border-[#F4A340]'
       }`}
     >
       {speaking ? (

@@ -81,13 +81,13 @@ export function useOnlineStatus() {
 
 export function PWAInstallButton({
   compact = false,
-  forceSaffron = false,
+  forceSaffron = true,
 }: {
   compact?: boolean;
   forceSaffron?: boolean;
 }) {
-  const { language, route, showToast } = useApp();
-  const isHome = !forceSaffron && (route === '/' || route === '');
+  const { language, showToast } = useApp();
+  void forceSaffron;
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
   const [showGuide, setShowGuide] = useState(false);
 
@@ -118,13 +118,9 @@ export function PWAInstallButton({
     setShowGuide(true);
   };
 
-  const buttonClasses = isHome
-    ? compact
-      ? 'px-3 py-2 text-xs text-[#176B4D] bg-[#EBF4F0] border border-[#176B4D]/25 hover:bg-[#DDECE5]'
-      : 'px-4 py-2.5 text-xs text-[#176B4D] bg-[#EBF4F0] border border-[#176B4D]/30 hover:bg-[#DDECE5] min-h-[42px]'
-    : compact
-      ? 'px-3 py-2 text-xs text-[#26364B] dark:text-[#FFF5E8] bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] hover:bg-[#FFE5C2] dark:hover:bg-[#382616]'
-      : 'px-4 py-2.5 text-xs text-[#26364B] dark:text-[#FFF5E8] bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] hover:bg-[#FFE5C2] dark:hover:bg-[#382616] min-h-[42px]';
+  const buttonClasses = compact
+    ? 'px-3 py-2 text-xs text-[#26364B] dark:text-[#FFF5E8] bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] hover:bg-[#FFE5C2] dark:hover:bg-[#382616]'
+    : 'px-4 py-2.5 text-xs text-[#26364B] dark:text-[#FFF5E8] bg-white dark:bg-[#241B13] border border-[#F2DCC1] dark:border-[#4A3522] hover:bg-[#FFE5C2] dark:hover:bg-[#382616] min-h-[42px]';
 
   return (
     <>
@@ -143,19 +139,9 @@ export function PWAInstallButton({
           role="dialog"
           aria-modal="true"
         >
-          <div
-            className={`w-full max-w-sm rounded-2xl p-6 shadow-xl space-y-4 border ${
-              isHome
-                ? 'bg-white border-[#E5E3DC]'
-                : 'bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#4A3522]'
-            }`}
-          >
+          <div className="w-full max-w-sm rounded-2xl p-6 shadow-xl space-y-4 border bg-white dark:bg-[#241B13] border-[#F2DCC1] dark:border-[#4A3522]">
             <div className="flex items-start justify-between gap-3">
-              <h3
-                className={`text-base font-bold ${
-                  isHome ? 'text-[#252525]' : 'text-[#26364B] dark:text-[#FFF5E8]'
-                }`}
-              >
+              <h3 className="text-base font-bold text-[#26364B] dark:text-[#FFF5E8]">
                 {tr(
                   language,
                   'হোম স্ক্রিনে JENOVA যোগ করুন',
@@ -166,22 +152,14 @@ export function PWAInstallButton({
               <button
                 type="button"
                 onClick={() => setShowGuide(false)}
-                className={`p-1 cursor-pointer ${
-                  isHome
-                    ? 'text-[#5C5C58] hover:text-[#252525]'
-                    : 'text-[#454545] dark:text-[#DCC8B0] hover:text-[#26364B] dark:hover:text-white'
-                }`}
+                className="p-1 cursor-pointer text-[#454545] dark:text-[#DCC8B0] hover:text-[#26364B] dark:hover:text-white"
                 aria-label={tr(language, 'বন্ধ করুন', 'बंद करें', 'Close')}
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
             {isIOS ? (
-              <ol
-                className={`text-sm space-y-2 list-decimal pl-4 ${
-                  isHome ? 'text-[#4A4A46]' : 'text-[#454545] dark:text-[#E5D3BE]'
-                }`}
-              >
+              <ol className="text-sm space-y-2 list-decimal pl-4 text-[#454545] dark:text-[#E5D3BE]">
                 <li>
                   {tr(
                     language,
@@ -200,11 +178,7 @@ export function PWAInstallButton({
                 </li>
               </ol>
             ) : (
-              <ol
-                className={`text-sm space-y-2 list-decimal pl-4 ${
-                  isHome ? 'text-[#4A4A46]' : 'text-[#454545] dark:text-[#E5D3BE]'
-                }`}
-              >
+              <ol className="text-sm space-y-2 list-decimal pl-4 text-[#454545] dark:text-[#E5D3BE]">
                 <li>
                   {tr(
                     language,
@@ -226,11 +200,7 @@ export function PWAInstallButton({
             <button
               type="button"
               onClick={() => setShowGuide(false)}
-              className={`w-full py-2.5 rounded-xl text-sm font-semibold cursor-pointer ${
-                isHome
-                  ? 'bg-[#176B4D] hover:bg-[#11533B] text-white'
-                  : 'jenova-saffron-btn'
-              }`}
+              className="w-full py-2.5 rounded-xl text-sm font-semibold cursor-pointer jenova-saffron-btn"
             >
               {tr(language, 'বুঝেছি', 'समझ गया', 'Got It')}
             </button>
@@ -242,8 +212,7 @@ export function PWAInstallButton({
 }
 
 export function OfflineIndicator() {
-  const { language, route } = useApp();
-  const isHome = route === '/' || route === '';
+  const { language } = useApp();
   const isOnline = useOnlineStatus();
 
   if (isOnline) return null;
@@ -252,11 +221,7 @@ export function OfflineIndicator() {
     <div
       role="status"
       aria-live="polite"
-      className={`fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold shadow-lg ${
-        isHome
-          ? 'bg-[#B56A10] text-white'
-          : 'bg-[#FFD19A] text-[#26364B] border border-[#F4A340]'
-      }`}
+      className="fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold shadow-lg bg-[#FFD19A] text-[#26364B] border border-[#F4A340]"
     >
       <WifiOff className="w-4 h-4 shrink-0" />
       <span>

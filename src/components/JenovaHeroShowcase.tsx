@@ -104,15 +104,9 @@ export function JenovaHeroShowcase({ language, onNavigate }: JenovaHeroShowcaseP
     >
       {/* Fixed aspect-ratio stage matching exact clean 3D India + Globe visual bounds (2.297:1) */}
       <div
-        className="relative w-full aspect-[2.26/1] sm:aspect-[2.29/1] overflow-hidden rounded-2xl lg:rounded-3xl transition-transform duration-300 ease-out"
+        className="relative w-full aspect-[2.26/1] sm:aspect-[2.29/1] overflow-hidden rounded-2xl lg:rounded-3xl transition-transform duration-300 ease-out ring-1 ring-[#F2DCC1]/90 dark:ring-[#4A3522] shadow-[0_18px_40px_-14px_rgba(186,112,32,0.34)]"
         style={{
           transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
-          WebkitMaskImage:
-            'linear-gradient(to right, transparent 0%, black 5%, black 98%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 4%, black 94%, transparent 100%)',
-          WebkitMaskComposite: 'source-in',
-          maskImage:
-            'linear-gradient(to right, transparent 0%, black 5%, black 98%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 4%, black 94%, transparent 100%)',
-          maskComposite: 'intersect',
         }}
       >
         {/* Clean cropped 3D Tricolour India + Crystal JENOVA Globe + Howrah Bridge */}
@@ -129,7 +123,7 @@ export function JenovaHeroShowcase({ language, onNavigate }: JenovaHeroShowcaseP
           }}
         />
 
-        {/* Interactive Clickable Hotspots with luminous cyan/gold hover highlight */}
+        {/* Interactive Clickable Hotspots with luminous saffron-gold hover highlight */}
         {hotspots.map((hs) => {
           const isHot = hovered === hs.id;
           return (
@@ -142,24 +136,24 @@ export function JenovaHeroShowcase({ language, onNavigate }: JenovaHeroShowcaseP
               aria-label={hs.label}
               title={hs.label}
               style={hs.style}
-              className={`absolute z-20 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC45C] ${
+              className={`absolute z-20 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F4A340] ${
                 hs.ring
                   ? `rounded-2xl ${
                       isHot
-                        ? 'ring-2 ring-[#FFC45C] bg-white/10 shadow-[0_0_24px_rgba(255,196,92,0.75)] scale-[1.04]'
-                        : 'hover:ring-2 hover:ring-[#36E7F2]/80'
+                        ? 'ring-2 ring-[#FFD19A] bg-white/10 shadow-[0_0_24px_rgba(244,163,64,0.75)] scale-[1.04]'
+                        : 'hover:ring-2 hover:ring-[#FFD19A]/85'
                     }`
                   : `rounded-full ${
-                      isHot ? 'bg-white/[0.04] shadow-[0_0_32px_rgba(54,231,242,0.22)]' : ''
+                      isHot ? 'bg-white/[0.04] shadow-[0_0_32px_rgba(244,163,64,0.28)]' : ''
                     }`
               }`}
             />
           );
         })}
 
-        {/* Subtle hover caption pill at bottom-right when inspecting interactive 3D landmarks */}
+        {/* Subtle hover caption pill at bottom-center when inspecting interactive 3D landmarks */}
         {hovered && (
-          <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full bg-[#072042]/90 border border-[#36E7F2]/70 text-[11px] font-bold text-white shadow-lg whitespace-nowrap">
+          <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full bg-[#26364B]/92 border border-[#F4A340]/75 text-[11px] font-bold text-[#FFF9F0] shadow-lg whitespace-nowrap">
             {hotspots.find((h) => h.id === hovered)?.label}
           </div>
         )}
